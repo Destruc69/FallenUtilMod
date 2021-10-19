@@ -27,18 +27,18 @@ public final class ClickGuiHack extends Hack
 		ValueDisplay.INTEGER);
 	
 	private final SliderSetting bgRed = new SliderSetting("BG red",
-		"Background red", 64, 0, 255, 1, ValueDisplay.INTEGER);
+		"Background red", 64, 0, 255, 0.01, ValueDisplay.INTEGER);
 	private final SliderSetting bgGreen = new SliderSetting("BG green",
-		"Background green", 64, 0, 255, 1, ValueDisplay.INTEGER);
+		"Background green", 64, 0, 255, 0.01, ValueDisplay.INTEGER);
 	private final SliderSetting bgBlue = new SliderSetting("BG blue",
-		"Background blue", 64, 0, 255, 1, ValueDisplay.INTEGER);
+		"Background blue", 64, 0, 255, 0.01, ValueDisplay.INTEGER);
 	
 	private final SliderSetting acRed = new SliderSetting("AC red",
-		"Accent red", 16, 0, 255, 1, ValueDisplay.INTEGER);
+		"Accent red", 16, 0, 255, 0.01, ValueDisplay.INTEGER);
 	private final SliderSetting acGreen = new SliderSetting("AC green",
-		"Accent green", 16, 0, 255, 1, ValueDisplay.INTEGER);
+		"Accent green", 16, 0, 255, 0.01, ValueDisplay.INTEGER);
 	private final SliderSetting acBlue = new SliderSetting("AC blue",
-		"Accent blue", 16, 0, 255, 1, ValueDisplay.INTEGER);
+		"Accent blue", 16, 0, 255, 0.01, ValueDisplay.INTEGER);
 	
 	private final CheckboxSetting inventoryButton =
 		new CheckboxSetting("Inventory Button",
