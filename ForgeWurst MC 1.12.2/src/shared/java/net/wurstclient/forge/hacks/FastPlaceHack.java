@@ -21,7 +21,7 @@ public final class FastPlaceHack extends Hack
 	public FastPlaceHack()
 	{
 		super("FastPlace", "Allows you to place blocks 5 times faster.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.WORLD);
 	}
 	
 	@Override

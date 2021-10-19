@@ -23,7 +23,7 @@ public final class AutoPlaceHack extends Hack
 	public AutoPlaceHack()
 	{
 		super("AutoPlace", "Places blocks automatically.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.WORLD);
 	}
 	
 	@Override

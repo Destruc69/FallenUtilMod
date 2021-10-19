@@ -26,7 +26,7 @@ public final class PacketFly extends Hack {
 
 	public PacketFly() {
 		super("PacketFly", "Fly around with packets.");
-		setCategory(Category.MOVEMENT);
+		setCategory(Category.EXPLOIT);
 		addSetting(speed);
 	}
 

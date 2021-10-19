@@ -20,7 +20,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class StatSpoof extends Hack {
 	public StatSpoof() {
 		super("StatisticPause", "Attempts to cancel packets that update your statistics.");
-		setCategory(Category.OTHER);
+		setCategory(Category.EXPLOIT);
 	}
 
 	@Override

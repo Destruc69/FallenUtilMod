@@ -21,7 +21,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class AntiSwing extends Hack {
 	public AntiSwing() {
 		super("AntiSwing", "Cancels animation packets server-side.");
-		setCategory(Category.OTHER);
+		setCategory(Category.COMBAT);
 	}
 
 	@Override

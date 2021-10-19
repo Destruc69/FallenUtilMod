@@ -45,7 +45,7 @@ import net.minecraft.network.play.server.SPacketDisplayObjective;
 public final class AntiKick extends Hack {
 	public AntiKick() {
 		super("AntiExploit", "Avoids crash expoits, Like 2b2ts new SignExploit.");
-		setCategory(Category.OTHER);
+		setCategory(Category.EXPLOIT);
 	}
 
 	@Override

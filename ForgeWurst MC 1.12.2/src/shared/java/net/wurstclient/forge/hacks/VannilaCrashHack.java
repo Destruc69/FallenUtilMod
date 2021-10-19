@@ -17,7 +17,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class VannilaCrashHack extends Hack {
 	public VannilaCrashHack() {
 		super("Vannila Crasher", "Load chunks on Vanilla Servers.");
-		setCategory(Category.OTHER);
+		setCategory(Category.WORLD);
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class NoSound extends Hack {
 	public NoSound() {
 		super("NoSound", "Prevents sound effects.");
-		setCategory(Category.OTHER);
+		setCategory(Category.MISC);
 	}
 
 	@Override

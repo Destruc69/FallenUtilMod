@@ -20,7 +20,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class PortalGod extends Hack {
 	public PortalGod() {
 		super("PortalGod", "Become a god when your in a portal.");
-		setCategory(Category.OTHER);
+		setCategory(Category.EXPLOIT);
 	}
 
 	@Override

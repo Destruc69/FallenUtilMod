@@ -28,7 +28,7 @@ public final class AntiSpamHack extends Hack
 	{
 		super("AntiSpam",
 			"Blocks chat spam by adding a\n" + "counter to repeated messages.");
-		setCategory(Category.CHAT);
+		setCategory(Category.MISC);
 	}
 	
 	@Override

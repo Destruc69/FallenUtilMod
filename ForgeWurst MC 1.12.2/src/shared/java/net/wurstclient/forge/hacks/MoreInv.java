@@ -20,7 +20,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class MoreInv extends Hack {
 	public MoreInv() {
 		super("MoreInv", "Keep items in your inventory crafting slots.");
-		setCategory(Category.OTHER);
+		setCategory(Category.EXPLOIT);
 	}
 
 	@Override

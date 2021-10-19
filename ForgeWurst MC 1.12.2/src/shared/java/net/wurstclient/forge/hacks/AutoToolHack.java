@@ -44,7 +44,7 @@ public final class AutoToolHack extends Hack
 			"Automatically equips the fastest\n"
 				+ "applicable tool in your hotbar\n"
 				+ "when you try to break a block.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.MISC);
 		addSetting(useSwords);
 		addSetting(useHands);
 		addSetting(repairMode);

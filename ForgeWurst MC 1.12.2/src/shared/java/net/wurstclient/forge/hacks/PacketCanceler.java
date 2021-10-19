@@ -40,7 +40,7 @@ public final class PacketCanceler extends Hack {
 
 	public PacketCanceler() {
 		super("PacketCanceler", "Cancel packets that you desire!.");
-		setCategory(Category.OTHER);
+		setCategory(Category.MISC);
 		addSetting(Abilities);
 		addSetting(Animation);
 		addSetting(CPacketPlayer);

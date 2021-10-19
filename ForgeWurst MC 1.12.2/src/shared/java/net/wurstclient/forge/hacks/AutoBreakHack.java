@@ -23,7 +23,7 @@ public final class AutoBreakHack extends Hack
 	public AutoBreakHack()
 	{
 		super("AutoBreak", "Breaks blocks automatically.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.WORLD);
 	}
 	
 	@Override

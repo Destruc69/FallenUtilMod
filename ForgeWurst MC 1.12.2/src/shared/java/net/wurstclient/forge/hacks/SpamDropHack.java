@@ -21,7 +21,7 @@ public final class SpamDropHack extends Hack
 	public SpamDropHack()
 	{
 		super("AutoDrop", "Makes you drop your holding item.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.WORLD);
 	}
 	
 	@Override

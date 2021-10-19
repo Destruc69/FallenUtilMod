@@ -21,7 +21,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class InfiniteEffects extends Hack {
 	public InfiniteEffects() {
 		super("InfiniteEffects", "Attempts to cancel packets that remove your effects.");
-		setCategory(Category.COMBAT);
+		setCategory(Category.EXPLOIT);
 	}
 
 	@Override

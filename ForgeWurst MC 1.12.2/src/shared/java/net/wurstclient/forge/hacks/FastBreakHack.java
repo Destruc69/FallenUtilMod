@@ -24,7 +24,7 @@ public final class FastBreakHack extends Hack
 	public FastBreakHack()
 	{
 		super("FastBreak", "Allows you to break blocks faster.");
-		setCategory(Category.BLOCKS);
+		setCategory(Category.WORLD);
 	}
 	
 	@Override
