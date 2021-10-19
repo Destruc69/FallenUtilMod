@@ -36,7 +36,7 @@ public final class Discord extends Hack {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		DiscordEventHandlers handlers = new DiscordEventHandlers();
-		rpc.Discord_Initialize("837013588396081233", handlers, true, "");
+		rpc.Discord_Initialize("891902442999017482", handlers, true, "");
 		presence.startTimestamp = System.currentTimeMillis() / 1000L;
 		presence.details = presence.state = "Idle";
 		presence.largeImageKey = "fallen";
@@ -52,8 +52,8 @@ public final class Discord extends Hack {
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 
-		presence.details = getUsername() + "|" + getWorld();
-		presence.state = getBrand() + "|" + getVersion();
+		presence.details = getUsername() + " " + "|" + " " + getWorld();
+		presence.state = getBrand() + " " + "|" + " " + getVersion();
 		presence.largeImageText = "Fallen Utility Mod";
 		rpc.Discord_UpdatePresence(presence);
 
@@ -84,7 +84,11 @@ public final class Discord extends Hack {
 
 	private static String getBrand() {
 
-		return String.valueOf(mc.getConnection().getNetworkManager().getRemoteAddress());
-
+		try {
+			return String.valueOf(mc.player.getServer());
+		} catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 }
