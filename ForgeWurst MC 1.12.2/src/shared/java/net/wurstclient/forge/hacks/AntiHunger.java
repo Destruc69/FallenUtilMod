@@ -35,8 +35,5 @@ public final class AntiHunger extends Hack {
 	public void onUpdate(WUpdateEvent event) {
 		if (mc.player.isSprinting())
 			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
-
-		if (mc.player.onGround)
-			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
 	}
 }
