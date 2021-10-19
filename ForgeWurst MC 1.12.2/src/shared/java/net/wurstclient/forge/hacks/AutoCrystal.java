@@ -62,6 +62,7 @@ public final class AutoCrystal extends Hack {
 		addSetting(playersOnly);
 		addSetting(highPing);
 		addSetting(range);
+		addSetting(maxDamage);
 		addSetting(fastPlace);
 		addSetting(fastBreak);
 	}
@@ -142,7 +143,6 @@ public final class AutoCrystal extends Hack {
 
 					}catch(ReflectiveOperationException e)
 					{
-						setEnabled(false);
 						throw new RuntimeException(e);
 					}
 				}
@@ -154,7 +154,6 @@ public final class AutoCrystal extends Hack {
 
 					}catch(ReflectiveOperationException e)
 					{
-						setEnabled(false);
 						throw new RuntimeException(e);
 					}
 				}

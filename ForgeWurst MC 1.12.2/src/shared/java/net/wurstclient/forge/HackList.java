@@ -38,6 +38,7 @@ public final class HackList extends WHackList
 	public final NoCom noCom = register(new NoCom());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final FakePlayer fakePlayer = register(new FakePlayer());
 	public final Discord discord = register(new Discord());
 	public final AutoCrystal autoCrystal = register(new AutoCrystal());
 	public final AntiAFK antiAFK = register(new AntiAFK());
