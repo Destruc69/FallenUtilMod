@@ -7,43 +7,54 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.client.entity.EntityPlayerSP;
+import javazoom.jl.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.settings.SliderSetting;
 
-public final class MusicBox extends Hack
-{
-	public MusicBox()
-	{
-		super("AutoSprint", "Makes you sprint automatically.");
-		setCategory(Category.MOVEMENT);
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+import java.io.FileInputStream;
+
+public final class MusicBox extends Hack {
+
+	private final SliderSetting radio =
+			new SliderSetting("2b2tFM", 1, 1.0, 5, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
+	public MusicBox() {
+		super("MusicBox", "Plays built in music!.");
+		setCategory(Category.MISC);
+		addSetting(radio);
 	}
-	
+
 	@Override
-	protected void onEnable()
-	{
+	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@Override
-	protected void onDisable()
-	{
+	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
-	
+
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event)
-	{
-		EntityPlayerSP player = event.getPlayer();
-		
-		if(WEntity.isCollidedHorizontally(player) || player.isSneaking())
-			return;
-		
-		if(player.moveForward > 0)
-			player.setSprinting(true);
+	public void onUpdate(WUpdateEvent event) {
+
+		if (radio.getValue() == 1)
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song1.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
 	}
 }
