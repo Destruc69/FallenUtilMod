@@ -39,6 +39,7 @@ public final class HackList extends WHackList
 	public final NoCom noCom = register(new NoCom());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final Teleport teleport = register(new Teleport());
 	public final Scaffold scaffold = register(new Scaffold());
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());

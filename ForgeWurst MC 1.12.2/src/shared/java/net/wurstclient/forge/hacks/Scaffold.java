@@ -9,7 +9,9 @@ package net.wurstclient.forge.hacks;
 
 import io.netty.util.internal.MathUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -28,6 +30,8 @@ import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.*;
+
+import java.util.ArrayList;
 
 public final class Scaffold extends Hack {
 

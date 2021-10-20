@@ -16,34 +16,41 @@ import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.settings.SliderSetting;
 
-public final class Anchor extends Hack {
+public final class Teleport extends Hack {
 
-	private final SliderSetting speed =
-			new SliderSetting("Speed", 4, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+	private final SliderSetting x =
+			new SliderSetting("X Coord", 1, -30000000, 30000000, 0.1, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final SliderSetting fall =
-			new SliderSetting("Fall Distance", 1, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+	private final SliderSetting y =
+			new SliderSetting("Y Coord", 1, 1.0, 64, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
-	public Anchor() {
-		super("Anchor", "Fast fall when your 2 blocks over a hole.");
-		setCategory(Category.COMBAT);
-		addSetting(fall);
-		addSetting(speed);
+	private final SliderSetting z =
+			new SliderSetting("Z Coords", 1, -30000000, 30000000, 0.1, SliderSetting.ValueDisplay.DECIMAL);
+
+	public Teleport()
+	{
+		super("Teleport", "Teleport to coords.");
+		setCategory(Category.MOVEMENT);
+		addSetting(x);
+		addSetting(y);
+		addSetting(z);
 	}
-
+	
 	@Override
-	protected void onEnable() {
+	protected void onEnable()
+	{
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
+	
 	@Override
-	protected void onDisable() {
+	protected void onDisable()
+	{
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
-
+	
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event) {
-		if (event.getPlayer().fallDistance > fall.getValue())
-			mc.player.motionY -= speed.getValue();
+	public void onUpdate(WUpdateEvent event)
+	{
+		mc.player.setPosition(x.getValue(), y.getValue(), z.getValue());
 	}
 }
