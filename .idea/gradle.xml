@@ -13,6 +13,17 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ForgeWurst MC 1.12.2/build/tmp/jar/baritone-1.2.15" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ForgeWurst MC 1.12.2/build/tmp/jar/baritone-1.2.15" />
+            <option value="$PROJECT_DIR$/ForgeWurst MC 1.12.2/build/tmp/jar/baritone-1.2.15/buildSrc" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
