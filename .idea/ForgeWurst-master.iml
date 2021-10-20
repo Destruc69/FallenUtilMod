@@ -8,5 +8,6 @@
     <orderEntry type="library" exported="" name="java-discord-rpc-2.0.1-all (2)" level="project" />
     <orderEntry type="library" exported="" name="jl1.0.1" level="project" />
     <orderEntry type="library" name="Fallen" level="application" />
+    <orderEntry type="library" name="baritone-api-forge-1.2.15" level="project" />
   </component>
 </module>
