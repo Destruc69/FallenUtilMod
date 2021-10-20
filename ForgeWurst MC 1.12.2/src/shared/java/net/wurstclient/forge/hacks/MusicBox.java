@@ -49,6 +49,14 @@ public final class MusicBox extends Hack {
 			new CheckboxSetting("The Power",
 					false);
 
+	private final CheckboxSetting song7 =
+			new CheckboxSetting("Never Gonna Give You Up",
+					false);
+
+	private final CheckboxSetting song8 =
+			new CheckboxSetting("Cant Touch This",
+					false);
+
 	public MusicBox() {
 		super("MusicBox", "Plays built in music!.");
 		setCategory(Category.MISC);
@@ -58,6 +66,8 @@ public final class MusicBox extends Hack {
 		addSetting(song4);
 		addSetting(song5);
 		addSetting(song6);
+		addSetting(song7);
+		addSetting(song8);
 	}
 
 	@Override
@@ -145,6 +155,32 @@ public final class MusicBox extends Hack {
 				clip.open(audioInputStream);
 				clip.start();
 				song6.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song7.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song7.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song7.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song8.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song8.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song8.setChecked(false);
 
 			} catch (Exception ex) {
 				System.out.println("Error with playing sound.");

@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAir;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 
@@ -255,5 +256,9 @@ public class InventoryUtil {
 			this.itemStack = itemStack;
 			this.slotId = slotId;
 		}
+	}
+
+	public static boolean isItemStackNull(final ItemStack stack) {
+		return stack == null || stack.getItem() instanceof ItemAir;
 	}
 }

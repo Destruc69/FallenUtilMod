@@ -10,19 +10,18 @@ package net.wurstclient.forge.utils;
 import java.lang.reflect.Field;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerDigging.Action;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.wurstclient.forge.ForgeWurst;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.compatibility.WPlayerController;
@@ -234,5 +233,37 @@ public final class BlockUtils {
 				break;
 			}
 		}
+	}
+
+	public static boolean isScaffoldPos(final BlockPos pos) {
+		return mc.world.isAirBlock(pos)
+				|| mc.world.getBlockState(pos).getBlock() == Blocks.SNOW_LAYER
+				|| mc.world.getBlockState(pos).getBlock() == Blocks.TALLGRASS
+				|| mc.world.getBlockState(pos).getBlock() instanceof BlockLiquid;
+	}
+
+	@SuppressWarnings("deprecation")
+	public static boolean isValidBlock(final BlockPos pos) {
+		final Block block = mc.world.getBlockState(pos).getBlock();
+		return !(block instanceof BlockLiquid) && block.getMaterial((IBlockState) null) != Material.AIR;
+	}
+
+	public static EnumFacing getFacing(BlockPos pos) {
+		for (EnumFacing facing : EnumFacing.values()) {
+			RayTraceResult rayTraceResult = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX,
+							mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ),
+					new Vec3d((double) pos.getX() + 0.5 + (double) facing.getDirectionVec().getX() * 1.0 / 2.0,
+							(double) pos.getY() + 0.5 + (double) facing.getDirectionVec().getY() * 1.0 / 2.0,
+							(double) pos.getZ() + 0.5 + (double) facing.getDirectionVec().getZ() * 1.0 / 2.0),
+					false, true, false);
+			if (rayTraceResult != null && (rayTraceResult.typeOfHit != RayTraceResult.Type.BLOCK
+					|| !rayTraceResult.getBlockPos().equals(pos)))
+				continue;
+			return facing;
+		}
+		if ((double) pos.getY() > mc.player.posY + (double) mc.player.getEyeHeight()) {
+			return EnumFacing.DOWN;
+		}
+		return EnumFacing.UP;
 	}
 }
