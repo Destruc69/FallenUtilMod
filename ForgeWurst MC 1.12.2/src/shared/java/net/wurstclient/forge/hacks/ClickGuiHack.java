@@ -117,7 +117,7 @@ public final class ClickGuiHack extends Hack
 			
 			event.getButtonList()
 				.add(new GuiButton(-1, mc.currentScreen.width / 2 - 50,
-					mc.currentScreen.height / 2 - 120, 100, 20, "ForgeWurst"));
+					mc.currentScreen.height / 2 - 120, 100, 20, "Fallen"));
 		}
 		
 		@SubscribeEvent

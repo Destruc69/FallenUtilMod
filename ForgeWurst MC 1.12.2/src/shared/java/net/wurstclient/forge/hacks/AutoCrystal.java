@@ -13,6 +13,8 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemEndCrystal;
+import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
@@ -24,6 +26,7 @@ import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
 import net.wurstclient.forge.utils.CrystalUtil;
+import net.wurstclient.forge.utils.KeyBindingUtils;
 import net.wurstclient.forge.utils.PlayerControllerUtils;
 
 import java.lang.reflect.Field;
@@ -49,12 +52,6 @@ public final class AutoCrystal extends Hack {
 	private final SliderSetting maxDamage =
 			new SliderSetting("Max Self Damage", 4, 2.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final SliderSetting fastPlace =
-			new SliderSetting("FastPlace Health Cap", 5, 4.0, 10, 1.0, SliderSetting.ValueDisplay.DECIMAL);
-
-	private final SliderSetting fastBreak =
-			new SliderSetting("FastBreak", 5, 4.0, 10, 1.0, SliderSetting.ValueDisplay.DECIMAL);
-
 	public AutoCrystal() {
 		super("AutoCrystal", "Killaura but for crystals.");
 		setCategory(Category.COMBAT);
@@ -63,8 +60,6 @@ public final class AutoCrystal extends Hack {
 		addSetting(highPing);
 		addSetting(range);
 		addSetting(maxDamage);
-		addSetting(fastPlace);
-		addSetting(fastBreak);
 	}
 
 	@Override
@@ -132,37 +127,12 @@ public final class AutoCrystal extends Hack {
 					mc.world.getLoadedEntityList();
 				}
 
-				if (mc.player.getHealth() > fastPlace.getValue()) {
-					try
-					{
-						Field rightClickDelayTimer =
-								mc.getClass().getDeclaredField(wurst.isObfuscated()
-										? "field_71467_ac" : "rightClickDelayTimer");
-						rightClickDelayTimer.setAccessible(true);
-						rightClickDelayTimer.setInt(mc, 0);
-
-					}catch(ReflectiveOperationException e)
-					{
-						throw new RuntimeException(e);
-					}
-				}
-
-				if (mc.player.getHealth() > fastBreak.getValue()) {
-					try
-					{
-						PlayerControllerUtils.setBlockHitDelay(0);
-
-					}catch(ReflectiveOperationException e)
-					{
-						throw new RuntimeException(e);
-					}
-				}
-
 				float selfDamage = CrystalUtil.calculateDamage(new Vec3d(mc.player.posX, mc.player.posY, mc.player.posZ), mc.player);
 				if (selfDamage > maxDamage.getValue()) {
 					mc.player.stopActiveHand();
+					KeyBindingUtils.setPressed(mc.gameSettings.keyBindUseItem, false);
+					KeyBindingUtils.setPressed(mc.gameSettings.keyBindAttack, false);
 				}
-
 			}
 		}
 	}
