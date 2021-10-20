@@ -28,7 +28,7 @@ package net.wurstclient.forge.analytics;
 /**
  * Data that is client-specific, and should be common for all tracking requests.
  * For convenience most of this data is populated automatically by
- * {@link #populateFromSystem()}.
+ * .
  *
  * @author Daniel Murphy
  *

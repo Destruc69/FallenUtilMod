@@ -55,7 +55,7 @@ public final class IngameHUD
 		GL11.glPushMatrix();
 		GL11.glScaled(1.33333333, 1.33333333, 1);
 		WMinecraft.getFontRenderer().drawStringWithShadow(
-			"Fallen 2.0", 3, 3, textColor);
+			"Fallen", 3, 3, textColor);
 		GL11.glPopMatrix();
 		
 		// hack list

@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import net.minecraft.item.Item;
 import net.wurstclient.forge.compatibility.WHackList;
 import net.wurstclient.forge.hacks.*;
 import net.wurstclient.forge.settings.Setting;

@@ -33,11 +33,31 @@ public final class MusicBox extends Hack {
 			new CheckboxSetting("NormalFag Song",
 					false);
 
+	private final CheckboxSetting song3 =
+			new CheckboxSetting("Temple OS Remix",
+					false);
+
+	private final CheckboxSetting song4 =
+			new CheckboxSetting("Mr.BlueSky",
+					false);
+
+	private final CheckboxSetting song5 =
+			new CheckboxSetting("The Hitman",
+					false);
+
+	private final CheckboxSetting song6 =
+			new CheckboxSetting("The Power",
+					false);
+
 	public MusicBox() {
 		super("MusicBox", "Plays built in music!.");
 		setCategory(Category.MISC);
 		addSetting(song1);
 		addSetting(song2);
+		addSetting(song3);
+		addSetting(song4);
+		addSetting(song5);
+		addSetting(song6);
 	}
 
 	@Override
@@ -73,6 +93,58 @@ public final class MusicBox extends Hack {
 				clip.open(audioInputStream);
 				clip.start();
 				song2.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song3.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song3.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song3.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song4.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song4.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song4.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song5.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song5.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song5.setChecked(false);
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+
+		if (song6.isChecked())
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("song6.wav").getAbsoluteFile());
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				song6.setChecked(false);
 
 			} catch (Exception ex) {
 				System.out.println("Error with playing sound.");

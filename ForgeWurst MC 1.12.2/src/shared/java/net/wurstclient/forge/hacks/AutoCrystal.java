@@ -132,6 +132,7 @@ public final class AutoCrystal extends Hack {
 					mc.player.stopActiveHand();
 					KeyBindingUtils.setPressed(mc.gameSettings.keyBindUseItem, false);
 					KeyBindingUtils.setPressed(mc.gameSettings.keyBindAttack, false);
+					return;
 				}
 			}
 		}
