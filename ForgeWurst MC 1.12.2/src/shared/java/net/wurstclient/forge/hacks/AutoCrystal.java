@@ -59,7 +59,6 @@ public final class AutoCrystal extends Hack {
 		addSetting(playersOnly);
 		addSetting(highPing);
 		addSetting(range);
-		addSetting(maxDamage);
 	}
 
 	@Override
@@ -74,13 +73,6 @@ public final class AutoCrystal extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-
-
-		float selfDamage = CrystalUtil.calculateDamage(new Vec3d(mc.player.posX, mc.player.posY, mc.player.posZ), mc.player);
-		if (selfDamage > maxDamage.getValue()) {
-			mc.player.stopActiveHand();
-			return;
-		}
 		for (Entity e : mc.world.loadedEntityList) {
 			if (mc.player.getDistance(e) < range.getValue()) {
 				if (e instanceof EntityEnderCrystal) {
