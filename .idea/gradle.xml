@@ -16,11 +16,10 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/baritone-master" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Stevebot-develop" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/baritone-master" />
-            <option value="$PROJECT_DIR$/baritone-master/buildSrc" />
+            <option value="$PROJECT_DIR$/Stevebot-develop" />
           </set>
         </option>
       </GradleProjectSettings>

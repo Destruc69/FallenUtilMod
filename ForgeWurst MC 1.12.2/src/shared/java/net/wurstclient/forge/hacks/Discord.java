@@ -83,12 +83,6 @@ public final class Discord extends Hack {
 	}
 
 	private static String getBrand() {
-
-		try {
-			return String.valueOf(mc.player.getServer());
-		} catch(Exception e)
-		{
-			throw new RuntimeException(e);
-		}
+		return mc.player.getServerBrand();
 	}
 }

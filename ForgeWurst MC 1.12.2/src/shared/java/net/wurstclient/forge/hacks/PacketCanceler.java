@@ -7,9 +7,7 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketAnimation;
-import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.client.CPacketPlayerAbilities;
+import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketEntity;
 import net.minecraft.network.play.server.SPacketRemoveEntityEffect;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,20 +20,29 @@ import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.ChatUtils;
 
 public final class PacketCanceler extends Hack {
+
 	private final CheckboxSetting Abilities =
-			new CheckboxSetting("Abilities",
+			new CheckboxSetting("CPacketPlayerAbilities",
 					false);
 
 	private final CheckboxSetting Rotation =
-			new CheckboxSetting("Rotation",
+			new CheckboxSetting("S16PacketEntityLook",
 					false);
 
 	private final CheckboxSetting Animation =
-			new CheckboxSetting("Animation",
+			new CheckboxSetting("CPacketAnimation",
 					false);
 
-	private final CheckboxSetting CPacketPlayer =
-			new CheckboxSetting("CPacketPlayer",
+	private final CheckboxSetting useEntity =
+			new CheckboxSetting("CPacketUseEntity",
+					false);
+
+	private final CheckboxSetting teleport =
+			new CheckboxSetting("CPacketConfirmTeleport",
+					false);
+
+	private final CheckboxSetting digging =
+			new CheckboxSetting("CPacketPlayerDigging",
 					false);
 
 	public PacketCanceler() {
@@ -43,8 +50,10 @@ public final class PacketCanceler extends Hack {
 		setCategory(Category.MISC);
 		addSetting(Abilities);
 		addSetting(Animation);
-		addSetting(CPacketPlayer);
 		addSetting(Rotation);
+		addSetting(useEntity);
+		addSetting(teleport);
+		addSetting(digging);
 	}
 
 	@Override
@@ -61,18 +70,29 @@ public final class PacketCanceler extends Hack {
 
 	@SubscribeEvent
 	public void onPacketInput(WPacketInputEvent event) {
-		if (CPacketPlayer.isChecked())
-			if (event.getPacket() instanceof CPacketPlayer)
-				event.setCanceled(true);
 		if (Animation.isChecked())
-			if (event.getPacket() instanceof CPacketAnimation)
+			if (event.getPacket() instanceof CPacketAnimation) {
 				event.setCanceled(true);
-		if (Rotation.isChecked())
+			}
+		if (Rotation.isChecked()) {
 			if (event.getPacket() instanceof SPacketEntity.S16PacketEntityLook)
 				event.setCanceled(true);
-		if (Abilities.isChecked())
+		}
+		if (Abilities.isChecked()) {
 			if (event.getPacket() instanceof CPacketPlayerAbilities)
 				event.setCanceled(true);
+		}
+		if (useEntity.isChecked()) {
+			if (event.getPacket() instanceof CPacketUseEntity)
+				event.setCanceled(true);
+		}
+		if (teleport.isChecked()) {
+			if (event.getPacket() instanceof CPacketConfirmTeleport)
+				event.setCanceled(true);
+		}
+		if (digging.isChecked()) {
+			if (event.getPacket() instanceof CPacketPlayerDigging)
+				event.setCanceled(true);
+		}
 	}
 }
-
