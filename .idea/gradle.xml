@@ -8,18 +8,10 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/ForgeWurst MC 1.12.2" />
+        <option name="gradleJvm" value="corretto-1.8" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/ForgeWurst MC 1.12.2" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/Stevebot-develop" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/Stevebot-develop" />
           </set>
         </option>
       </GradleProjectSettings>

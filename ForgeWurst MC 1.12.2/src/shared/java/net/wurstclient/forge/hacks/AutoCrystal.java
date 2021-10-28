@@ -13,11 +13,8 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemEndCrystal;
-import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
@@ -25,11 +22,7 @@ import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
-import net.wurstclient.forge.utils.CrystalUtil;
-import net.wurstclient.forge.utils.KeyBindingUtils;
-import net.wurstclient.forge.utils.PlayerControllerUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public final class AutoCrystal extends Hack {
@@ -48,9 +41,6 @@ public final class AutoCrystal extends Hack {
 
 	private final SliderSetting range =
 			new SliderSetting("Range", 5, 4.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
-
-	private final SliderSetting maxDamage =
-			new SliderSetting("Max Self Damage", 4, 2.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	public AutoCrystal() {
 		super("AutoCrystal", "Killaura but for crystals.");

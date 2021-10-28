@@ -37,6 +37,7 @@ public final class HackList extends WHackList
 	public final MoreInv moreInv = register(new MoreInv());
 	public final SlowFly slowFly = register(new SlowFly());
 	public final NoCom noCom = register(new NoCom());
+	public final ItemModel itemModel = register(new ItemModel());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
 	public final Teleport teleport = register(new Teleport());

@@ -42,7 +42,7 @@ public final class SliderSetting extends Setting
 		this(name, null, value, min, max, increment, display);
 	}
 	
-	public double getValue()
+	public void getValue()
 	{
 		return value;
 	}
@@ -118,7 +118,7 @@ public final class SliderSetting extends Setting
 		public static final ValueDisplay INTEGER = v -> (int)v + "";
 		public static final ValueDisplay PERCENTAGE =
 			v -> (int)(Math.round(v * 1e8) / 1e6) + "%";
-		public static final ValueDisplay DEGREES = v -> (int)v + "°";
+		public static final ValueDisplay DEGREES = v -> (int)v + "ï¿½";
 		public static final ValueDisplay NONE = v -> "";
 		
 		public String getValueString(double value);

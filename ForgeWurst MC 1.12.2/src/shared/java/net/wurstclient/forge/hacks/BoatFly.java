@@ -99,6 +99,7 @@ public final class BoatFly extends Hack {
 		if (NCP.isChecked()) {
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
 		}
+
 	}
 
 	@SubscribeEvent

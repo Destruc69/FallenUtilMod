@@ -9,6 +9,7 @@ package net.wurstclient.forge.clickgui;
 
 import java.util.Arrays;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.FontRenderer;
