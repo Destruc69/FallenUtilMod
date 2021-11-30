@@ -44,10 +44,6 @@ public final class Strafe extends Hack {
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 
-		if (mc.player.onGround) {
-			mc.player.jump();
-		}
-
 		if (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f) {
 			mc.player.motionY = 0.405f;
 
