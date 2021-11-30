@@ -21,6 +21,7 @@ public final class CommandList extends WCommandList
 	public final SetEnumCmd setEnumCmd = register(new SetEnumCmd());
 	public final SetSliderCmd setSliderCmd = register(new SetSliderCmd());
 	public final TCmd tCmd = register(new TCmd());
+	public final tpCMD tpCMD = register(new tpCMD());
 	public final TacoCmd tacoCmd = register(new TacoCmd());
 	public final VClipCmd vClipCmd = register(new VClipCmd());
 	public final VrTweaksCmd vrTweaksCmd = register(new VrTweaksCmd());

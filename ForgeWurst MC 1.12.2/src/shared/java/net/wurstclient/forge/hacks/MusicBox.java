@@ -12,9 +12,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
+import net.wurstclient.forge.ForgeWurst;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
+import net.wurstclient.forge.utils.ChatUtils;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -73,6 +75,10 @@ public final class MusicBox extends Hack {
 	@Override
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
+
+		ForgeWurst.getForgeWurst().getHax().musicBox.setEnabled(false);
+
+		ChatUtils.error("MusicBox is temporarily disabled, Sorry about this!");
 	}
 
 	@Override

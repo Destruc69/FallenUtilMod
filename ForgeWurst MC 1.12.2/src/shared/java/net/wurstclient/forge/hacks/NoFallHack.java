@@ -40,7 +40,9 @@ public final class NoFallHack extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		if(event.getPlayer().fallDistance > 2)
+		if(event.getPlayer().fallDistance > 2) {
 			mc.getConnection().sendPacket(new CPacketPlayer(true));
+			mc.player.fallDistance = 2f;
+		}
 	}
 }

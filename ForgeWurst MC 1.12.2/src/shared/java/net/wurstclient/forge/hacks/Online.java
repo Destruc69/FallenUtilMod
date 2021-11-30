@@ -74,6 +74,6 @@ public final class Online extends Hack {
 	}
 
 	public static int getOnline() {
-		return mc.getConnection().currentServerMaxPlayers;
+		return mc.getConnection().getPlayerInfoMap().size();
 	}
 }
