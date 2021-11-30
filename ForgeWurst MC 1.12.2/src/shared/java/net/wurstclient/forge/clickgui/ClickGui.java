@@ -7,7 +7,6 @@
  */
 package net.wurstclient.forge.clickgui;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -34,8 +32,6 @@ import net.wurstclient.forge.HackList;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.Setting;
 import net.wurstclient.forge.utils.JsonUtils;
-
-import javax.naming.Context;
 
 public final class ClickGui
 {
@@ -360,11 +356,16 @@ public final class ClickGui
 			break;
 		}
 	}
-
+	
 	public void render(int mouseX, int mouseY, float partialTicks)
 	{
-
-
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glLineWidth(1);
+		
 		// scrolling
 		int dWheel = Mouse.getDWheel();
 		if(dWheel != 0)
