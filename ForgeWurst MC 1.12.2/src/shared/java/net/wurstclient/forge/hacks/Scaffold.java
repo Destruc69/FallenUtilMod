@@ -140,10 +140,7 @@ public final class Scaffold extends Hack {
 		}
 		if (this.rotation.isChecked()) {
 			mc.player.setSprinting(false);
-			float[] angle = MathUtils.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()),
-					new Vec3d((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f));
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation(angle[0],
-					(float) MathHelper.normalizeAngle((int) angle[1], 360), mc.player.onGround));
+			RotationUtils.faceVectorPacket(new Vec3d(0,-5, 0));
 		}
 		mc.playerController.processRightClickBlock(mc.player, mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5),
 				EnumHand.MAIN_HAND);

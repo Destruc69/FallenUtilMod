@@ -9,6 +9,8 @@ package net.wurstclient.forge.hacks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
@@ -42,33 +44,49 @@ public final class Strafe extends Hack {
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 
-		float yaw = Minecraft.getMinecraft().player.rotationYaw;
-		float pitch = Minecraft.getMinecraft().player.rotationPitch;
+		if (mc.player.onGround) {
+			mc.player.jump();
+		}
 
-		if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown() && mc.player.onGround)
-			mc.player.motionY = speed.getValue();
-		if (Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown() && mc.player.onGround)
-			mc.player.motionY = speed.getValue();
-		if (Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown() && mc.player.onGround)
-			mc.player.motionY = speed.getValue();
-		if (Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown() && mc.player.onGround)
-			mc.player.motionY = speed.getValue();
+		if (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f) {
+			mc.player.motionY = 0.405f;
 
-		if (mc.player.isAirBorne && Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown()) {
-			Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
-			Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
+			final float yaw = GetRotationYawForCalc();
+			mc.player.motionX -= MathHelper.sin(yaw) * 0.2f;
+			mc.player.motionZ += MathHelper.cos(yaw) * 0.2f;
+		} else if (mc.player.onGround) {
+			final float yaw = GetRotationYawForCalc();
+			mc.player.motionX -= MathHelper.sin(yaw) * 0.2f;
+			mc.player.motionZ += MathHelper.cos(yaw) * 0.2f;
+			mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.4, mc.player.posZ, false));
+
 		}
-		if (mc.player.isAirBorne && Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown()) {
-			Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
-			Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
+	}
+
+	private float GetRotationYawForCalc()
+	{
+		float rotationYaw = mc.player.rotationYaw;
+		if (mc.player.moveForward < 0.0f)
+		{
+			rotationYaw += 180.0f;
 		}
-		if (mc.player.isAirBorne && Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown()) {
-			Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
-			Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
+		float n = 1.0f;
+		if (mc.player.moveForward < 0.0f)
+		{
+			n = -0.5f;
 		}
-		if (mc.player.isAirBorne && Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown()) {
-			Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
-			Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.03;
+		else if (mc.player.moveForward > 0.0f)
+		{
+			n = 0.5f;
 		}
+		if (mc.player.moveStrafing > 0.0f)
+		{
+			rotationYaw -= 90.0f * n;
+		}
+		if (mc.player.moveStrafing < 0.0f)
+		{
+			rotationYaw += 90.0f * n;
+		}
+		return rotationYaw * 0.017453292f;
 	}
 }

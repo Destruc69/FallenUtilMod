@@ -42,7 +42,7 @@ public final class SliderSetting extends Setting
 		this(name, null, value, min, max, increment, display);
 	}
 	
-	public void getValue()
+	public double getValue()
 	{
 		return value;
 	}

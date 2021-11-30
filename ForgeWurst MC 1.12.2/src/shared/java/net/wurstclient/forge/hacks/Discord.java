@@ -83,6 +83,6 @@ public final class Discord extends Hack {
 	}
 
 	private static String getBrand() {
-		return mc.player.getServerBrand();
+		return String.valueOf(mc.getConnection().getNetworkManager().getRemoteAddress());
 	}
 }

@@ -7,34 +7,40 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.ChatUtils;
+import net.wurstclient.forge.compatibility.WEntity;
 
-public final class AntiHunger extends Hack {
-	public AntiHunger() {
-		super("AntiHunger", "Reduces hunger rate.");
+public final class AntiVoid extends Hack
+{
+	public AntiVoid()
+	{
+		super("AntiVoid", "Prevents you from falling in the void.");
 		setCategory(Category.MOVEMENT);
 	}
-
+	
 	@Override
-	protected void onEnable() {
+	protected void onEnable()
+	{
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
+	
 	@Override
-	protected void onDisable() {
+	protected void onDisable()
+	{
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
-
+	
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mc.player.isSprinting()) {
-			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+		if (mc.player.posY == 1) {
+			mc.player.jump();
 		}
 	}
 }
