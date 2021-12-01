@@ -47,6 +47,7 @@ public final class HackList extends WHackList
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
+	public final HighwayNavigator highwayNavigator = register(new HighwayNavigator());
 	/**
 	 * ClickGUI Backround Effects
 	 * Fix AutoTotem
