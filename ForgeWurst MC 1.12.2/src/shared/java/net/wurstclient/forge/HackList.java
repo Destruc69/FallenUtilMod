@@ -40,6 +40,7 @@ public final class HackList extends WHackList
 	public final ItemModel itemModel = register(new ItemModel());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final CrashTest crashTest = register(new CrashTest());
 	public final AntiVoid antiVoid = register(new AntiVoid());
 	public final Teleport teleport = register(new Teleport());
 	public final Scaffold scaffold = register(new Scaffold());

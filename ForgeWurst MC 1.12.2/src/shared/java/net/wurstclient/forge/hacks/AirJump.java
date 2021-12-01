@@ -13,14 +13,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
+import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.ChatUtils;
+import org.lwjgl.input.Keyboard;
 
-public final class AirJump extends Hack
-{
+public final class AirJump extends Hack {
+
+	private final CheckboxSetting stati =
+			new CheckboxSetting("Static",
+					false);
+
 	public AirJump()
 	{
 		super("AirJump", "Jump in mid air.");
 		setCategory(Category.MOVEMENT);
+		addSetting(stati);
 	}
 	
 	@Override
@@ -39,7 +46,12 @@ public final class AirJump extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
-			Minecraft.getMinecraft().player.jump();
+		if (!stati.isChecked()) {
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
+				Minecraft.getMinecraft().player.jump();
+		} else
+			if (mc.gameSettings.keyBindJump.isKeyDown()) {
+				mc.player.setPosition(mc.player.posX, mc.player.posY + 1, mc.player.posZ);
+			}
 	}
 }

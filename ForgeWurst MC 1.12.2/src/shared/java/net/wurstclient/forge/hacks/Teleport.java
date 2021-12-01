@@ -15,17 +15,18 @@ import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.settings.SliderSetting;
+import net.wurstclient.forge.utils.ChatUtils;
 
 public final class Teleport extends Hack {
 
 	private final SliderSetting x =
-			new SliderSetting("X Coord", 1, -30000000, 30000000, 0.1, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("X Coord", 1, -30000000, 30000000, 5.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting y =
-			new SliderSetting("Y Coord", 1, 1.0, 64, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Y Coord", 1, 1.0, 64, 5.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting z =
-			new SliderSetting("Z Coords", 1, -30000000, 30000000, 0.1, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Z Coords", 1, -30000000, 30000000, 5.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	public Teleport()
 	{
@@ -40,6 +41,8 @@ public final class Teleport extends Hack {
 	protected void onEnable()
 	{
 		MinecraftForge.EVENT_BUS.register(this);
+
+		ChatUtils.message("Remember, U can always use the command | .tp <x> <y> <z>");
 	}
 	
 	@Override

@@ -76,6 +76,7 @@ public final class AutoCrystal extends Hack {
 
 			ArrayList<Entity> attackEntityList = new ArrayList<Entity>();
 
+
 			for (Entity e : mc.world.loadedEntityList) {
 				if (e instanceof EntityPlayer && e != mc.player && playersOnly.isChecked()) {
 					attackEntityList.add(e);

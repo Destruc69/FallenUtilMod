@@ -95,7 +95,7 @@ public final class ElytraBoostHack extends Hack {
 	public void onUpdate(WUpdateEvent event) {
 
 		if (timer1.isChecked() && mc.player.isElytraFlying() && !(mc.player.fallDistance > 5)) {
-			setTickLength(0.8f / 50f);
+			setTickLength(0.5f / 50f);
 		} else
 			setTickLength(50);
 
