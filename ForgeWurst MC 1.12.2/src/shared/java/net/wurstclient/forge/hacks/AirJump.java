@@ -25,7 +25,7 @@ public final class AirJump extends Hack {
 
 	public AirJump()
 	{
-		super("AirJump", "Jump in mid air.");
+		super("AirJump", "Jump in mid-air.");
 		setCategory(Category.MOVEMENT);
 		addSetting(stati);
 	}
