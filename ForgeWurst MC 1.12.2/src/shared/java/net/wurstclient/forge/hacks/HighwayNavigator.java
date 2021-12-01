@@ -31,11 +31,25 @@ public final class HighwayNavigator extends Hack {
 
     @SubscribeEvent
     public void onUpdate(WUpdateEvent event) {
-        BlockPos blockPos = Minecraft.getMinecraft().player.getPosition();
 
-        if (Minecraft.getMinecraft().world.getBlockState(blockPos.down()).getBlock() == Blocks.OBSIDIAN) {
+        boolean jump = true;
+        boolean forward = true;
+
+        if (jump == true) {
+            KeyBindingUtils.setPressed(mc.gameSettings.keyBindJump, true);
+        } else
+            KeyBindingUtils.setPressed(mc.gameSettings.keyBindJump, false);
+
+        if (forward == true) {
             KeyBindingUtils.setPressed(mc.gameSettings.keyBindForward, true);
         } else
             KeyBindingUtils.setPressed(mc.gameSettings.keyBindForward, false);
+
+        BlockPos blockPos = Minecraft.getMinecraft().player.getPosition();
+
+        if (Minecraft.getMinecraft().world.getBlockState(blockPos.down()).getBlock() == Blocks.OBSIDIAN) {
+            forward = true;
+        } else
+            forward = false;
     }
 }
