@@ -46,8 +46,8 @@ public final class HackList extends WHackList
 	public final Scaffold scaffold = register(new Scaffold());
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
+	public final Stash stash = register(new Stash());
 	/**
-	 * Baritone
 	 * ClickGUI Backround Effects
 	 * Fix AutoTotem
 	 * Improve Stash/StashFinder

@@ -15,7 +15,8 @@ public enum Category
 	RENDER("Render"),
 	MISC("Misc"),
 	EXPLOIT("Exploit"),
-	HUD("Hud");
+	HUD("Hud"),
+	NAV("AutoPilot");
 	
 	private final String name;
 	

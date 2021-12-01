@@ -28,7 +28,7 @@ public final class Stash extends Hack {
 
 	public Stash() {
 		super("StashFinder", "Notifies when stashes are found.");
-		setCategory(Category.MOVEMENT);
+		setCategory(Category.WORLD);
 		addSetting(chest);
 		addSetting(portal);
 		addSetting(anti);
