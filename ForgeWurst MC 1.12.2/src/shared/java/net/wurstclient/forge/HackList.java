@@ -46,6 +46,17 @@ public final class HackList extends WHackList
 	public final Scaffold scaffold = register(new Scaffold());
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
+	/**
+	 * Baritone
+	 * ClickGUI Backround Effects
+	 * Fix AutoTotem
+	 * Improve Stash/StashFinder
+	 * Make Scaffold bypass NCP
+	 * More Render Modules for PvP/CPvP
+	 * Make ElytraFlight better than it is
+	 * FIX JLAYER/MUSICBOX
+	 * More General Modules
+	 */
 	public final AutoCrystal autoCrystal = register(new AutoCrystal());
 	public final AntiAFK antiAFK = register(new AntiAFK());
 	public final Anchor anchor = register(new Anchor());
