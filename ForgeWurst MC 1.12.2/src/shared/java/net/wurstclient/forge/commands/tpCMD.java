@@ -24,7 +24,7 @@ public final class tpCMD extends Command
     public void call(String[] args) throws CmdException
     {
 
-        if(args.length != 2)
+        if(args.length != 3)
             throw new CmdSyntaxError();
 
         mc.player.setPosition(mc.player.posX = Integer.parseInt(args[0]), mc.player.posY = Integer.parseInt(args[1]), mc.player.posZ = Integer.parseInt(args[2]));

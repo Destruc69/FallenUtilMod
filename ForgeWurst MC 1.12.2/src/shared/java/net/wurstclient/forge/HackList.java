@@ -47,7 +47,7 @@ public final class HackList extends WHackList
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
-	public final HighwayNavigator highwayNavigator = register(new HighwayNavigator());
+	public final DebugForScaff debugForScaff = register(new DebugForScaff());
 	/**
 	 * ClickGUI Backround Effects
 	 * Fix AutoTotem
@@ -61,6 +61,7 @@ public final class HackList extends WHackList
 	public final AutoCrystal autoCrystal = register(new AutoCrystal());
 	public final AntiAFK antiAFK = register(new AntiAFK());
 	public final Anchor anchor = register(new Anchor());
+	public final PlayerCom playerCom = register(new PlayerCom());
 	public final AutoTotem autoTotem = register(new AutoTotem());
 	public final YawLock yawLock = register(new YawLock());
 	public final PacketFly packetFly = register(new PacketFly());

@@ -26,18 +26,21 @@ import net.wurstclient.forge.settings.SliderSetting;
 
 public final class ItemModel extends Hack {
 
-	private final SliderSetting pitch =
-			new SliderSetting("Pitch", 1, 0.05, 10, 0.05, SliderSetting.ValueDisplay.DECIMAL);
+	private final SliderSetting x =
+			new SliderSetting("X", 1, 0.05, 10, 0.05, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final SliderSetting yaw =
-			new SliderSetting("Yaw", 1, 0.05, 10, 0.05, SliderSetting.ValueDisplay.DECIMAL);
+	private final SliderSetting y =
+			new SliderSetting("Y", 1, 0.05, 10, 0.05, SliderSetting.ValueDisplay.DECIMAL);
+
+	private final SliderSetting z =
+			new SliderSetting("Z", 1, 0.05, 10, 0.05, SliderSetting.ValueDisplay.DECIMAL);
 
 	public ItemModel() {
 		super("ItemModel", "Change the angle of your arm.");
 		setCategory(Category.MOVEMENT);
-		addSetting(pitch);
-		addSetting(yaw);
-
+		addSetting(x);
+		addSetting(y);
+		addSetting(z);
 	}
 
 	@Override
@@ -52,7 +55,15 @@ public final class ItemModel extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		mc.player.renderArmPitch = (Float) pitch.getValueF();
-		mc.player.renderArmYaw = (Float) yaw.getValueF();
+
+		final EnumHandSide enumHandSide = null;
+
+		if (getEnumHandSide() == EnumHandSide.LEFT || getEnumHandSide() == EnumHandSide.RIGHT) {
+			GlStateManager.scale(x.getValue(), y.getValue(), z.getValue());
+		}
+	}
+
+	public EnumHandSide getEnumHandSide(){
+		return getEnumHandSide();
 	}
 }
