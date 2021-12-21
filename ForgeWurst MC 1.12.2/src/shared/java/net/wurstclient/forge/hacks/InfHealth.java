@@ -7,18 +7,20 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.GameType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.KeyBindingUtils;
 
-public final class AutoPlaceHack extends Hack
+public final class InfHealth extends Hack
 {
-	public AutoPlaceHack()
+	public InfHealth()
 	{
-		super("AutoPlace", "Places blocks automatically.");
+		super("InfHealth", "Make you invincible.");
 		setCategory(Category.WORLD);
 	}
 	
@@ -37,6 +39,12 @@ public final class AutoPlaceHack extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		KeyBindingUtils.setPressed(mc.gameSettings.keyBindUseItem, true);
+		mc.player.setHealth(10f);
+		mc.player.setPlayerSPHealth(10f);
+		mc.player.setGameType(GameType.CREATIVE);
+		mc.player.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 100, 2));
+		mc.player.addPotionEffect(new PotionEffect(MobEffects.INSTANT_HEALTH, 100, 2));
+		mc.player.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 100, 2));
+		mc.player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 2));
 	}
 }

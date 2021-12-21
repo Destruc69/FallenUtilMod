@@ -7,17 +7,13 @@
  */
 package net.wurstclient.forge.hacks;
 
-import io.netty.util.internal.MathUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
-import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Timer;
@@ -29,19 +25,24 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.*;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 public final class Scaffold extends Hack {
+
+	private final CheckboxSetting bot =
+			new CheckboxSetting("Auto-Bot",
+					false);
+	private int xPos;
+	private int zPos;
 
 	public Scaffold() {
 		super("Scaffold", "Scaffold for you with blocks.");
 		setCategory(Category.MOVEMENT);
+		addSetting(bot);
 	}
 
 	@Override
@@ -57,7 +58,6 @@ public final class Scaffold extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-
 		BlockPos playerBlock;
 		if (mc.world == null) {
 			return;
@@ -103,22 +103,24 @@ public final class Scaffold extends Hack {
 			pos = pos.add(0, -1, 0);
 		} else if (face == EnumFacing.NORTH) {
 			pos = pos.add(0, 0, 1);
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation(90, 90, true));
 		} else if (face == EnumFacing.SOUTH) {
 			pos = pos.add(0, 0, -1);
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation(270, 90, true));
 		} else if (face == EnumFacing.EAST) {
 			pos = pos.add(-1, 0, 0);
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation(360, 90, true));
 		} else if (face == EnumFacing.WEST) {
 			pos = pos.add(1, 0, 0);
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation(180, 90, true));
 		}
 
 		if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock) {
 			mc.playerController.processRightClickBlock(mc.player, mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5),
 					EnumHand.MAIN_HAND);
+			mc.player.connection.sendPacket(new CPacketConfirmTransaction());
 			mc.player.swingArm(EnumHand.MAIN_HAND);
+			mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face.rotateAround(face.getAxis()), EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+			mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+
+			float[] angle = MathUtils.calcAngle(Scaffold.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double)((float)pos.getX() + 0.5f), (double)((float)pos.getY() - 0.5f), (double)((float)pos.getZ() + 0.5f)));
+			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(angle[0], (float) MathHelper.normalizeAngle((int)((int)angle[1]), (int)360), Scaffold.mc.player.onGround));
 		}
 
 		setTickLength(50f / 0.9f);

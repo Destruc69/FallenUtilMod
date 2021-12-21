@@ -7,6 +7,7 @@
  */
 package net.wurstclient.forge;
 
+import net.wurstclient.forge.clickgui.RandomCmd;
 import net.wurstclient.forge.commands.*;
 import net.wurstclient.forge.compatibility.WCommandList;
 
@@ -25,4 +26,5 @@ public final class CommandList extends WCommandList
 	public final TacoCmd tacoCmd = register(new TacoCmd());
 	public final VClipCmd vClipCmd = register(new VClipCmd());
 	public final VrTweaksCmd vrTweaksCmd = register(new VrTweaksCmd());
+	public final RandomCmd randomCmd = register(new RandomCmd());
 }

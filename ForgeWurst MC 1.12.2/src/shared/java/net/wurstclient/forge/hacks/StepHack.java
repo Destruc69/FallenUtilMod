@@ -8,6 +8,7 @@ import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
 import net.wurstclient.forge.utils.ChatUtils;
 
@@ -16,10 +17,15 @@ public final class StepHack extends Hack {
 	private final SliderSetting Height =
 			new SliderSetting("StepHeight", 1, 1.0, 80, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
+	private final CheckboxSetting packet =
+			new CheckboxSetting("PacketFast",
+					false);
+
 	public StepHack() {
 		super("Step", "Makes you go up blocks fast.");
 		setCategory(Category.MOVEMENT);
 		addSetting(Height);
+		addSetting(packet);
 	}
 
 	@Override
@@ -37,7 +43,10 @@ public final class StepHack extends Hack {
     public void WUpdateEvent (WUpdateEvent event) {
 
 	    mc.player.stepHeight = Height.getValueF();
-		mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY+0.75, mc.player.posZ, mc.player.onGround));
+
+		if (packet.isChecked()) {
+			mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.75, mc.player.posZ, mc.player.onGround));
+		}
 
 	}
 }

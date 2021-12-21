@@ -15,6 +15,27 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/baritone-1.2.15" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/baritone-1.2.15" />
+            <option value="$PROJECT_DIR$/baritone-1.2.15/Baritone" />
+            <option value="$PROJECT_DIR$/baritone-1.2.15/buildSrc" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/baritone-1.2.15/buildSrc" />
+        <option name="gradleJvm" value="corretto-1.8" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/baritone-1.2.15/buildSrc" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>

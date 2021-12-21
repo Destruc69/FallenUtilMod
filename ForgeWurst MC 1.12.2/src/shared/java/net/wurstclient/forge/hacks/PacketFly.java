@@ -13,10 +13,13 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WIsNormalCubeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
+import net.wurstclient.fmlevents.WSetOpaqueCubeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
+import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
 
 public final class PacketFly extends Hack {
@@ -24,10 +27,16 @@ public final class PacketFly extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 0.05, 0.05, 1, 0.01, SliderSetting.ValueDisplay.DECIMAL);
 
+	private final CheckboxSetting anti =
+			new CheckboxSetting("AntiKick",
+					false);
+
+
 	public PacketFly() {
 		super("PacketFly", "Fly around with packets.");
 		setCategory(Category.EXPLOIT);
 		addSetting(speed);
+		addSetting(anti);
 	}
 
 	@Override
@@ -38,6 +47,9 @@ public final class PacketFly extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		mc.player.noClip = false;
+		mc.player.onGround = true;
 	}
 
 	@SubscribeEvent
@@ -47,7 +59,6 @@ public final class PacketFly extends Hack {
 			mc.player.connection.sendPacket(new CPacketConfirmTeleport(packet.getTeleportId()));
 			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch(), false));
 			mc.player.setPosition(packet.getX(), packet.getY(), packet.getZ());
-
 		}
 	}
 
@@ -55,6 +66,16 @@ public final class PacketFly extends Hack {
 	@SubscribeEvent
 	public void WUpdateEvent(WUpdateEvent event) {
 		mc.player.setVelocity(0, 0, 0);
+
+		if (anti.isChecked()) {
+			if (!mc.gameSettings.keyBindJump.isKeyDown()) {
+				mc.player.motionY -= 0.001;
+			}
+		}
+
+		mc.player.noClip = true;
+		mc.player.onGround = false;
+		mc.player.fallDistance = 0;
 
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
 			mc.player.motionY += speed.getValue();
@@ -74,5 +95,13 @@ public final class PacketFly extends Hack {
 		mc.player.connection.sendPacket(new CPacketConfirmTeleport());
 		mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX + mc.player.motionX, y, mc.player.posZ + mc.player.motionZ, mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
 		mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX + mc.player.motionX, mc.player.posY + mc.player.motionY, mc.player.posZ + mc.player.motionZ, mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
+	}
+
+	public void opac(WSetOpaqueCubeEvent event) {
+		event.setCanceled(true);
+	}
+
+	public void opac1(WIsNormalCubeEvent event) {
+		event.setCanceled(true);
 	}
 }

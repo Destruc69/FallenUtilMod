@@ -31,22 +31,25 @@ public final class HackList extends WHackList
 {
 	public final AntiSpamHack antiSpamHack = register(new AntiSpamHack());
 	public final BoatFly boatFly = register(new BoatFly());
+	public final LongJump longJump = register(new LongJump());
 	public final EntitySpeed entitySpeed = register(new EntitySpeed());
 	public final StatSpoof statSpoof = register(new StatSpoof());
 	public final PortalGod portalGod = register(new PortalGod());
 	public final MoreInv moreInv = register(new MoreInv());
 	public final SlowFly slowFly = register(new SlowFly());
 	public final NoCom noCom = register(new NoCom());
-	public final ItemModel itemModel = register(new ItemModel());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
-	public final CrashTest crashTest = register(new CrashTest());
 	public final AntiVoid antiVoid = register(new AntiVoid());
 	public final Teleport teleport = register(new Teleport());
 	public final Scaffold scaffold = register(new Scaffold());
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
+	public final Speed speed = register(new Speed());
+	public final InvMove invMove = register(new InvMove());
+	public final AntiFog antiFog = register(new AntiFog());
+	public final Anti4J anti4J = register(new Anti4J());
 	public final DebugForScaff debugForScaff = register(new DebugForScaff());
 	/**
 	 * ClickGUI Backround Effects

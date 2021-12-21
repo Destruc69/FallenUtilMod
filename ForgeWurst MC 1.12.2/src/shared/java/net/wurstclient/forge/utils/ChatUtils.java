@@ -10,6 +10,7 @@ package net.wurstclient.forge.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import scala.Int;
 
 public final class ChatUtils
 {

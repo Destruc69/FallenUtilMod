@@ -11,6 +11,8 @@ import net.minecraft.client.Minecraft;
 import net.wurstclient.forge.compatibility.WForgeRegistryEntry;
 import net.wurstclient.forge.utils.ChatUtils;
 
+import java.io.IOException;
+
 public abstract class Command extends WForgeRegistryEntry<Command>
 {
 	protected static final ForgeWurst wurst = ForgeWurst.getForgeWurst();
@@ -27,7 +29,7 @@ public abstract class Command extends WForgeRegistryEntry<Command>
 		this.syntax = syntax;
 	}
 	
-	public abstract void call(String[] args) throws CmdException;
+	public abstract void call(String[] args) throws CmdException, IOException;
 	
 	public final String getName()
 	{

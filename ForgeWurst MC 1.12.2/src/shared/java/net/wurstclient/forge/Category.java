@@ -15,7 +15,8 @@ public enum Category
 	RENDER("Render"),
 	MISC("Misc"),
 	EXPLOIT("Exploit"),
-	HUD("Hud");
+	HUD("Hud"),
+	PATHFINDING("Pathfinding");
 	
 	private final String name;
 	

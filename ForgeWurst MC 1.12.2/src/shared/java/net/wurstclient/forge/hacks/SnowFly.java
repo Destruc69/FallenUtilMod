@@ -7,19 +7,22 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.KeyBindingUtils;
 
-public final class AutoPlaceHack extends Hack
+public final class SnowFly extends Hack
 {
-	public AutoPlaceHack()
+	public SnowFly()
 	{
-		super("AutoPlace", "Places blocks automatically.");
-		setCategory(Category.WORLD);
+		super("SnowFly", "Fly over snow blocks/snow.");
+		setCategory(Category.MOVEMENT);
 	}
 	
 	@Override
@@ -37,6 +40,10 @@ public final class AutoPlaceHack extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		KeyBindingUtils.setPressed(mc.gameSettings.keyBindUseItem, true);
+		BlockPos blockPos = Minecraft.getMinecraft().player.getPosition();
+
+		if (mc.player.world.getBlockState(blockPos.down()).getBlock() instanceof BlockSnowBlock || mc.player.world.getBlockState(blockPos.down()).getBlock() instanceof BlockSnow) {
+			mc.player.jump();
+		}
 	}
 }

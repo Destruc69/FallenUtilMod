@@ -7,19 +7,21 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.KeyBindingUtils;
+import net.wurstclient.forge.compatibility.WEntity;
 
-public final class AutoPlaceHack extends Hack
+public final class AntiFog extends Hack
 {
-	public AutoPlaceHack()
+	public AntiFog()
 	{
-		super("AutoPlace", "Places blocks automatically.");
-		setCategory(Category.WORLD);
+		super("AntiFog", "Prevents Fog from rendering.");
+		setCategory(Category.RENDER);
 	}
 	
 	@Override
@@ -37,6 +39,9 @@ public final class AutoPlaceHack extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		KeyBindingUtils.setPressed(mc.gameSettings.keyBindUseItem, true);
+		mc.entityRenderer.setupFogColor(false);
+		GlStateManager.glNormal3f(0.0F, -1.0F, 0.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.colorMaterial(1028, 4608);
 	}
 }

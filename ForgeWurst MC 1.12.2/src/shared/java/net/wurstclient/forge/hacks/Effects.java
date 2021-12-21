@@ -7,21 +7,20 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
+import net.wurstclient.forge.ForgeWurst;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.InventoryUtil;
-import net.wurstclient.forge.utils.TimerUtils;
+import net.wurstclient.forge.compatibility.WEntity;
 
-public final class AutoTotem extends Hack {
-	public AutoTotem() {
-		super("AutoTotem", "We will activate the totem for you.");
-		setCategory(Category.COMBAT);
+public final class Effects extends Hack {
+	public Effects() {
+		super("ClickGUI Effects", "Draw effects when ClickGUI is enabled.");
+		setCategory(Category.RENDER);
 	}
 
 	@Override
@@ -36,14 +35,9 @@ public final class AutoTotem extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (TimerUtils.passed(500)) {
-			Item oldItem = mc.player.getHeldItemOffhand().getItem();
-			int slot = InventoryUtil.getSlot(Items.TOTEM_OF_UNDYING);
-			InventoryUtil.clickSlot(slot);
-			InventoryUtil.clickSlot(45);
-			if (oldItem != Items.AIR) {
-				mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.OPEN_INVENTORY));
-				InventoryUtil.clickSlot(slot);
+		if (ForgeWurst.getForgeWurst().getHax().clickGuiHack.isEnabled()) {
+			if (Minecraft.getMinecraft().currentScreen != null) {
+				Minecraft.getMinecraft().currentScreen.drawDefaultBackground();
 			}
 		}
 	}
