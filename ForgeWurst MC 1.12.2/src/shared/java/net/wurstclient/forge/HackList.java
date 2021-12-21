@@ -7,6 +7,15 @@
  */
 package net.wurstclient.forge;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import net.wurstclient.forge.compatibility.WHackList;
+import net.wurstclient.forge.hacks.*;
+import net.wurstclient.forge.settings.Setting;
+import net.wurstclient.forge.utils.JsonUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,17 +24,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import net.minecraft.item.Item;
-import net.wurstclient.forge.compatibility.WHackList;
-import net.wurstclient.forge.hacks.*;
-import net.wurstclient.forge.settings.Setting;
-import net.wurstclient.forge.utils.JsonUtils;
 
 public final class HackList extends WHackList
 {
@@ -40,6 +38,8 @@ public final class HackList extends WHackList
 	public final NoCom noCom = register(new NoCom());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final FakeHackers fakeHackers = register(new FakeHackers());
+	public final NameTags nameTags = register(new NameTags());
 	public final AntiVoid antiVoid = register(new AntiVoid());
 	public final Teleport teleport = register(new Teleport());
 	public final Scaffold scaffold = register(new Scaffold());
@@ -47,6 +47,7 @@ public final class HackList extends WHackList
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
 	public final Speed speed = register(new Speed());
+	public final AntiBot antiBot = register(new AntiBot());
 	public final InvMove invMove = register(new InvMove());
 	public final AntiFog antiFog = register(new AntiFog());
 	public final Anti4J anti4J = register(new Anti4J());
