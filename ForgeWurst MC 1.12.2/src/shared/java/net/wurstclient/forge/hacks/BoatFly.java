@@ -28,18 +28,6 @@ public final class BoatFly extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 1, 0.05, 5, 0.05, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final CheckboxSetting antiStuck =
-			new CheckboxSetting("AntiStuck",
-					false);
-
-	private final CheckboxSetting NCP =
-			new CheckboxSetting("NCP-PacketBypass",
-					false);
-
-	private final CheckboxSetting Trick =
-			new CheckboxSetting("Trick your friends that this bypasses on 2b2t",
-					false);
-
 	private final CheckboxSetting velocity =
 			new CheckboxSetting("Velocity",
 					false);
@@ -48,9 +36,6 @@ public final class BoatFly extends Hack {
 		super("EntityFly", "Fly with Entity's.");
 		setCategory(Category.MOVEMENT);
 		addSetting(speed);
-		addSetting(antiStuck);
-		addSetting(NCP);
-		addSetting(Trick);
 		addSetting(velocity);
 
 	}
@@ -84,33 +69,8 @@ public final class BoatFly extends Hack {
 			mc.player.getRidingEntity().motionY -= speed.getValue();
 		}
 
-		if (antiStuck.isChecked()) {
-			mc.player.connection.sendPacket(new CPacketPlayer.Position());
-			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation());
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation());
-		}
-
 		if (velocity.isChecked())
 			if (!mc.gameSettings.keyBindJump.isKeyDown() && !mc.gameSettings.keyBindSneak.isKeyDown() && !mc.gameSettings.keyBindForward.isKeyDown())
-				mc.player.getRidingEntity().setVelocity(0,0,0);
-
-		if (NCP.isChecked()) {
-			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
-		}
-
-	}
-
-	@SubscribeEvent
-	public void onPacketInput(WPacketInputEvent event) {
-		if (Trick.isChecked())
-			if (event.getPacket() instanceof CPacketPlayer)
-				event.setCanceled(true);
-
-	}
-	@SubscribeEvent
-	public void onPacketOutput(WPacketOutputEvent event) {
-		if (Trick.isChecked())
-		if (event.getPacket() instanceof CPacketPlayer)
-			event.setCanceled(true);
+				mc.player.getRidingEntity().setVelocity(0, 0, 0);
 	}
 }

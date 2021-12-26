@@ -7,11 +7,16 @@
  */
 package net.wurstclient.forge.hacks;
 
+import io.netty.util.internal.MathUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
 import net.minecraft.util.EnumFacing;
@@ -28,6 +33,7 @@ import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.*;
+import org.apache.http.util.EntityUtils;
 
 import java.lang.reflect.Field;
 
@@ -36,8 +42,6 @@ public final class Scaffold extends Hack {
 	private final CheckboxSetting bot =
 			new CheckboxSetting("Auto-Bot",
 					false);
-	private int xPos;
-	private int zPos;
 
 	public Scaffold() {
 		super("Scaffold", "Scaffold for you with blocks.");
@@ -57,12 +61,9 @@ public final class Scaffold extends Hack {
 	}
 
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event) {
+	public void onUpdateWalkingPlayerPost(WUpdateEvent event) {
 		BlockPos playerBlock;
-		if (mc.world == null) {
-			return;
-		}
-		if (BlockUtils.isScaffoldPos((playerBlock = getPlayerPosWithEntity()).add(0, -1, 0))) {
+		if (BlockUtils.isScaffoldPos((playerBlock = BlockUtils.getPlayerPosWithEntity()).add(0, -1, 0))) {
 			if (BlockUtils.isValidBlock(playerBlock.add(0, -2, 0))) {
 				this.place(playerBlock.add(0, -1, 0), EnumFacing.UP);
 			} else if (BlockUtils.isValidBlock(playerBlock.add(-1, -1, 0))) {
@@ -98,6 +99,7 @@ public final class Scaffold extends Hack {
 	}
 
 	public void place(BlockPos posI, EnumFacing face) {
+		Block block;
 		BlockPos pos = posI;
 		if (face == EnumFacing.UP) {
 			pos = pos.add(0, -1, 0);
@@ -110,33 +112,54 @@ public final class Scaffold extends Hack {
 		} else if (face == EnumFacing.WEST) {
 			pos = pos.add(1, 0, 0);
 		}
-
-		if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock) {
-			mc.playerController.processRightClickBlock(mc.player, mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5),
-					EnumHand.MAIN_HAND);
-			mc.player.connection.sendPacket(new CPacketConfirmTransaction());
-			mc.player.swingArm(EnumHand.MAIN_HAND);
-			mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face.rotateAround(face.getAxis()), EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-			mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-
-			float[] angle = MathUtils.calcAngle(Scaffold.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double)((float)pos.getX() + 0.5f), (double)((float)pos.getY() - 0.5f), (double)((float)pos.getZ() + 0.5f)));
-			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(angle[0], (float) MathHelper.normalizeAngle((int)((int)angle[1]), (int)360), Scaffold.mc.player.onGround));
+		int oldSlot = Scaffold.mc.player.inventory.currentItem;
+		int newSlot = -1;
+		for (int i = 0; i < 9; ++i) {
+			ItemStack stack = Scaffold.mc.player.inventory.getStackInSlot(i);
+			if (InventoryUtil.isItemStackNull(stack) || !(stack.getItem() instanceof ItemBlock) || !Block.getBlockFromItem((Item)stack.getItem()).getDefaultState().isFullBlock()) continue;
+			newSlot = i;
+			break;
+		}
+		if (newSlot == -1) {
+			return;
 		}
 
-		setTickLength(50f / 0.9f);
+		if (mc.gameSettings.keyBindJump.isKeyDown()) {
+			mc.player.jump();
+			mc.player.motionY -= 0.20f;
+			setTickLength(50 / 0.7f);
+		} else {
+			setTickLength(50 / 0.9f);
+		}
+
+		BlockPos blockPos = Minecraft.getMinecraft().player.getPosition().down();
+		Block blocks = Minecraft.getMinecraft().world.getBlockState(blockPos).getBlock();
+
+		boolean crouched = false;
+		if (!Scaffold.mc.player.isSneaking() && !(blocks.getBlockState().getBlock() instanceof BlockAir)) {
+			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Scaffold.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+			crouched = true;
+		}
+		if (!(Scaffold.mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock)) {
+			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketHeldItemChange(newSlot));
+			Scaffold.mc.player.inventory.currentItem = newSlot;
+			Scaffold.mc.playerController.updateController();
+		}
+		float[] angle = MathUtils.calcAngle(Scaffold.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double) ((float) pos.getX() + 0.5f), (double) ((float) pos.getY() - 0.5f), (double) ((float) pos.getZ() + 0.5f)));
+		Scaffold.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(angle[0], (float)MathHelper.normalizeAngle((int)((int)angle[1]), (int)360), Scaffold.mc.player.onGround));
+		Scaffold.mc.playerController.processRightClickBlock(Scaffold.mc.player, Scaffold.mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
+
+		mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face.rotateAround(face.getAxis()), EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+		mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+
+		Scaffold.mc.player.swingArm(EnumHand.MAIN_HAND);
+		Scaffold.mc.player.connection.sendPacket((Packet)new CPacketHeldItemChange(oldSlot));
+		Scaffold.mc.player.inventory.currentItem = oldSlot;
+		Scaffold.mc.playerController.updateController();
+		if (crouched) {
+			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Scaffold.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
+		}
 	}
-
-
-	public static BlockPos getPlayerPosWithEntity() {
-		return new BlockPos(
-				(mc.player.getRidingEntity() != null) ? mc.player.getRidingEntity().posX
-						: mc.player.posX,
-				(mc.player.getRidingEntity() != null) ? mc.player.getRidingEntity().posY
-						: mc.player.posY,
-				(mc.player.getRidingEntity() != null) ? mc.player.getRidingEntity().posZ
-						: mc.player.posZ);
-	}
-
 	private void setTickLength(float tickLength)
 	{
 		try
@@ -166,4 +189,5 @@ public final class Scaffold extends Hack {
 		}
 	}
 }
+
 

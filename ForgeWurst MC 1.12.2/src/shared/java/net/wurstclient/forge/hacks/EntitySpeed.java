@@ -42,20 +42,10 @@ public final class EntitySpeed extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 1, 0.05, 5, 0.05, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final CheckboxSetting antiStuck =
-			new CheckboxSetting("AntiStuck",
-					false);
-
-	private final CheckboxSetting NCP =
-			new CheckboxSetting("NCP-PacketBypass",
-					false);
-
 	public EntitySpeed() {
 		super("EntitySpeed", "Speed with Entity's.");
 		setCategory(Category.MOVEMENT);
 		addSetting(speed);
-		addSetting(antiStuck);
-		addSetting(NCP);
 	}
 
 	@Override
@@ -78,15 +68,6 @@ public final class EntitySpeed extends Hack {
 			float pitch = Minecraft.getMinecraft().player.getRidingEntity().rotationPitch;
 			Minecraft.getMinecraft().player.getRidingEntity().motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * speed.getValue();
 			Minecraft.getMinecraft().player.getRidingEntity().motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * speed.getValue();
-		}
-
-		if (antiStuck.isChecked()) {
-			mc.player.connection.sendPacket(new CPacketPlayer.Position());
-			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation());
-			mc.player.connection.sendPacket(new CPacketPlayer.Rotation());
-		}
-		if (NCP.isChecked()) {
-			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
 		}
 	}
 }

@@ -7,13 +7,17 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.block.BlockAir;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemAir;
 import net.minecraft.item.ItemEndCrystal;
 import net.minecraft.network.play.client.*;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
@@ -32,6 +36,12 @@ import java.util.ArrayList;
 
 public final class AutoCrystal extends Hack {
 
+	private final SliderSetting rangeb =
+			new SliderSetting("BreakRange", "Range for witch we will break the crystal", 4, 1.0, 5, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
+	private final SliderSetting rangep =
+			new SliderSetting("PlaceRange", "Range for witch we will place the crystal", 4, 1.0, 5, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
 	private final CheckboxSetting autoPlace =
 			new CheckboxSetting("AutoPlace", "Shall we place crystals automatically?",
 					true);
@@ -40,8 +50,21 @@ public final class AutoCrystal extends Hack {
 			new CheckboxSetting("PlayersOnly", "Only place near EntityPlayers",
 					true);
 
+	private final CheckboxSetting pause =
+			new CheckboxSetting("PauseWhileActive", "Pause while breaking/eating ect",
+					true);
+
+	private final CheckboxSetting set =
+			new CheckboxSetting("AutoSet", "Auto switches to a Crystal in your hand",
+					true);
+
 	private final SliderSetting delay =
-			new SliderSetting("Delay [MS]", "The delay for witch we will place crystals", 200, 0.0, 800, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Delay [MS]", "The delay for witch we will place crystals", 200, 0.0, 800, 10.0, SliderSetting.ValueDisplay.DECIMAL);
+
+
+	private final CheckboxSetting pack =
+			new CheckboxSetting("ExtraPacket", "Sends extra packets, may not work on most servers",
+					true);
 
 	private final SliderSetting max =
 			new SliderSetting("MaxSelfDamage", "Max damage a crystal will damage you", 5, 1.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
@@ -49,8 +72,6 @@ public final class AutoCrystal extends Hack {
 	private final SliderSetting rage =
 			new SliderSetting("Rage", "At what health the target should be for us to fast break", 5, 1.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final SliderSetting range =
-			new SliderSetting("Range", "Range for witch we will place the crystal", 5, 4.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private EntityEnderCrystal entity;
 
@@ -59,10 +80,14 @@ public final class AutoCrystal extends Hack {
 		setCategory(Category.COMBAT);
 		addSetting(autoPlace);
 		addSetting(playersOnly);
-		addSetting(range);
+		addSetting(rangeb);
 		addSetting(rage);
 		addSetting(max);
 		addSetting(delay);
+		addSetting(pause);
+		addSetting(set);
+		addSetting(rangep);
+		addSetting(pack);
 	}
 
 	@Override
@@ -77,26 +102,35 @@ public final class AutoCrystal extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		float selfDamage = CrystalUtil.calculateDamage(new Vec3d(mc.player.posX, mc.player.posY, mc.player.posZ), mc.player);
 		for (Entity e : mc.world.loadedEntityList) {
-			if (mc.player.getDistance(e) < range.getValue()) {
-				if (e instanceof EntityEnderCrystal) {
-					Minecraft.getMinecraft().playerController.attackEntity(mc.player, e);
-					mc.player.swingArm(EnumHand.MAIN_HAND);
-					return;
-				}
-			}
-		}
-
-		for (Entity a : mc.world.loadedEntityList) {
-			if (a instanceof EntityEnderCrystal) {
-				if (mc.player.getDistance(a) < range.getValue()) {
-
+			if (e instanceof EntityEnderCrystal) {
+				if (mc.player.getDistance(e) < rangep.getValue()) {
 					double x = entity.getEntityBoundingBox().calculateXOffset(entity.getEntityBoundingBox(), mc.player.posX);
 					double y = entity.getEntityBoundingBox().calculateYOffset(entity.getEntityBoundingBox(), mc.player.posY);
 					double z = entity.getEntityBoundingBox().calculateZOffset(entity.getEntityBoundingBox(), mc.player.posZ);
 
-					RotationUtils.faceVectorPacketInstant(new Vec3d(x, y, z));
+					RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
+				}
+			}
+
+			if (e instanceof EntityEnderCrystal) {
+				if (mc.player.getDistance(e) < rangeb.getValue()) {
+					double x = entity.getEntityBoundingBox().calculateXOffset(entity.getEntityBoundingBox(), mc.player.posX);
+					double y = entity.getEntityBoundingBox().calculateYOffset(entity.getEntityBoundingBox(), mc.player.posY);
+					double z = entity.getEntityBoundingBox().calculateZOffset(entity.getEntityBoundingBox(), mc.player.posZ);
+
+					RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
+				}
+			}
+		}
+
+		float selfDamage = CrystalUtil.calculateDamage(new Vec3d(mc.player.posX, mc.player.posY, mc.player.posZ), mc.player);
+		for (Entity e : mc.world.loadedEntityList) {
+			if (mc.player.getDistance(e) < rangeb.getValue()) {
+				if (e instanceof EntityEnderCrystal) {
+					Minecraft.getMinecraft().playerController.attackEntity(mc.player, e);
+					mc.player.swingArm(EnumHand.MAIN_HAND);
+					return;
 				}
 			}
 		}
@@ -106,10 +140,12 @@ public final class AutoCrystal extends Hack {
 			ArrayList<Entity> attackEntityList = new ArrayList<Entity>();
 
 			for (Entity e : mc.world.loadedEntityList) {
+
 				if (e instanceof EntityPlayer && e != mc.player && playersOnly.isChecked()) {
 					attackEntityList.add(e);
 				}
 				if (e != mc.player && !playersOnly.isChecked()) {
+
 					attackEntityList.add(e);
 				}
 			}
@@ -124,10 +160,12 @@ public final class AutoCrystal extends Hack {
 					minDistance = mc.player.getDistance(e);
 				}
 			}
-
 			if (selfDamage < max.getValue()) {
-				if (minEntity != null && mc.player.getDistance(minEntity) < range.getValue()) {
-					if (TimerUtils.passed(delay.getValue())) {
+				if (pause.isChecked() && mc.player.isHandActive())
+					return;
+
+				if (minEntity != null && mc.player.getDistance(minEntity) < rangep.getValue()) {
+					if (TimerUtils.passed(delay.getValueL())) {
 						for (int i = -5; i <= 5; i++) {
 							for (int j = -5; j <= 5; j++) {
 								if (mc.world.getBlockState(minEntity.getPosition().add(i, 0, j)).getBlock()
@@ -140,11 +178,16 @@ public final class AutoCrystal extends Hack {
 											minEntity.getPosition().add(i, -1, j), EnumFacing.UP, mc.objectMouseOver.hitVec,
 											EnumHand.MAIN_HAND);
 
-									double minx = minEntity.getPosition().getX();
-									double miny = minEntity.getPosition().getY();
-									double minz = minEntity.getPosition().getZ();
+									if (set.isChecked()) {
+										if (mc.player.getHeldItemMainhand().getItem() instanceof ItemAir) {
+											double id = InventoryUtil.getHandSlot();
+											double item = InventoryUtil.getSlot(Items.END_CRYSTAL);
 
-									RotationUtils.faceVectorPacketInstant(new Vec3d(minx, miny, minz));
+											InventoryUtil.clickSlot((int) item);
+											TimerUtils.passed(100L);
+											InventoryUtil.clickSlot((int) id);
+										}
+									}
 								}
 							}
 						}
@@ -152,6 +195,7 @@ public final class AutoCrystal extends Hack {
 				}
 			}
 		}
+
 	}
 	@SubscribeEvent
 	public void onPlayerDamageBlock(WPlayerDamageBlockEvent event) {

@@ -66,6 +66,10 @@ public final class SliderSetting extends Setting
 	{
 		return defaultValue;
 	}
+
+	public long getValueL() {
+		return (long) value;
+	}
 	
 	public void setValue(double value)
 	{

@@ -9,6 +9,9 @@ package net.wurstclient.forge.hacks;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.wurstclient.forge.utils.ChatUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -45,12 +48,14 @@ public final class ChestEspHack extends Hack
 	private final ArrayList<AxisAlignedBB> basicChests = new ArrayList<>();
 	private final ArrayList<AxisAlignedBB> trappedChests = new ArrayList<>();
 	private final ArrayList<AxisAlignedBB> enderChests = new ArrayList<>();
+	private final ArrayList<AxisAlignedBB> shulkerChests = new ArrayList<>();
 	private final ArrayList<Entity> minecarts = new ArrayList<>();
 	
 	private int greenBox;
 	private int orangeBox;
 	private int cyanBox;
 	private int normalChests;
+	private int shulkerChest;
 	
 	public ChestEspHack()
 	{
@@ -122,17 +127,31 @@ public final class ChestEspHack extends Hack
 		cyanBox = 0;
 		GL11.glDeleteLists(normalChests, 1);
 		normalChests = 0;
+		GL11.glDeleteLists(shulkerChest, 1);
+		shulkerChest = 0;
 
 	}
 	
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
+
+		for (TileEntity a : mc.world.loadedTileEntityList) {
+			if (a instanceof TileEntityShulkerBox) {
+				BlockPos pos = a.getPos();
+				AxisAlignedBB cc = BlockUtils.getBoundingBox(pos);
+
+				shulkerChests.add(cc);
+				break;
+			}
+		}
+
 		World world = WPlayer.getWorld(event.getPlayer());
 		
 		basicChests.clear();
 		trappedChests.clear();
 		enderChests.clear();
+		shulkerChests.clear();
 		
 		for(TileEntity tileEntity : world.loadedTileEntityList)
 			if(tileEntity instanceof TileEntityChest)
@@ -184,6 +203,7 @@ public final class ChestEspHack extends Hack
 		renderBoxes(basicChests, greenBox);
 		renderBoxes(trappedChests, orangeBox);
 		renderBoxes(enderChests, cyanBox);
+		renderBoxes(shulkerChests, greenBox);
 		GL11.glEndList();
 		
 		// minecarts
@@ -236,6 +256,7 @@ public final class ChestEspHack extends Hack
 		if(style.getSelected().boxes)
 		{
 			GL11.glCallList(normalChests);
+			GL11.glCallList(shulkerChest);
 			renderBoxes(minecartBoxes, greenBox);
 		}
 		
@@ -258,6 +279,9 @@ public final class ChestEspHack extends Hack
 			
 			GL11.glColor4f(0, 1, 1, 0.5F);
 			renderLines(start, enderChests);
+
+			GL11.glColor4f(0, 1, 1, 0.5F);
+			renderLines(start, shulkerChests);
 			
 			GL11.glEnd();
 		}

@@ -50,7 +50,8 @@ public final class Criticals extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.2, mc.player.posZ, false));
-		mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, false));
+		if (mc.player.getAttackingEntity() != null) {
+			mc.player.connection.sendPacket(new CPacketPlayer(false));
+		}
 	}
 }

@@ -30,40 +30,39 @@ public final class FakeHackers extends Hack {
 			new CheckboxSetting("Yaw", "Changes the players yaw rapidly",
 					false);
 
-	public FakeHackers()
-	{
+	public FakeHackers() {
 		super("FakeHackers", "False report players with evidence!.");
 		setCategory(Category.MISC);
 		addSetting(limb);
 		addSetting(vel);
 		addSetting(yaw);
 	}
-	
+
 	@Override
-	protected void onEnable()
-	{
+	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@Override
-	protected void onDisable()
-	{
+	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
-	
+
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 		for (Entity e : mc.world.loadedEntityList) {
-			if (e instanceof EntityPlayer) {
-				if (limb.isChecked()) {
-					((EntityPlayer) e).limbSwing += 999f;
-				}
-				if (vel.isChecked()) {
-					e.setVelocity(0, 0, 0);
-				}
+			if (e != mc.player) {
+				if (e instanceof EntityPlayer) {
+					if (limb.isChecked()) {
+						((EntityPlayer) e).limbSwing += 999f;
+					}
+					if (vel.isChecked()) {
+						e.setVelocity(0, 0, 0);
+					}
 
-				if (yaw.isChecked()) {
-					((EntityPlayer) e).rotationYawHead += 2f;
+					if (yaw.isChecked()) {
+						((EntityPlayer) e).rotationYawHead += 2f;
+					}
 				}
 			}
 		}

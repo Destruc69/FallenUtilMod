@@ -7,21 +7,19 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.InventoryUtil;
+import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.utils.TimerUtils;
 
-public final class AutoTotem extends Hack {
-	public AutoTotem() {
-		super("AutoTotem", "We will activate the totem for you.");
-		setCategory(Category.COMBAT);
+public final class Advertiser extends Hack {
+	public Advertiser() {
+		super("Advertise", "Auto Advertises for Fallen.");
+		setCategory(Category.MISC);
 	}
 
 	@Override
@@ -36,15 +34,8 @@ public final class AutoTotem extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (TimerUtils.passed(500L)) {
-			Item oldItem = mc.player.getHeldItemOffhand().getItem();
-			int slot = InventoryUtil.getSlot(Items.TOTEM_OF_UNDYING);
-			InventoryUtil.clickSlot(slot);
-			InventoryUtil.clickSlot(45);
-			if (oldItem != Items.AIR) {
-				mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.OPEN_INVENTORY));
-				InventoryUtil.clickSlot(slot);
-			}
+		if (TimerUtils.passed(12000L)) {
+			mc.player.sendChatMessage(">Join Fallen today! https://discord.gg/Z5rHscehpd" + " " + Math.round(Math.random()) + " " + Math.round(Math.random()));
 		}
 	}
 }

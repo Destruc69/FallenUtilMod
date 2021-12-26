@@ -97,6 +97,10 @@ public final class HackList extends WHackList
 	public final AutoWalkHack autoWalkHack = register(new AutoWalkHack());
 	public final BlinkHack blinkHack = register(new BlinkHack());
 	public final Strafe strafe = register(new Strafe());
+	public final Portal portal = register(new Portal());
+	public final Structure endPortal = register(new Structure());
+	public final Follow follow = register(new Follow());
+	public final Crasher crasher = register(new Crasher());
 	public final ChestEspHack chestEspHack = register(new ChestEspHack());
 	public final ClickGuiHack clickGuiHack = register(new ClickGuiHack());
 	public final FastBreakHack fastBreakHack = register(new FastBreakHack());
@@ -111,11 +115,13 @@ public final class HackList extends WHackList
 	public final GlideHack glideHack = register(new GlideHack());
 	public final ItemEspHack itemEspHack = register(new ItemEspHack());
 	public final JesusHack jesusHack = register(new JesusHack());
+	public final MoveBot moveBot = register(new MoveBot());
 	public final KillauraHack killauraHack = register(new KillauraHack());
 	public final MobEspHack mobEspHack = register(new MobEspHack());
 	public final MobSpawnEspHack mobSpawnEspHack =
 			register(new MobSpawnEspHack());
 	public final NoFallHack noFallHack = register(new NoFallHack());
+	public final TunnellerHack tunnellerHack = register(new TunnellerHack());
 	public final NoHurtcamHack noHurtcamHack = register(new NoHurtcamHack());
 	public final NoWebHack noWebHack = register(new NoWebHack());
 	public final NukerHack nukerHack = register(new NukerHack());

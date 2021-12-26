@@ -14,6 +14,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Timer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
@@ -34,28 +35,32 @@ import java.lang.reflect.Field;
 
 public final class ElytraBoostHack extends Hack {
 	private final SliderSetting speed =
-			new SliderSetting("BaseSpeed", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("BaseSpeed", "Base Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting down =
-			new SliderSetting("DownSpeed", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("DownSpeed", "Down Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting up =
-			new SliderSetting("UpSpeed", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("UpSpeed", "Up Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final CheckboxSetting timer1 =
-			new CheckboxSetting("Timer TakeOff",
+			new CheckboxSetting("Timer TakeOff", "Half tick speed for when taking off",
 					false);
 
 	private final CheckboxSetting still =
-			new CheckboxSetting("Velocity",
+			new CheckboxSetting("Velocity", "When idle we will hold you in the air",
 					true);
 
 	private final CheckboxSetting auto =
-			new CheckboxSetting("AutoPilot",
+			new CheckboxSetting("AutoPilot", "Will auto handle for you at a certain height",
 					false);
 
 	private final SliderSetting height =
-			new SliderSetting("AutoPilot-Height", 200, 1.0, 256, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("AutoPilot-Height", "Y Value for witch we will AutoPilot", 200, 1.0, 256, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
+	private final CheckboxSetting better =
+			new CheckboxSetting("UpAndDown", "Just makes going up and down different",
+					false);
 
 	public ElytraBoostHack() {
 		super("ElytraBoost", "Elytra fly without slowing down.");
@@ -67,6 +72,7 @@ public final class ElytraBoostHack extends Hack {
 		addSetting(auto);
 		addSetting(timer1);
 		addSetting(height);
+		addSetting(better);
 	}
 
 	@Override
@@ -87,7 +93,7 @@ public final class ElytraBoostHack extends Hack {
 		if (mc.player.isElytraFlying()) {
 
 			if (timer1.isChecked() && mc.player.isElytraFlying() && mc.player.fallDistance < 5) {
-				setTickLength(50f / 0.7f);
+				setTickLength(50f / 0.5f);
 			} else
 				setTickLength(50f / 1.0f);
 
@@ -97,14 +103,44 @@ public final class ElytraBoostHack extends Hack {
 				Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * speed.getValue();
 				Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * speed.getValue();
 			}
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
-				Minecraft.getMinecraft().player.motionY += up.getValue();
-			if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown())
-				Minecraft.getMinecraft().player.motionY -= down.getValue();
+
+			if (mc.gameSettings.keyBindRight.isKeyDown()) {
+				final float yaw1 = GetRotationYawForCalc();
+				mc.player.motionX -= MathHelper.sin(yaw1) * speed.getValueF();
+				mc.player.motionZ += MathHelper.cos(yaw1) * speed.getValueF();
+			}
+
+			if (mc.gameSettings.keyBindLeft.isKeyDown()) {
+				final float yaw1 = GetRotationYawForCalc();
+				mc.player.motionX -= MathHelper.sin(yaw1) * speed.getValueF();
+				mc.player.motionZ += MathHelper.cos(yaw1) * speed.getValueF();
+			}
+
+			if (!better.isChecked()) {
+				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
+					Minecraft.getMinecraft().player.motionY += up.getValue();
+				if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown())
+					Minecraft.getMinecraft().player.motionY -= down.getValue();
+			}
+
+			if (better.isChecked()) {
+				if (mc.gameSettings.keyBindJump.isKeyDown()) {
+					mc.player.setPosition(mc.player.posX, mc.player.posY + 0.5, mc.player.posZ);
+				}
+
+				if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+					mc.player.setPosition(mc.player.posX, mc.player.posY - 0.5, mc.player.posZ);
+				}
+			}
 
 			if (still.isChecked()) {
 				if (!Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown() && !Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && !Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown()) {
 					mc.player.setVelocity(0, 0, 0);
+					if (mc.player.fallDistance > 5) {
+						setTickLength(50f / 0.5f);
+					} else {
+						setTickLength(50f / 1.0f);
+					}
 				}
 			}
 
@@ -150,5 +186,26 @@ public final class ElytraBoostHack extends Hack {
 			throw new RuntimeException(e);
 		}
 	}
+
+	private float GetRotationYawForCalc() {
+		float rotationYaw = mc.player.rotationYaw;
+		if (mc.player.moveForward < 0.0f) {
+			rotationYaw += 180.0f;
+		}
+		float n = 1.0f;
+		if (mc.player.moveForward < 0.0f) {
+			n = -0.5f;
+		} else if (mc.player.moveForward > 0.0f) {
+			n = 0.5f;
+		}
+		if (mc.player.moveStrafing > 0.0f) {
+			rotationYaw -= 90.0f * n;
+		}
+		if (mc.player.moveStrafing < 0.0f) {
+			rotationYaw += 90.0f * n;
+		}
+		return rotationYaw * 0.017453292f;
+	}
 }
+
 

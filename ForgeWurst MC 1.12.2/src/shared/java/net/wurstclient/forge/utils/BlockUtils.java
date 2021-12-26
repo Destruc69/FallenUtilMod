@@ -55,6 +55,10 @@ public final class BlockUtils {
 				.offset(pos);
 	}
 
+	public static BlockPos getPlayerPosWithEntity() {
+		return new BlockPos(mc.player.getRidingEntity() != null ? mc.player.getRidingEntity().posX : mc.player.posX, mc.player.getRidingEntity() != null ? mc.player.getRidingEntity().posY : mc.player.posY, mc.player.getRidingEntity() != null ? mc.player.getRidingEntity().posZ : mc.player.posZ);
+	}
+
 	public static boolean canBeClicked(BlockPos pos) {
 		return getBlock(pos).canCollideCheck(getState(pos), false);
 	}
