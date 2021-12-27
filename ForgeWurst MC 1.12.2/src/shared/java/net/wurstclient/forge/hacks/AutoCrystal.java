@@ -104,17 +104,7 @@ public final class AutoCrystal extends Hack {
 	public void onUpdate(WUpdateEvent event) {
 		for (Entity e : mc.world.loadedEntityList) {
 			if (e instanceof EntityEnderCrystal) {
-				if (mc.player.getDistance(e) < rangep.getValue()) {
-					double x = entity.getEntityBoundingBox().calculateXOffset(entity.getEntityBoundingBox(), mc.player.posX);
-					double y = entity.getEntityBoundingBox().calculateYOffset(entity.getEntityBoundingBox(), mc.player.posY);
-					double z = entity.getEntityBoundingBox().calculateZOffset(entity.getEntityBoundingBox(), mc.player.posZ);
-
-					RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
-				}
-			}
-
-			if (e instanceof EntityEnderCrystal) {
-				if (mc.player.getDistance(e) < rangeb.getValue()) {
+				if (mc.player.getDistance(e) < rangep.getValue() && mc.player.getDistance(e) < rangeb.getValue()) {
 					double x = entity.getEntityBoundingBox().calculateXOffset(entity.getEntityBoundingBox(), mc.player.posX);
 					double y = entity.getEntityBoundingBox().calculateYOffset(entity.getEntityBoundingBox(), mc.player.posY);
 					double z = entity.getEntityBoundingBox().calculateZOffset(entity.getEntityBoundingBox(), mc.player.posZ);
@@ -161,7 +151,7 @@ public final class AutoCrystal extends Hack {
 				}
 			}
 			if (selfDamage < max.getValue()) {
-				if (pause.isChecked() && mc.player.isHandActive())
+				if (pause.isChecked() && mc.player.isHandActive() && !(mc.player.getHeldItemMainhand().getItem() instanceof ItemEndCrystal))
 					return;
 
 				if (minEntity != null && mc.player.getDistance(minEntity) < rangep.getValue()) {

@@ -2,8 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="baritone.Baritone.main" target="1.8" />
-      <module name="baritone.Baritone.test" target="1.8" />
+      <module name="baritone" target="1.8" />
       <module name="baritone.buildSrc" target="1.8" />
       <module name="baritone.buildSrc.main" target="1.8" />
       <module name="baritone.buildSrc.test" target="1.8" />
