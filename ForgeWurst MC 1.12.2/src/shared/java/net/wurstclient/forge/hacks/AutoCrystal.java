@@ -110,6 +110,8 @@ public final class AutoCrystal extends Hack {
 					double z = entity.getEntityBoundingBox().calculateZOffset(entity.getEntityBoundingBox(), mc.player.posZ);
 
 					RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
+
+					mc.player.rotationYawHead = (float) (x * y * z);
 				}
 			}
 		}
