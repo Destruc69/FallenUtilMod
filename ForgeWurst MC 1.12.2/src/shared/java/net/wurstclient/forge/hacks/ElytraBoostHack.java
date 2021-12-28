@@ -8,6 +8,7 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -86,6 +87,20 @@ public final class ElytraBoostHack extends Hack {
 	public void onUpdate(WUpdateEvent event) {
 		if (mc.player.isElytraFlying()) {
 
+			if (auto.isChecked()) {
+				if (mc.player.posY > height.getValue()) {
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), true);
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), true);
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);
+				}
+
+				if (mc.player.posY < height.getValue()) {
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), false);
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), true);
+					KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
+				}
+			}
+
 			if (hold.isChecked() && !mc.gameSettings.keyBindForward.isKeyDown() &&
 					!mc.gameSettings.keyBindSneak.isKeyDown() &&
 					!mc.gameSettings.keyBindJump.isKeyDown() &&
@@ -103,25 +118,25 @@ public final class ElytraBoostHack extends Hack {
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown()) {
-				mc.player.rotationYaw += 0.5;
+				mc.player.rotationYaw += 5.5;
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown()) {
-				mc.player.rotationYaw -= 0.5;
+				mc.player.rotationYaw -= 5.5;
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
-				mc.player.motionY += speed.getValueF();
+				mc.player.motionY += up.getValueF();
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown()) {
-				mc.player.motionY -= speed.getValueF();
+				mc.player.motionY -= down.getValueF();
 			}
 
 			if (time.isChecked() && mc.player.fallDistance < 5) {
 				setTickLength(50 / 0.5f);
 			} else {
-				setTickLength(50);
+				setTickLength(50 / 1.0f);
 			}
 		}
 	}

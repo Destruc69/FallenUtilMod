@@ -13,10 +13,7 @@ import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.wurstclient.fmlevents.WIsNormalCubeEvent;
-import net.wurstclient.fmlevents.WPacketInputEvent;
-import net.wurstclient.fmlevents.WSetOpaqueCubeEvent;
-import net.wurstclient.fmlevents.WUpdateEvent;
+import net.wurstclient.fmlevents.*;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
@@ -103,5 +100,9 @@ public final class PacketFly extends Hack {
 
 	public void opac1(WIsNormalCubeEvent event) {
 		event.setCanceled(true);
+	}
+
+	public void clip(WPlayerMoveEvent event) {
+		event.getPlayer().noClip = true;
 	}
 }

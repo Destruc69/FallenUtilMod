@@ -57,6 +57,8 @@ public final class Coords extends Hack {
 	@SubscribeEvent
 	public void onRenderGUI(RenderGameOverlayEvent.Post event) {
 
+		GL11.glColor3f(1, 1, 1);
+
 		int textColor;
 
 		textColor = 0xffffff;

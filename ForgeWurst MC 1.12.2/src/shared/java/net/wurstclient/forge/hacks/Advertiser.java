@@ -7,13 +7,11 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
 import net.wurstclient.forge.utils.TimerUtils;
 
 public final class Advertiser extends Hack {
@@ -34,7 +32,7 @@ public final class Advertiser extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (TimerUtils.passed(12000L)) {
+		if (TimerUtils.hasPassed(12000)) {
 			mc.player.sendChatMessage(">Join Fallen today! https://discord.gg/Z5rHscehpd" + " " + Math.round(Math.random()) + " " + Math.round(Math.random()));
 		}
 	}

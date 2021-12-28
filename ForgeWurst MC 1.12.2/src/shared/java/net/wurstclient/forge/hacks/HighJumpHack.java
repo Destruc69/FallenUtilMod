@@ -43,7 +43,7 @@ public final class HighJumpHack extends Hack
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event)
 	{
-		if (mc.gameSettings.keyBindJump.isPressed()) {
+		if (mc.gameSettings.keyBindJump.isKeyDown()) {
 			if (mc.player.onGround) {
 				mc.player.motionY = 3.0;
 		}

@@ -13,7 +13,7 @@ public final class Anchor extends Hack {
 			new SliderSetting("Speed", 4, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting fall =
-			new SliderSetting("Fall Distance", 1, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Fall Distance", 2, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	public Anchor() {
 		super("Anchor", "Fast fall when your 2 blocks over a hole.");
@@ -34,7 +34,9 @@ public final class Anchor extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (event.getPlayer().fallDistance > fall.getValue())
+		if (event.getPlayer().fallDistance > fall.getValue()) {
 			mc.player.motionY -= speed.getValue();
+			mc.player.setVelocity(0, -1, 0);
+		}
 	}
 }

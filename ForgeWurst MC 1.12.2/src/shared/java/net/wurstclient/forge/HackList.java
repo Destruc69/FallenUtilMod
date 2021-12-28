@@ -107,6 +107,7 @@ public final class HackList extends WHackList
 	public final FastLadderHack fastLadderHack = register(new FastLadderHack());
 	public final FastPlaceHack fastPlaceHack = register(new FastPlaceHack());
 	public final StepHack stepHack = register(new StepHack());
+	public final FakePlayer fakePlayer = register(new FakePlayer());
 	public final ElytraBoostHack elytraboosthack = register(new ElytraBoostHack());
 	public final ParkourHack parkourhack = register(new ParkourHack());
 	public final FlightHack flightHack = register(new FlightHack());

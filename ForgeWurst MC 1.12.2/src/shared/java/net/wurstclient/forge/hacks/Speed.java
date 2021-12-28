@@ -46,6 +46,7 @@ public final class Speed extends Hack {
 	@SubscribeEvent
 	public void onRenderGUI(RenderGameOverlayEvent.Post event) {
 
+		GL11.glColor3f(1, 1, 1);
 
 		final double deltaX = mc.player.posX - PrevPosX;
 		final double deltaZ = mc.player.posZ - PrevPosZ;
@@ -57,7 +58,7 @@ public final class Speed extends Hack {
 
 		int textColor;
 
-		if (TimerUtils.passed(1000)) {
+		if (TimerUtils.hasPassed(1000)) {
 			PrevPosX = mc.player.prevPosX;
 			PrevPosZ = mc.player.prevPosZ;
 		}

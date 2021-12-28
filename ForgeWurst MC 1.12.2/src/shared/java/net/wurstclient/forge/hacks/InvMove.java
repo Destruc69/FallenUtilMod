@@ -15,6 +15,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.play.client.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WPlayerMoveEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
@@ -46,7 +47,7 @@ public final class InvMove extends Hack {
 	}
 
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event) {
+	public void onUpdate(WPlayerMoveEvent event) {
 		if (mc.currentScreen == null || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook) {
 			return;
 		}
