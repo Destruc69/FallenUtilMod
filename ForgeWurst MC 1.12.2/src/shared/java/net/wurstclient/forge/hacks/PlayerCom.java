@@ -45,12 +45,6 @@ public final class PlayerCom extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-
-		if (!mc.player.getName().contains("12master") && !mc.player.getName().contains("Dockson")) {
-			ForgeWurst.getForgeWurst().getHax().playerCom.setEnabled(false);
-			ChatUtils.error("This is currently unavailable to the public");
-		}
-
 		for (Entity e : mc.world.loadedEntityList) {
 			if (e instanceof EntityPlayer) {
 
