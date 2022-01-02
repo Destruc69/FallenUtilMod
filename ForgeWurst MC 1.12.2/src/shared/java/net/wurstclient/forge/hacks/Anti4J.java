@@ -48,13 +48,6 @@ public final class Anti4J extends Hack {
 			mc.currentScreen = null;
 			mc.player.connection.sendPacket(new SPacketDisconnect());
 			mc.player.connection.sendPacket(new net.minecraft.network.login.server.SPacketDisconnect());
-
-			JFrame fr = new JFrame();
-
-			JButton b1 = new JButton("[FALLEN] Characters containing Log4j characters where sent/received, We left the game in-case but please run your AntiVirus scans ASAP");
-
-			b1.setBounds(250,200,100,30);
-			fr.add(b1);
 		}
 
 		if (strict.isChecked()) {
@@ -63,13 +56,6 @@ public final class Anti4J extends Hack {
 				mc.currentScreen = null;
 				mc.player.connection.sendPacket(new SPacketDisconnect());
 				mc.player.connection.sendPacket(new net.minecraft.network.login.server.SPacketDisconnect());
-
-				JFrame fr = new JFrame();
-
-				JButton b1 = new JButton("[FALLEN] Characters containing Log4j characters where sent/received, We left the game in-case but please run your AntiVirus scans ASAP");
-
-				b1.setBounds(250,200,100,30);
-				fr.add(b1);
 			}
 		}
 	}
@@ -80,13 +66,6 @@ public final class Anti4J extends Hack {
 			mc.world.sendQuittingDisconnectingPacket();
 			mc.currentScreen = null;
 			mc.player.connection.sendPacket(new SPacketDisconnect());
-
-			JFrame fr = new JFrame();
-
-			JButton b1 = new JButton("[FALLEN] Characters containing Log4j characters where sent/received, We left the game in-case but please run your AntiVirus scans ASAP");
-
-			b1.setBounds(250,200,100,30);
-			fr.add(b1);
 		}
 
 
@@ -95,13 +74,6 @@ public final class Anti4J extends Hack {
 				mc.world.sendQuittingDisconnectingPacket();
 				mc.currentScreen = null;
 				mc.player.connection.sendPacket(new SPacketDisconnect());
-
-				JFrame fr = new JFrame();
-
-				JButton b1 = new JButton("[FALLEN] Characters containing Log4j characters where sent/received, We left the game in-case but please run your AntiVirus scans ASAP");
-
-				b1.setBounds(250,200,100,30);
-				fr.add(b1);
 			}
 		}
 	}

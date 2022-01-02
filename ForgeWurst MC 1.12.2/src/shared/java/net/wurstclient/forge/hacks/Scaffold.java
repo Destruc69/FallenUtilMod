@@ -125,8 +125,7 @@ public final class Scaffold extends Hack {
 		}
 
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			mc.player.jump();
-			mc.player.motionY -= 0.20f;
+			mc.player.motionY += 0.20f;
 			setTickLength(50 / 0.7f);
 		} else {
 			setTickLength(50 / 0.9f);

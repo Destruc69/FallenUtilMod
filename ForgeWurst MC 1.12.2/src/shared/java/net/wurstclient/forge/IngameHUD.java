@@ -26,6 +26,9 @@ public final class IngameHUD
 	private final HackList hackList;
 	private final ClickGui clickGui;
 	
+	boolean a;
+	boolean b;
+	
 	public IngameHUD(HackList hackList, ClickGui clickGui)
 	{
 		this.hackList = hackList;
@@ -33,23 +36,23 @@ public final class IngameHUD
 	}
 	
 	@SubscribeEvent
-	public void onRenderGUI(RenderGameOverlayEvent.Post event)
-	{
-		if(event.getType() != ElementType.ALL || mc.gameSettings.showDebugInfo)
+	public void onRenderGUI(RenderGameOverlayEvent.Post event) {
+		if (event.getType() != ElementType.ALL || mc.gameSettings.showDebugInfo)
 			return;
-		
+
 		boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
-		
+
 		// color
 		clickGui.updateColors();
+
 		int textColor;
-		if(hackList.rainbowUiHack.isEnabled())
-		{
+		if (hackList.rainbowUiHack.isEnabled()) {
 			float[] acColor = clickGui.getAcColor();
-			textColor = (int)(acColor[0] * 256) << 16
-				| (int)(acColor[1] * 256) << 8 | (int)(acColor[2] * 256);
-		}else
-			textColor = 0xffffff;
+			textColor = (int) (acColor[0] * 256) << 16
+					| (int) (acColor[1] * 256) << 8 | (int) (acColor[2] * 256);
+		} else {
+			textColor = 0x0099ff;
+		}
 		
 		// title
 		GL11.glPushMatrix();

@@ -7,6 +7,7 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.network.play.server.SPacketCloseWindow;
 import net.minecraft.network.play.server.SPacketRemoveEntityEffect;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,7 +45,7 @@ public final class MoreInv extends Hack {
 
 	@SubscribeEvent
 	public void onPacketInput(WPacketInputEvent event) {
-		if (event.getPacket() instanceof CPacketCloseWindow)
+		if (event.getPacket() instanceof SPacketCloseWindow)
 			event.setCanceled(true);
 	}
 }

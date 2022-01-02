@@ -7,15 +7,13 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketCloseWindow;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.minecraft.network.play.server.SPacketSoundEffect;
-import net.wurstclient.forge.utils.ChatUtils;
 
 public final class NoSound extends Hack {
 	public NoSound() {

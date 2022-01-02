@@ -39,7 +39,7 @@ public final class AntiVoid extends Hack
 	
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mc.player.posY == 1) {
+		if (mc.player.posY < 1) {
 			mc.player.jump();
 		}
 	}

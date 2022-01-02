@@ -8,6 +8,7 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;

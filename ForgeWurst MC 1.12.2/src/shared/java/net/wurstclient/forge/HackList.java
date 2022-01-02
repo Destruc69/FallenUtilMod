@@ -78,7 +78,6 @@ public final class HackList extends WHackList
 	public final AntiSwing antiSwing = register(new AntiSwing());
 	public final NoSound noSound = register(new NoSound());
 	public final Criticals criticals = register(new Criticals());
-	public final InfiniteEffects infiniteEffects = register(new InfiniteEffects());
 	public final PacketCanceler packetCanceler = register(new PacketCanceler());
 	public final NoKnockback noKnockback = register(new NoKnockback());
 	public final SpamDropHack spamDropHack = register(new SpamDropHack());

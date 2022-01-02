@@ -7,25 +7,18 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.block.BlockAir;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemAir;
 import net.minecraft.item.ItemEndCrystal;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.network.play.client.*;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WPlayerDamageBlockEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
@@ -33,8 +26,11 @@ import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
-import net.wurstclient.forge.utils.*;
+import net.wurstclient.forge.utils.BlockUtils;
+import net.wurstclient.forge.utils.PlayerControllerUtils;
+import net.wurstclient.forge.utils.RotationUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public final class AutoCrystal extends Hack {
@@ -50,6 +46,13 @@ public final class AutoCrystal extends Hack {
 			new CheckboxSetting("PlayersOnly", "Only place near EntityPlayers",
 					true);
 
+	private final SliderSetting fast =
+			new SliderSetting("FastBreak", "Targets health in order to fast place", 4, 1.0, 10, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
+	private final CheckboxSetting place =
+			new CheckboxSetting("FastPlace", "Fast Breaks, might not work on most servers",
+					true);
+
 	private EntityEnderCrystal enderCrystal;
 
 	boolean a;
@@ -60,6 +63,7 @@ public final class AutoCrystal extends Hack {
 		addSetting(autoPlace);
 		addSetting(playersOnly);
 		addSetting(range);
+		addSetting(fast);
 	}
 
 	@Override
@@ -74,14 +78,29 @@ public final class AutoCrystal extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
+
+		if (place.isChecked()) {
+			try {
+				Field rightClickDelayTimer =
+						mc.getClass().getDeclaredField(wurst.isObfuscated()
+								? "field_71467_ac" : "rightClickDelayTimer");
+				rightClickDelayTimer.setAccessible(true);
+				rightClickDelayTimer.setInt(mc, 0);
+
+			} catch (ReflectiveOperationException e) {
+				setEnabled(false);
+				throw new RuntimeException(e);
+			}
+		}
+
 		try {
 			for (Entity a : mc.world.loadedEntityList) {
 				if (a instanceof EntityEnderCrystal) {
 					if (mc.player.getDistance(a) < range.getValue()) {
 
-						double x = enderCrystal.getRenderBoundingBox().calculateXOffset(enderCrystal.getRenderBoundingBox(), mc.player.lastTickPosX);
-						double y = enderCrystal.getRenderBoundingBox().calculateYOffset(enderCrystal.getRenderBoundingBox(), mc.player.lastTickPosY);
-						double z = enderCrystal.getRenderBoundingBox().calculateZOffset(enderCrystal.getEntityBoundingBox(), mc.player.lastTickPosY);
+						double x = enderCrystal.getEntityBoundingBox().calculateXOffset(enderCrystal.getEntityBoundingBox(), mc.player.lastTickPosX);
+						double y = enderCrystal.getEntityBoundingBox().calculateYOffset(enderCrystal.getEntityBoundingBox(), mc.player.lastTickPosY);
+						double z = enderCrystal.getEntityBoundingBox().calculateZOffset(enderCrystal.getEntityBoundingBox(), mc.player.lastTickPosY);
 
 						RotationUtils.faceVectorPacketInstant(new Vec3d(x, y, z));
 					}
@@ -139,6 +158,32 @@ public final class AutoCrystal extends Hack {
 									minEntity.getPosition().add(i, -1, j), EnumFacing.UP, mc.objectMouseOver.hitVec,
 									EnumHand.MAIN_HAND);
 						}
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerDamageBlock(WPlayerDamageBlockEvent event) {
+		for (Entity e : mc.world.loadedEntityList) {
+			if (e instanceof EntityPlayer) {
+				if (mc.player.getDistance(e) < range.getValue()) {
+					if (((EntityPlayer) e).getHealth() < fast.getValue()) {
+						try {
+							PlayerControllerUtils.setBlockHitDelay(0);
+							float progress = PlayerControllerUtils.getCurBlockDamageMP()
+									+ BlockUtils.getHardness(event.getPos());
+							if (progress >= 1)
+								return;
+
+						} catch (Exception a) {
+							throw new RuntimeException(a);
+						}
+
+						WMinecraft.getPlayer().connection.sendPacket(new CPacketPlayerDigging(
+								CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, event.getPos(),
+								event.getFacing()));
 					}
 				}
 			}

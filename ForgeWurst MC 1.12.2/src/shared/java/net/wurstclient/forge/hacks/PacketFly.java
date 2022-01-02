@@ -94,14 +94,17 @@ public final class PacketFly extends Hack {
 		mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX + mc.player.motionX, mc.player.posY + mc.player.motionY, mc.player.posZ + mc.player.motionZ, mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
 	}
 
+	@SubscribeEvent
 	public void opac(WSetOpaqueCubeEvent event) {
 		event.setCanceled(true);
 	}
 
+	@SubscribeEvent
 	public void opac1(WIsNormalCubeEvent event) {
 		event.setCanceled(true);
 	}
 
+	@SubscribeEvent
 	public void clip(WPlayerMoveEvent event) {
 		event.getPlayer().noClip = true;
 	}
