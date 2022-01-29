@@ -69,10 +69,6 @@ public final class FreecamHack extends Hack {
 			return;
 		}
 
-		if (camera == null) {
-			return;
-		}
-
 		//Update motion
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
 			camera.motionY = speed.getValueF();

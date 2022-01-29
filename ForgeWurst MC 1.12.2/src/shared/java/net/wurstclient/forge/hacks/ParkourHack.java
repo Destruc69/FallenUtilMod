@@ -7,15 +7,12 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
-import net.minecraft.client.Minecraft;
-import net.wurstclient.forge.utils.ChatUtils;
 
 public final class ParkourHack extends Hack {
 	public ParkourHack() {

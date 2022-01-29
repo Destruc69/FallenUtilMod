@@ -1,17 +1,24 @@
 package net.wurstclient.forge.utils;
 
+import net.minecraft.client.Minecraft;
+
 public class TimerUtils {
-    private static long ms;
 
-    public TimerUtils() {
-        this.ms = 0;
-    }
+    //Created by Paul (FallenUtilityMod)
 
-    public static boolean hasPassed(int ms) {
-        return System.currentTimeMillis() - ms >= ms;
-    }
+    private static float tickLength;
 
-    public static void reset() {
-        ms = System.currentTimeMillis();
+    public static boolean passedTick(double tick) {
+
+        if (tickLength == tick) {
+            tick = tick + tick;
+        }
+
+        tickLength = Minecraft.getMinecraft().getTickLength();
+        if (tickLength == tick) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.forge.Category;
+import net.wurstclient.forge.ForgeWurst;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.SliderSetting;
@@ -58,7 +59,7 @@ public final class Speed extends Hack {
 
 		int textColor;
 
-		if (TimerUtils.hasPassed(1000)) {
+		if (TimerUtils.passedTick(20)) {
 			PrevPosX = mc.player.prevPosX;
 			PrevPosZ = mc.player.prevPosZ;
 		}

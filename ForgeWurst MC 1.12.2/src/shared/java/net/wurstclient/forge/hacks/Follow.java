@@ -54,6 +54,9 @@ public final class Follow extends Hack {
 		for (Entity e : mc.world.loadedEntityList) {
 			if (e instanceof Entity) {
 				if (e != mc.player) {
+
+					//Created by Paul (FallenUtilityMod)
+
 					if (mc.player.getDistance(e) < range.getValue() && !mc.player.collidedHorizontally) {
 						double dd = RotationUtils.getEyesPos().distanceTo(
 								e.getEntityBoundingBox().getCenter());

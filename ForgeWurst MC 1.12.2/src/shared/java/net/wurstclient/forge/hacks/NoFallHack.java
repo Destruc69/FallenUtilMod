@@ -13,34 +13,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.ChatUtils;
 
-public final class NoFallHack extends Hack
-{
-	public NoFallHack()
-	{
+public final class NoFallHack extends Hack {
+	public NoFallHack() {
 		super("NoFall", "Protects you from fall damage.");
 		setCategory(Category.MOVEMENT);
 	}
-	
+
 	@Override
-	protected void onEnable()
-	{
+	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
 
 	}
-	
+
 	@Override
-	protected void onDisable()
-	{
+	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 
 	}
-	
+
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event)
-	{
-		if(event.getPlayer().fallDistance > 2) {
+	public void onUpdate(WUpdateEvent event) {
+		if (event.getPlayer().fallDistance > 4) {
 			mc.getConnection().sendPacket(new CPacketPlayer(true));
 			mc.player.fallDistance = 2f;
 		}

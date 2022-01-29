@@ -24,10 +24,6 @@ public final class FlightHack extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 1, 0.05, 5, 0.05, ValueDisplay.DECIMAL);
 
-	private final CheckboxSetting spoof =
-			new CheckboxSetting("NCP Spoof",
-					false);
-
 	public FlightHack() {
 		super("Flight",
 				"Allows you to fly.\n\n"
@@ -35,7 +31,6 @@ public final class FlightHack extends Hack {
 						+ "if you don't use NoFall.");
 		setCategory(Category.MOVEMENT);
 		addSetting(speed);
-		addSetting(spoof);
 	}
 
 	@Override
@@ -57,10 +52,6 @@ public final class FlightHack extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-
-		if (spoof.isChecked()) {
-			mc.getConnection().sendPacket(new CPacketPlayerDigging());
-		}
 
 		EntityPlayerSP player = event.getPlayer();
 

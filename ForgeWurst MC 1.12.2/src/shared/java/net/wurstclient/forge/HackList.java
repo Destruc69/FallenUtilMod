@@ -15,6 +15,7 @@ import net.wurstclient.forge.compatibility.WHackList;
 import net.wurstclient.forge.hacks.*;
 import net.wurstclient.forge.settings.Setting;
 import net.wurstclient.forge.utils.JsonUtils;
+import net.wurstclient.forge.utils.TimerUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,7 +63,6 @@ public final class HackList extends WHackList
 	 * FIX JLAYER/MUSICBOX
 	 * More General Modules
 	 */
-	public final AutoCrystal autoCrystal = register(new AutoCrystal());
 	public final AntiAFK antiAFK = register(new AntiAFK());
 	public final Anchor anchor = register(new Anchor());
 	public final PlayerCom playerCom = register(new PlayerCom());
@@ -71,6 +71,7 @@ public final class HackList extends WHackList
 	public final PacketFly packetFly = register(new PacketFly());
 	public final AirJump airJump = register(new AirJump());
 	public final Online online = register(new Online());
+	public final AutoCrystalReWrite autoCrystalReWrite = register(new AutoCrystalReWrite());
 	public final Coords coords = register(new Coords());
 	public final AntiHunger antiHunger = register(new AntiHunger());
 	public final NoSlowdown noSlowdown = register(new NoSlowdown());
@@ -96,7 +97,6 @@ public final class HackList extends WHackList
 	public final AutoWalkHack autoWalkHack = register(new AutoWalkHack());
 	public final BlinkHack blinkHack = register(new BlinkHack());
 	public final Strafe strafe = register(new Strafe());
-	public final Portal portal = register(new Portal());
 	public final Structure endPortal = register(new Structure());
 	public final Follow follow = register(new Follow());
 	public final Crasher crasher = register(new Crasher());
@@ -106,7 +106,6 @@ public final class HackList extends WHackList
 	public final FastLadderHack fastLadderHack = register(new FastLadderHack());
 	public final FastPlaceHack fastPlaceHack = register(new FastPlaceHack());
 	public final StepHack stepHack = register(new StepHack());
-	public final FakePlayer fakePlayer = register(new FakePlayer());
 	public final ElytraBoostHack elytraboosthack = register(new ElytraBoostHack());
 	public final ParkourHack parkourhack = register(new ParkourHack());
 	public final FlightHack flightHack = register(new FlightHack());

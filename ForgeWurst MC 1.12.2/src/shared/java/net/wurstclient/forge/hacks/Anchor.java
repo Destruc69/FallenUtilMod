@@ -10,13 +10,13 @@ import net.wurstclient.forge.settings.SliderSetting;
 public final class Anchor extends Hack {
 
 	private final SliderSetting speed =
-			new SliderSetting("Speed", 4, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Speed", 2, 1.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting fall =
 			new SliderSetting("Fall Distance", 2, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	public Anchor() {
-		super("Anchor", "Fast fall when your 2 blocks over a hole.");
+		super("Anchor", "Fast fall when your value blocks over a hole.");
 		setCategory(Category.COMBAT);
 		addSetting(fall);
 		addSetting(speed);

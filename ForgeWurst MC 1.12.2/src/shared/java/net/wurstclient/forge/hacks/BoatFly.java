@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public final class BoatFly extends Hack {
 	private final SliderSetting speed =
-			new SliderSetting("Speed", 1, 0.05, 5, 0.05, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Speed", 1, 0.05, 5, 0.005, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final CheckboxSetting velocity =
 			new CheckboxSetting("Velocity",

@@ -8,8 +8,11 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.network.play.server.SPacketDisconnect;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WPacketInputEvent;
+import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
@@ -21,21 +24,43 @@ public final class FakePlayer extends Hack {
 	private EntityFakePlayer fakePlayer;
 
 	public FakePlayer() {
-		super("FakePlayer", "Spawns a fake player for testing modules.");
+		super("FakePlayer", "Spawns a fake player.");
 		setCategory(Category.MOVEMENT);
 	}
 
 	@Override
 	protected void onEnable() {
-		fakePlayer = new EntityFakePlayer();
-
 		MinecraftForge.EVENT_BUS.register(this);
+
+		fakePlayer = new EntityFakePlayer();
 	}
 
 	@Override
 	protected void onDisable() {
-		fakePlayer.despawn();
-
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		fakePlayer.despawn();
+	}
+
+	@SubscribeEvent
+	public void packet(WPacketInputEvent event) {
+		if (event.getPacket() instanceof SPacketDisconnect) {
+			fakePlayer.despawn();
+		}
+
+		if (event.getPacket() instanceof net.minecraft.network.login.server.SPacketDisconnect) {
+			fakePlayer.despawn();
+		}
+	}
+
+	@SubscribeEvent
+	public void packett(WPacketOutputEvent event) {
+		if (event.getPacket() instanceof SPacketDisconnect) {
+			fakePlayer.despawn();
+		}
+
+		if (event.getPacket() instanceof net.minecraft.network.login.server.SPacketDisconnect) {
+			fakePlayer.despawn();
+		}
 	}
 }

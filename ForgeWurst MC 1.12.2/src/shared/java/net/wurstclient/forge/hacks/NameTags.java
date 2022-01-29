@@ -7,24 +7,27 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.settings.SliderSetting;
 
-public final class NameTags extends Hack
-{
+import java.util.Set;
+
+public final class NameTags extends Hack {
+
+	private final SliderSetting size =
+			new SliderSetting("Size", 5, 1.0, 20, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+
 	public NameTags()
 	{
 		super("NameTags", "Displays health of the player and make it bolder.");
 		setCategory(Category.RENDER);
+		addSetting(size);
 	}
 	
 	@Override
@@ -44,6 +47,11 @@ public final class NameTags extends Hack
 		for (Entity e : mc.world.loadedEntityList) {
 			if (e instanceof EntityPlayer) {
 				double health = ((EntityPlayer) e).getHealth();
+
+				Set<String> tag = mc.player.getTags();
+
+				boolean b = tag.size() == size.getValueI();
+				b = true;
 
 				e.setAlwaysRenderNameTag(true);
 
