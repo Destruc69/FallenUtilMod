@@ -3,9 +3,20 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="baritone" target="1.8" />
+      <module name="baritone-1.2.15.buildSrc" target="1.8" />
+      <module name="baritone-1.2.15.buildSrc.main" target="1.8" />
+      <module name="baritone-1.2.15.buildSrc.test" target="1.8" />
+      <module name="baritone.api" target="1.8" />
+      <module name="baritone.Baritone" target="1.8" />
+      <module name="baritone.Baritone.main" target="1.8" />
+      <module name="baritone.Baritone.test" target="1.8" />
       <module name="baritone.buildSrc" target="1.8" />
       <module name="baritone.buildSrc.main" target="1.8" />
       <module name="baritone.buildSrc.test" target="1.8" />
+      <module name="baritone.launch" target="1.8" />
+      <module name="baritone.main" target="1.8" />
+      <module name="baritone.schematica_api" target="1.8" />
+      <module name="baritone.test" target="1.8" />
       <module name="ForgeWurst_MC_1.10.2" target="1.8" />
       <module name="ForgeWurst_MC_1.10.2.api" target="1.8" />
       <module name="ForgeWurst_MC_1.10.2.main" target="1.8" />
