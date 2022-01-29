@@ -9,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
+import net.wurstclient.fmlevents.WPlayerMoveEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
@@ -34,6 +35,7 @@ public final class FreecamHack extends Hack {
 	@Override
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
+
 		if (mc.player == null || mc.world == null) {
 			return;
 		}
@@ -63,9 +65,14 @@ public final class FreecamHack extends Hack {
 		}
 	}
 
+
 	@SubscribeEvent
 	public void onUpdate(LivingEvent.LivingUpdateEvent e) {
 		if (!e.getEntity().equals(camera) || mc.currentScreen != null) {
+			return;
+		}
+
+		if (camera == null) {
 			return;
 		}
 
@@ -114,25 +121,21 @@ public final class FreecamHack extends Hack {
 
 		camera.inventory.copyInventory(mc.player.inventory);
 		camera.noClip = true;
-
-		camera.rotationYaw = mc.player.rotationYaw;
-		camera.rotationPitch = mc.player.rotationPitch;
+		camera.rotationYawHead = camera.rotationYaw;
 
 		camera.move(MoverType.SELF, camera.motionX, camera.motionY, camera.motionZ);
 	}
 
-	private void packet(WPacketInputEvent event) {
-		try {
-			CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
-			if (packet.getEntityFromWorld(mc.world).equals(mc.player)) {
-				event.setCanceled(true);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@SubscribeEvent
+	public void packet(WPlayerMoveEvent event) {
+		event.getPlayer().movementInput.moveForward = 0;
+		event.getPlayer().movementInput.moveStrafe = 0;
+		event.getPlayer().movementInput.jump = false;
+		event.getPlayer().movementInput.sneak = false;
+		event.getPlayer().setSprinting(false);
 	}
 
-		public static double[] getRotationFromVec(Vec3d vec) {
+	public static double[] getRotationFromVec(Vec3d vec) {
 		double xz = Math.sqrt(vec.x * vec.x + vec.z * vec.z);
 		double yaw = normalizeAngle(Math.toDegrees(Math.atan2(vec.z, vec.x)) - 90.0);
 		double pitch = normalizeAngle(Math.toDegrees(-Math.atan2(vec.y, xz)));

@@ -25,8 +25,6 @@ import net.wurstclient.forge.utils.KeyBindingUtils;
 import net.wurstclient.forge.utils.RotationUtils;
 
 public final class Structure extends Hack {
-	private final SliderSetting range =
-			new SliderSetting("Range", 8, 1.0, 50, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 	private final CheckboxSetting dis =
 			new CheckboxSetting("DistanceToTarget",
 					false);
@@ -38,7 +36,6 @@ public final class Structure extends Hack {
 		super("StructureFinder", "Bot that finds structures.");
 		setCategory(Category.PATHFINDING);
 		addSetting(dis);
-		addSetting(range);
 	}
 
 	@Override
@@ -55,27 +52,24 @@ public final class Structure extends Hack {
 	public void onUpdate(WUpdateEvent event) {
 		for (TileEntity e : mc.world.loadedTileEntityList) {
 			if (e instanceof TileEntityStructure) {
-				if (e.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ) < range.getValue()) {
-					double dd = RotationUtils.getEyesPos().distanceTo(
-							e.getRenderBoundingBox().getCenter());
-					double posXX = e.getPos().getX() + (e.getPos().getX() - e.getPos().getX()) * dd
-							- mc.player.posX;
-					double posYY = e.getPos().getY() + (e.getPos().getY() - e.getPos().getY()) * dd
-							+ e.getRenderBoundingBox().calculateYOffset(e.getRenderBoundingBox(), mc.player.posY) * 0.5 - mc.player.posY
-							- mc.player.getEyeHeight();
-					double posZZ = e.getPos().getZ() + (e.getPos().getZ() - e.getPos().getZ()) * dd
-							- mc.player.posZ;
+				double dd = RotationUtils.getEyesPos().distanceTo(
+						e.getRenderBoundingBox().getCenter());
+				double posXX = e.getPos().getX() + (e.getPos().getX() - e.getPos().getX()) * dd
+						- mc.player.posX;
+				double posYY = e.getPos().getY() + (e.getPos().getY() - e.getPos().getY()) * dd
+						+ e.getRenderBoundingBox().calculateYOffset(e.getRenderBoundingBox(), mc.player.posY) * 0.5 - mc.player.posY
+						- mc.player.getEyeHeight();
+				double posZZ = e.getPos().getZ() + (e.getPos().getZ() - e.getPos().getZ()) * dd
+						- mc.player.posZ;
 
-					mc.player.rotationYaw = (float) Math.toDegrees(Math.atan2(posZZ, posXX)) - 90;
+				mc.player.rotationYaw = (float) Math.toDegrees(Math.atan2(posZZ, posXX)) - 90;
 
-					if (dis.isChecked()) {
-						ForgeWurst.getForgeWurst().getHax().endPortal.dis.setChecked(false);
-						double dis = e.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ);
-						ChatUtils.message("Distance:" + " " + dis);
-					}
+				if (dis.isChecked()) {
+					ForgeWurst.getForgeWurst().getHax().endPortal.dis.setChecked(false);
+					double dis = e.getDistanceSq(mc.player.posX, mc.player.posY, mc.player.posZ);
+					ChatUtils.message("Distance:" + " " + dis);
 				}
 			}
-
 		}
 		if (mc.player.moveForward < 0 && mc.player.moveStrafing < 0) {
 			if (mc.player.onGround) {

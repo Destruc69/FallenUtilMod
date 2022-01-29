@@ -1,24 +1,48 @@
+
 package net.wurstclient.forge.utils;
 
-import net.minecraft.client.Minecraft;
-
 public class TimerUtils {
+    private static long time = -1L;
 
-    //Created by Paul (FallenUtilityMod)
+    public static boolean passedS(double s) {
+        return passedMs((long)s * 1000L);
+    }
 
-    private static float tickLength;
+    public static boolean passedDms(double dms) {
+        return passedMs((long)dms * 10L);
+    }
 
-    public static boolean passedTick(double tick) {
+    public static boolean passedDs(double ds) {
+        return passedMs((long)ds * 100L);
+    }
 
-        if (tickLength == tick) {
-            tick = tick + tick;
-        }
+    public static boolean passedMs(long ms) {
+        return passedNS(convertToNS(ms));
+    }
 
-        tickLength = Minecraft.getMinecraft().getTickLength();
-        if (tickLength == tick) {
-            return true;
-        } else {
-            return false;
-        }
+    public static void setMs(long ms) {
+        time = System.nanoTime() - convertToNS(ms);
+    }
+
+    public static boolean passedNS(long ns) {
+        return System.nanoTime() - time >= ns;
+    }
+
+    public static long getPassedTimeMs() {
+        return getMs(System.nanoTime() - time);
+    }
+
+    public TimerUtils reset() {
+        time = System.nanoTime();
+        return this;
+    }
+
+    public static long getMs(long time) {
+        return time / 1000000L;
+    }
+
+    public static long convertToNS(long time) {
+        return time * 1000000L;
     }
 }
+

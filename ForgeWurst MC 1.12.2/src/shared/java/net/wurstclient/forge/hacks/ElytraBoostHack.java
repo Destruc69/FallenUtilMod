@@ -7,42 +7,29 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.network.play.client.CPacketConfirmTeleport;
-import net.minecraft.network.play.client.CPacketEntityAction;
-import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.client.CPacketPlayerDigging;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Timer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.compatibility.WEntity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.Vec3d;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
-import net.wurstclient.forge.utils.ChatUtils;
-import net.wurstclient.forge.utils.KeyBindingUtils;
-import net.wurstclient.forge.utils.PlayerUtils;
 
 import java.lang.reflect.Field;
 
 public final class ElytraBoostHack extends Hack {
 	private final SliderSetting speed =
-			new SliderSetting("BaseSpeed", "Base Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("BaseSpeed", "Base Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting down =
-			new SliderSetting("DownSpeed", "Down Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("DownSpeed", "Down Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting up =
-			new SliderSetting("UpSpeed", "Up Speed for Elytra", 0.05, 0.05, 1, 0.25, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("UpSpeed", "Up Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final CheckboxSetting time =
 			new CheckboxSetting("TimerTakeOff", "Makes getting off the ground easier",
@@ -106,8 +93,11 @@ public final class ElytraBoostHack extends Hack {
 					!mc.gameSettings.keyBindJump.isKeyDown() &&
 					!mc.gameSettings.keyBindLeft.isKeyDown() &&
 					!mc.gameSettings.keyBindRight.isKeyDown()) {
+
+				mc.player.motionX = 0;
+				mc.player.motionY = 0;
+				mc.player.motionZ = 0;
 				mc.player.setVelocity(0, 0, 0);
-				mc.player.motionY += 0.005;
 			}
 
 			float yaw = Minecraft.getMinecraft().player.rotationYaw;
@@ -136,7 +126,7 @@ public final class ElytraBoostHack extends Hack {
 			if (time.isChecked() && mc.player.fallDistance < 5) {
 				setTickLength(50 / 0.5f);
 			} else {
-				setTickLength(50 / 1.0f);
+				setTickLength(50);
 			}
 		}
 	}

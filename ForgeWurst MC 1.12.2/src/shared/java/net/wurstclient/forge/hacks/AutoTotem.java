@@ -54,7 +54,7 @@ public final class AutoTotem extends Hack {
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 		if (totem.isChecked()) {
-			if (TimerUtils.passedTick(10)) {
+			if (TimerUtils.passedMs(500)) {
 				Item oldItem = mc.player.getHeldItemOffhand().getItem();
 				int slot = InventoryUtil.getSlot(Items.TOTEM_OF_UNDYING);
 				InventoryUtil.clickSlot(slot);
@@ -69,7 +69,7 @@ public final class AutoTotem extends Hack {
 		ItemStack engolden = new ItemStack(Items.GOLDEN_APPLE, 1, (short) 1);
 
 		if (gap.isChecked()) {
-			if (TimerUtils.passedTick(10)) {
+			if (TimerUtils.passedMs(500)) {
 				Item oldItem = mc.player.getHeldItemOffhand().getItem();
 				int slot = mc.player.inventory.getSlotFor(engolden);
 				InventoryUtil.clickSlot(slot);
@@ -80,7 +80,7 @@ public final class AutoTotem extends Hack {
 			}
 
 			if (end.isChecked()) {
-				if (TimerUtils.passedTick(10)) {
+				if (TimerUtils.passedMs(500)) {
 					Item oldItem = mc.player.getHeldItemOffhand().getItem();
 					int slot = InventoryUtil.getSlot(Items.END_CRYSTAL);
 					InventoryUtil.clickSlot(slot);

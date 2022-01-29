@@ -32,7 +32,7 @@ public final class Advertiser extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (TimerUtils.passedTick(200)) {
+		if (TimerUtils.passedMs(10000)) {
 			mc.player.sendChatMessage(">Join Fallen today! https://discord.gg/Z5rHscehpd" + " " + Math.round(Math.random()) + " " + Math.round(Math.random()));
 		}
 	}

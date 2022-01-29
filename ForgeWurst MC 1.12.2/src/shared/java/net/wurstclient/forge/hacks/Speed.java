@@ -59,7 +59,7 @@ public final class Speed extends Hack {
 
 		int textColor;
 
-		if (TimerUtils.passedTick(20)) {
+		if (TimerUtils.passedMs(1000)) {
 			PrevPosX = mc.player.prevPosX;
 			PrevPosZ = mc.player.prevPosZ;
 		}

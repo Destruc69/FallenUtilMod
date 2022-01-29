@@ -15,7 +15,6 @@ import net.wurstclient.forge.compatibility.WHackList;
 import net.wurstclient.forge.hacks.*;
 import net.wurstclient.forge.settings.Setting;
 import net.wurstclient.forge.utils.JsonUtils;
-import net.wurstclient.forge.utils.TimerUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,7 +29,6 @@ public final class HackList extends WHackList
 {
 	public final AntiSpamHack antiSpamHack = register(new AntiSpamHack());
 	public final BoatFly boatFly = register(new BoatFly());
-	public final LongJump longJump = register(new LongJump());
 	public final EntitySpeed entitySpeed = register(new EntitySpeed());
 	public final StatSpoof statSpoof = register(new StatSpoof());
 	public final PortalGod portalGod = register(new PortalGod());

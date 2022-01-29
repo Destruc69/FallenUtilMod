@@ -8,6 +8,7 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
+import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.math.Vec3d;
@@ -24,16 +25,10 @@ public final class PacketFly extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 0.05, 0.05, 1, 0.01, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final CheckboxSetting anti =
-			new CheckboxSetting("AntiKick",
-					false);
-
-
 	public PacketFly() {
 		super("PacketFly", "Fly around with packets.");
 		setCategory(Category.EXPLOIT);
 		addSetting(speed);
-		addSetting(anti);
 	}
 
 	@Override
@@ -44,54 +39,34 @@ public final class PacketFly extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
-
-		mc.player.noClip = false;
-		mc.player.onGround = true;
 	}
-
-	@SubscribeEvent
-	public void onPacketInput(WPacketInputEvent event) {
-		if (event.getPacket() instanceof SPacketPlayerPosLook && mc.currentScreen == null) {
-			SPacketPlayerPosLook packet = (SPacketPlayerPosLook) event.getPacket();
-			mc.player.connection.sendPacket(new CPacketConfirmTeleport(packet.getTeleportId()));
-			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch(), false));
-			mc.player.setPosition(packet.getX(), packet.getY(), packet.getZ());
-		}
-	}
-
 
 	@SubscribeEvent
 	public void WUpdateEvent(WUpdateEvent event) {
+
 		mc.player.setVelocity(0, 0, 0);
 
-		if (anti.isChecked()) {
-			if (!mc.gameSettings.keyBindJump.isKeyDown()) {
-				mc.player.motionY -= 0.001;
-			}
-		}
+		mc.player.connection.sendPacket(new CPacketConfirmTeleport());
+		mc.player.connection.sendPacket(new CPacketConfirmTransaction());
+
+		mc.player.motionX = speed.getValueF();
+		mc.player.motionZ = speed.getValueF();
 
 		mc.player.noClip = true;
 		mc.player.onGround = false;
-		mc.player.fallDistance = 0;
+
+		mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, true));
+		mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, mc.player.rotationPitch, true));
 
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			mc.player.motionY += speed.getValue();
+			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY + speed.getValueF(), mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
+			mc.player.setPosition(mc.player.posX, mc.player.posY + speed.getValueF(), mc.player.posZ);
 		}
+
 		if (mc.gameSettings.keyBindSneak.isKeyDown()) {
-			mc.player.motionY -= speed.getValue();
+			mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX, mc.player.posY - speed.getValueF(), mc.player.posZ, mc.player.rotationYaw, mc.player.rotationPitch, true));
+			mc.player.setPosition(mc.player.posX, mc.player.posY - speed.getValueF(), mc.player.posZ);
 		}
-
-		double yawRad = Math.toRadians(mc.player.rotationYaw);
-		new Vec3d(-mc.player.moveStrafing, 0.0, mc.player.moveForward);
-		if (mc.gameSettings.keyBindForward.isKeyDown()) {
-			mc.player.motionX = -Math.sin(yawRad) * speed.getValue();
-			mc.player.motionZ = Math.cos(yawRad) * speed.getValue();
-		}
-
-		double y = mc.player.posY + mc.player.motionY;
-		mc.player.connection.sendPacket(new CPacketConfirmTeleport());
-		mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX + mc.player.motionX, y, mc.player.posZ + mc.player.motionZ, mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
-		mc.player.connection.sendPacket(new CPacketPlayer.PositionRotation(mc.player.posX + mc.player.motionX, mc.player.posY + mc.player.motionY, mc.player.posZ + mc.player.motionZ, mc.player.rotationYaw, mc.player.rotationPitch, mc.player.onGround));
 	}
 
 	@SubscribeEvent
@@ -102,10 +77,5 @@ public final class PacketFly extends Hack {
 	@SubscribeEvent
 	public void opac1(WIsNormalCubeEvent event) {
 		event.setCanceled(true);
-	}
-
-	@SubscribeEvent
-	public void clip(WPlayerMoveEvent event) {
-		event.getPlayer().noClip = true;
 	}
 }
