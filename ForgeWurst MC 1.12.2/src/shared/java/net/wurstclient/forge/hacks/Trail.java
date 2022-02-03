@@ -12,12 +12,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.utils.TimerUtils;
+import net.wurstclient.forge.utils.EntityFakePlayer;
 
-public final class Advertiser extends Hack {
-	public Advertiser() {
-		super("Advertise", "Auto Advertises for Fallen.");
-		setCategory(Category.MISC);
+public final class Trail extends Hack {
+
+	private EntityFakePlayer fakePlayer;
+
+	public Trail() {
+		super("Trail", "Creats a trail of clones lmao.");
+		setCategory(Category.MOVEMENT);
 	}
 
 	@Override
@@ -28,12 +31,13 @@ public final class Advertiser extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		if (mc.world.loadedEntityList.remove(fakePlayer));
 	}
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (TimerUtils.passedMs(10000)) {
-			mc.player.sendChatMessage(">Join Fallen today! https://discord.gg/Z5rHscehpd" + " " + Math.round(Math.random()) + " " + Math.round(Math.random()));
-		}
+		fakePlayer = new EntityFakePlayer() {
+		};
 	}
 }

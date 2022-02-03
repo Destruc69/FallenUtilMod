@@ -25,16 +25,16 @@ public final class IngameHUD
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private final HackList hackList;
 	private final ClickGui clickGui;
-	
+
 	boolean a;
 	boolean b;
-	
+
 	public IngameHUD(HackList hackList, ClickGui clickGui)
 	{
 		this.hackList = hackList;
 		this.clickGui = clickGui;
 	}
-	
+
 	@SubscribeEvent
 	public void onRenderGUI(RenderGameOverlayEvent.Post event) {
 		if (event.getType() != ElementType.ALL || mc.gameSettings.showDebugInfo)
@@ -45,20 +45,14 @@ public final class IngameHUD
 		// color
 		clickGui.updateColors();
 
-		int textColor;
-		if (hackList.rainbowUiHack.isEnabled()) {
-			float[] acColor = clickGui.getAcColor();
-			textColor = (int) (acColor[0] * 256) << 16
-					| (int) (acColor[1] * 256) << 8 | (int) (acColor[2] * 256);
-		} else {
-			textColor = 0x0099ff;
-		}
+		float textColor = 0x00ffef;
+
 		
 		// title
 		GL11.glPushMatrix();
-		GL11.glScaled(1.33333333, 1.33333333, 1);
-		WMinecraft.getFontRenderer().drawStringWithShadow(
-			"Fallen", 3, 3, textColor);
+		GL11.glScaled(1.55555555, 1.55555555, 1);
+		WMinecraft.getFontRenderer().drawString(
+			"Fallen", 3, 3, (int) textColor);
 		GL11.glPopMatrix();
 		
 		// hack list
@@ -73,7 +67,7 @@ public final class IngameHUD
 				continue;
 			
 			WMinecraft.getFontRenderer()
-				.drawStringWithShadow(hack.getRenderName(), 2, y, textColor);
+					.drawString(hack.getRenderName(), 2, y, (int) textColor);
 			y += 9;
 		}
 		

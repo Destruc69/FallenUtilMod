@@ -37,6 +37,7 @@ public final class HackList extends WHackList
 	public final NoCom noCom = register(new NoCom());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final FakePlayer fakePlayer = register(new FakePlayer());
 	public final FakeHackers fakeHackers = register(new FakeHackers());
 	public final NameTags nameTags = register(new NameTags());
 	public final AntiVoid antiVoid = register(new AntiVoid());
@@ -118,13 +119,14 @@ public final class HackList extends WHackList
 	public final MobSpawnEspHack mobSpawnEspHack =
 			register(new MobSpawnEspHack());
 	public final NoFallHack noFallHack = register(new NoFallHack());
+	public final Trail trail = register(new Trail());
 	public final TunnellerHack tunnellerHack = register(new TunnellerHack());
 	public final NoHurtcamHack noHurtcamHack = register(new NoHurtcamHack());
 	public final NoWebHack noWebHack = register(new NoWebHack());
 	public final NukerHack nukerHack = register(new NukerHack());
+	public final Disabler disabler = register(new Disabler());
 	public final PlayerEspHack playerEspHack = register(new PlayerEspHack());
 	public final RadarHack radarHack = register(new RadarHack());
-	public final RainbowUiHack rainbowUiHack = register(new RainbowUiHack());
 	public final SpiderHack spiderHack = register(new SpiderHack());
 	public final TimerHack timerHack = register(new TimerHack());
 	public final XRayHack xRayHack = register(new XRayHack());

@@ -7,13 +7,17 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.util.Timer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
+import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
+
+import java.lang.reflect.Field;
 
 public final class Strafe extends Hack {
 
@@ -36,6 +40,8 @@ public final class Strafe extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		setTickLength(50);
 	}
 
 	@SubscribeEvent
@@ -52,6 +58,12 @@ public final class Strafe extends Hack {
 				mc.player.motionX -= MathHelper.sin(yaw) * 0.2f;
 				mc.player.motionZ += MathHelper.cos(yaw) * 0.2f;
 			}
+		}
+
+		if (mc.player.onGround) {
+			setTickLength(50 / 1.1f);
+		} else {
+			setTickLength(50);
 		}
 
 		if (stable.isChecked()) {
@@ -80,4 +92,34 @@ public final class Strafe extends Hack {
 		}
 		return rotationYaw * 0.017453292f;
 	}
+
+	private void setTickLength(float tickLength)
+	{
+		try
+		{
+			Field fTimer = mc.getClass().getDeclaredField(
+					wurst.isObfuscated() ? "field_71428_T" : "timer");
+			fTimer.setAccessible(true);
+
+			if(WMinecraft.VERSION.equals("1.10.2"))
+			{
+				Field fTimerSpeed = Timer.class.getDeclaredField(
+						wurst.isObfuscated() ? "field_74278_d" : "timerSpeed");
+				fTimerSpeed.setAccessible(true);
+				fTimerSpeed.setFloat(fTimer.get(mc), 50 / tickLength);
+
+			}else
+			{
+				Field fTickLength = Timer.class.getDeclaredField(
+						wurst.isObfuscated() ? "field_194149_e" : "tickLength");
+				fTickLength.setAccessible(true);
+				fTickLength.setFloat(fTimer.get(mc), tickLength);
+			}
+
+		}catch(ReflectiveOperationException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 }
+

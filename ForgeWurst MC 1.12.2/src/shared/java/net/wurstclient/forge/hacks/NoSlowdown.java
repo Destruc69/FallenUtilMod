@@ -36,10 +36,20 @@ public final class NoSlowdown extends Hack {
 			new CheckboxSetting("NCP Strict",
 					true);
 
+	private final CheckboxSetting item =
+			new CheckboxSetting("Items",
+					true);
+
+	private final CheckboxSetting block =
+			new CheckboxSetting("Blocks",
+					true);
+
 	public NoSlowdown() {
-		super("NoSlowDown", "Don't slow down with items.");
+		super("NoSlowDown", "Don't slow down with items / blocks.");
 		setCategory(Category.MOVEMENT);
 		addSetting(NCP);
+		addSetting(item);
+		addSetting(block);
 	}
 
 	@Override
@@ -56,17 +66,62 @@ public final class NoSlowdown extends Hack {
 
 	@SubscribeEvent
 	public void WUpdateEvent(WUpdateEvent event) {
-		if (NCP.isChecked()) {
+		if (NCP.isChecked() && item.isChecked()) {
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
 			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
 		}
 
-		if (mc.player.isHandActive() && mc.player.getHeldItemMainhand().getItem() instanceof ItemFood) {
-			mc.player.moveStrafing *= 5;
-			mc.player.moveForward *= 5;
-		} else if (mc.player.isHandActive() && mc.player.getHeldItemOffhand().getItem() instanceof ItemFood) {
-			mc.player.moveStrafing *= 5;
-			mc.player.moveForward *= 5;
+		if (item.isChecked()) {
+			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemFood && mc.player.isHandActive()) {
+
+				float yaw = Minecraft.getMinecraft().player.rotationYaw;
+				float pitch = Minecraft.getMinecraft().player.rotationPitch;
+
+				if (!mc.player.isSprinting() && mc.player.onGround) {
+					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
+					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
+				} else if (mc.player.isSprinting() && mc.player.onGround) {
+					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.010;
+					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.010;
+				}
+
+				if (mc.player.isAirBorne) {
+					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.01;
+					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.01;
+				}
+
+				if (mc.player.getHeldItemMainhand().getItem() instanceof Item && mc.player.isHandActive()) {
+					if (!mc.player.isSprinting()) {
+						Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
+						Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
+					} else if (mc.player.isSprinting()) {
+						Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.016;
+						Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.016;
+					}
+				}
+
+				if (block.isChecked()) {
+					if (mc.player.onGround && mc.player.moveForward == 0f && mc.player.moveStrafing == 0) {
+						mc.player.setVelocity(0, 0, 0);
+					}
+
+					BlockPos blockpos = mc.player.getPosition();
+
+					if (mc.world.getBlockState(blockpos.down()).getBlock() instanceof BlockSoulSand) {
+						if (!mc.player.isSprinting()) {
+							if (mc.gameSettings.keyBindForward.isKeyDown()) {
+								Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.08;
+								Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.08;
+							} else if (mc.player.isSprinting()) {
+								if (mc.gameSettings.keyBindForward.isKeyDown()) {
+									Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.16;
+									Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.16;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

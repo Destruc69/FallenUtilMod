@@ -119,7 +119,7 @@ public final class Slider extends Component
 		GL11.glVertex2i(x4, y4);
 		GL11.glEnd();
 		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.5F);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x3, y4);
 		GL11.glVertex2i(x3, y5);
 		GL11.glVertex2i(x4, y5);
@@ -137,15 +137,6 @@ public final class Slider extends Component
 		float f = (float)(2 * percentage);
 		GL11.glColor4f(f, 2 - f, 0, hSlider ? 1 : 0.75F);
 		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2d(xk1, yk1);
-		GL11.glVertex2d(xk1, yk2);
-		GL11.glVertex2d(xk2, yk2);
-		GL11.glVertex2d(xk2, yk1);
-		GL11.glEnd();
-		
-		// outline
-		GL11.glColor4f(0.0625F, 0.0625F, 0.0625F, 0.5F);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex2d(xk1, yk1);
 		GL11.glVertex2d(xk1, yk2);
 		GL11.glVertex2d(xk2, yk2);

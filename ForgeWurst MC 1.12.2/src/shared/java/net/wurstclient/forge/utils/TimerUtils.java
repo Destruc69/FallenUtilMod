@@ -2,47 +2,30 @@
 package net.wurstclient.forge.utils;
 
 public class TimerUtils {
-    private static long time = -1L;
+    private static long lastTime;
 
-    public static boolean passedS(double s) {
-        return passedMs((long)s * 1000L);
+    // Returns change in time as double
+    public static long getDeltaTime(){
+        return (System.nanoTime()-lastTime);
     }
 
-    public static boolean passedDms(double dms) {
-        return passedMs((long)dms * 10L);
+    // Updates lastTime
+    public static void updateTime(){
+        lastTime = System.nanoTime();
     }
 
-    public static boolean passedDs(double ds) {
-        return passedMs((long)ds * 100L);
+    // Public constructor for Timer object
+    public TimerUtils() {
+        lastTime = System.nanoTime();
     }
 
-    public static boolean passedMs(long ms) {
-        return passedNS(convertToNS(ms));
-    }
 
-    public static void setMs(long ms) {
-        time = System.nanoTime() - convertToNS(ms);
-    }
-
-    public static boolean passedNS(long ns) {
-        return System.nanoTime() - time >= ns;
-    }
-
-    public static long getPassedTimeMs() {
-        return getMs(System.nanoTime() - time);
-    }
-
-    public TimerUtils reset() {
-        time = System.nanoTime();
-        return this;
-    }
-
-    public static long getMs(long time) {
-        return time / 1000000L;
-    }
-
-    public static long convertToNS(long time) {
-        return time * 1000000L;
+    public static boolean hasPassed(long ms) {
+        long second = ms * 10;
+        if (getDeltaTime() >= second) {
+            updateTime();
+            return true;
+        }
+        else return false;
     }
 }
-

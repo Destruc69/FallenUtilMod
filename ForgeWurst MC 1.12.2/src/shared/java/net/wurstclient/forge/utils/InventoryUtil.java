@@ -14,7 +14,6 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAir;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
 
 import java.util.ArrayList;
 
@@ -44,7 +43,8 @@ public class InventoryUtil {
 
 	/**
 	 * Get slot id for this item if its on inventory
-	 */
+     * @return
+     */
 	public static int getSlot(Item item) {
 		try {
 			for (ItemStackUtil itemStack : getAllItems()) {

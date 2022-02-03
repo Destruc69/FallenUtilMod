@@ -108,11 +108,11 @@ public final class ElytraBoostHack extends Hack {
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindRight.isKeyDown()) {
-				mc.player.rotationYaw += 5.5;
+				mc.player.rotationYaw += 3.5;
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindLeft.isKeyDown()) {
-				mc.player.rotationYaw -= 5.5;
+				mc.player.rotationYaw -= 3.5;
 			}
 
 			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {

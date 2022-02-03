@@ -25,6 +25,8 @@ public final class Speed extends Hack {
 	private final SliderSetting Color =
 			new SliderSetting("Colors", 1, 1.0, 4.0, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
+	private long time = -1L;
+
 	public Speed() {
 
 		super("SpeedCounter", "Shows your BPS.");
@@ -59,7 +61,7 @@ public final class Speed extends Hack {
 
 		int textColor;
 
-		if (TimerUtils.passedMs(1000)) {
+		if (passedMs(1000)) {
 			PrevPosX = mc.player.prevPosX;
 			PrevPosZ = mc.player.prevPosZ;
 		}
@@ -85,4 +87,47 @@ public final class Speed extends Hack {
 				"Speed:" + " " + Math.round(l_KMH) + "KM/H", ValueX.getValueF(), ValueY.getValueF(), textColor);
 		GL11.glPopMatrix();
 	}
+
+	public boolean passedS(double s) {
+		return this.passedMs((long)s * 1000L);
+	}
+
+	public boolean passedDms(double dms) {
+		return this.passedMs((long)dms * 10L);
+	}
+
+	public boolean passedDs(double ds) {
+		return this.passedMs((long)ds * 100L);
+	}
+
+	public boolean passedMs(long ms) {
+		return this.passedNS(this.convertToNS(ms));
+	}
+
+	public void setMs(long ms) {
+		this.time = System.nanoTime() - this.convertToNS(ms);
+	}
+
+	public boolean passedNS(long ns) {
+		return System.nanoTime() - this.time >= ns;
+	}
+
+	public long getPassedTimeMs() {
+		return this.getMs(System.nanoTime() - this.time);
+	}
+
+	public TimerUtils reset() {
+		this.time = System.nanoTime();
+		return this.reset();
+	}
+
+	public long getMs(long time) {
+		return this.time / 1000000L;
+	}
+
+	public long convertToNS(long time) {
+		return this.time * 1000000L;
+	}
 }
+
+

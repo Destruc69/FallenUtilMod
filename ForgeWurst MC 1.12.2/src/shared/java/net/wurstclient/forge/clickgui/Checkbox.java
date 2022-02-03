@@ -77,7 +77,7 @@ public final class Checkbox extends Component
 		GL11.glVertex2i(x3, y1);
 		GL11.glEnd();
 		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.5F);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x1, y1);
 		GL11.glVertex2i(x1, y2);
 		GL11.glVertex2i(x3, y2);
@@ -108,17 +108,6 @@ public final class Checkbox extends Component
 			GL11.glVertex2d(xc5, yc2);
 			GL11.glVertex2d(xc3, yc5);
 			GL11.glVertex2d(xc3, yc4);
-			GL11.glEnd();
-			
-			// outline
-			GL11.glColor4f(0.0625F, 0.0625F, 0.0625F, 0.5F);
-			GL11.glBegin(GL11.GL_LINE_LOOP);
-			GL11.glVertex2d(xc2, yc3);
-			GL11.glVertex2d(xc3, yc4);
-			GL11.glVertex2d(xc4, yc1);
-			GL11.glVertex2d(xc5, yc2);
-			GL11.glVertex2d(xc3, yc5);
-			GL11.glVertex2d(xc1, yc4);
 			GL11.glEnd();
 		}
 		
