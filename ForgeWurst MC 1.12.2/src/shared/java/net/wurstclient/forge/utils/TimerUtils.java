@@ -21,7 +21,7 @@ public class TimerUtils {
 
 
     public static boolean hasPassed(long ms) {
-        long second = ms * 10;
+        long second = ms * 20;
         if (getDeltaTime() >= second) {
             updateTime();
             return true;
