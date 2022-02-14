@@ -22,21 +22,9 @@ import net.wurstclient.forge.utils.TimerUtils;
 
 public final class Disabler extends Hack {
 
-	private final CheckboxSetting delay =
-			new CheckboxSetting("PacketDelay",
-					false);
-
-	private final CheckboxSetting basic =
-			new CheckboxSetting("Basic",
-					false);
-
-	private EntityFakePlayer fakePlayer;
-
 	public Disabler() {
 		super("Disabler", "Prevents anti-cheat flags.");
 		setCategory(Category.MOVEMENT);
-		addSetting(delay);
-		addSetting(basic);
 	}
 
 	@Override
@@ -50,25 +38,16 @@ public final class Disabler extends Hack {
 	}
 
 	@SubscribeEvent
-	public void onPacket(WPacketOutputEvent event) {
-		if (delay.isChecked()) {
-			if (TimerUtils.hasPassed(500)) {
-				fakePlayer = new EntityFakePlayer();
-				if (event.getPacket() instanceof CPacketPlayer) {
-					event.setCanceled(true);
-				}
-			} else {
-				fakePlayer.despawn();
-			}
+	public void onIn(WPacketInputEvent event) {
+		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction) {
+			event.setCanceled(true);
 		}
 	}
 
 	@SubscribeEvent
-	public void onIn(WPacketInputEvent event) {
-		if (basic.isChecked()) {
-			if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction) {
-				event.setCanceled(true);
-			}
+	public void onOut(WPacketOutputEvent event) {
+		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction) {
+			event.setCanceled(true);
 		}
 	}
 }

@@ -173,7 +173,7 @@ public final class HackButton extends Component
 		int fx = x1 + ((settings ? getWidth() - 11 : getWidth())
 			- fr.getStringWidth(hack.getName())) / 2;
 		int fy = y1 + 2;
-		fr.drawString(hack.getName(), fx, fy, 0xf0f0f0);
+		fr.drawStringWithShadow(hack.getName(), fx, fy, 0xf0f0f0);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	

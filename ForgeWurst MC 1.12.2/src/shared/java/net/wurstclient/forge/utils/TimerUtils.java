@@ -5,12 +5,12 @@ public class TimerUtils {
     private static long lastTime;
 
     // Returns change in time as double
-    public static long getDeltaTime(){
-        return (System.nanoTime()-lastTime);
+    public static long getDeltaTime() {
+        return (System.nanoTime() - lastTime);
     }
 
     // Updates lastTime
-    public static void updateTime(){
+    public static void updateTime() {
         lastTime = System.nanoTime();
     }
 
@@ -21,11 +21,10 @@ public class TimerUtils {
 
 
     public static boolean hasPassed(long ms) {
-        long second = ms * 20;
+        long second = ms * 22;
         if (getDeltaTime() >= second) {
             updateTime();
             return true;
-        }
-        else return false;
+        } else return false;
     }
 }

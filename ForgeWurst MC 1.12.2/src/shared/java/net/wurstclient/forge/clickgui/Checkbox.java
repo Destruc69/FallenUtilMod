@@ -115,7 +115,7 @@ public final class Checkbox extends Component
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		FontRenderer fr = WMinecraft.getFontRenderer();
-		fr.drawString(setting.getName(), x3 + 2, y1 + 2, 0xf0f0f0);
+		fr.drawStringWithShadow(setting.getName(), x3 + 2, y1 + 2, 0xf0f0f0);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	

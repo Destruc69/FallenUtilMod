@@ -147,8 +147,8 @@ public final class Slider extends Component
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		FontRenderer fr = WMinecraft.getFontRenderer();
-		fr.drawString(setting.getName(), x1, y1 + 2, 0xf0f0f0);
-		fr.drawString(setting.getValueString(),
+		fr.drawStringWithShadow(setting.getName(), x1, y1 + 2, 0xf0f0f0);
+		fr.drawStringWithShadow(setting.getValueString(),
 			x2 - fr.getStringWidth(setting.getValueString()), y1 + 2, 0xf0f0f0);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}

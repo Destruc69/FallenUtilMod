@@ -1,11 +1,14 @@
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketInput;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.*;
 import net.wurstclient.forge.Category;
@@ -21,7 +24,7 @@ public final class FreecamHack extends Hack {
 	private final SliderSetting speed =
 			new SliderSetting("Speed", 1, 0.05, 10, 0.05, ValueDisplay.DECIMAL);
 
-	private EntityFakePlayer fakePlayer;
+	EntityOtherPlayerMP clonedPlayer;
 
 	public FreecamHack() {
 		super("Freecam", "Allows you to move the camera\n"
@@ -33,46 +36,42 @@ public final class FreecamHack extends Hack {
 	@Override
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
-		fakePlayer = new EntityFakePlayer();
+
+		clonedPlayer = new EntityOtherPlayerMP(mc.world, mc.getSession().getProfile());
+		clonedPlayer.copyLocationAndAnglesFrom(mc.player);
+		clonedPlayer.rotationYawHead = mc.player.rotationYawHead;
+		mc.world.addEntityToWorld(-100, clonedPlayer);
+		mc.player.capabilities.isFlying = true;
+		mc.player.capabilities.setFlySpeed((float) (speed.getValue() / 100f));
+		mc.player.noClip = true;
 	}
 
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 
-		fakePlayer.despawn();
+		mc.player.setPosition(clonedPlayer.posX, clonedPlayer.posY, clonedPlayer.posZ);
+		mc.world.removeEntityFromWorld(-100);
+		clonedPlayer = null;
+		mc.player.capabilities.isFlying = false;
+		mc.player.capabilities.setFlySpeed(0.05f);
+		mc.player.noClip = false;
+		mc.player.motionX = mc.player.motionY = mc.player.motionZ = 0.f;
 	}
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		mc.player.jumpMovementFactor = speed.getValueF();
 		mc.player.capabilities.isFlying = true;
-
-		if (mc.gameSettings.keyBindSneak.isKeyDown()) {
-			mc.player.setPosition(mc.player.posX, mc.player.posY - speed.getValueF(), mc.player.posZ);
-		}
-
-		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			mc.player.setPosition(mc.player.posX, mc.player.posY + speed.getValueF(), mc.player.posZ);
-		}
+		mc.player.capabilities.setFlySpeed((float) (speed.getValue() / 100f));
+		mc.player.noClip = true;
+		mc.player.onGround = false;
+		mc.player.fallDistance = 0;
 	}
 
 	@SubscribeEvent
-	public void onPacketInput(WPacketInputEvent event) {
-		Packet<?> get = event.getPacket();
-
-		if (get instanceof CPacketPlayer || get instanceof CPacketPlayer.Position || get instanceof CPacketPlayer.Rotation) {
+	public void packet(WPacketInputEvent event) {
+		if (event.getPacket() instanceof CPacketInput) {
 			event.setCanceled(true);
 		}
-	}
-
-	@SubscribeEvent
-	public void clip(WSetOpaqueCubeEvent event) {
-		event.setCanceled(true);
-	}
-
-	@SubscribeEvent
-	public void clip1(WIsNormalCubeEvent event) {
-		event.setCanceled(true);
 	}
 }

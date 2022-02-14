@@ -8,24 +8,16 @@ import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
 import net.wurstclient.forge.utils.ChatUtils;
 
 public final class StepHack extends Hack {
 
-	private final SliderSetting Height =
-			new SliderSetting("StepHeight", 1, 1.0, 80, 1.0, SliderSetting.ValueDisplay.DECIMAL);
-
-	private final CheckboxSetting packet =
-			new CheckboxSetting("PacketFast",
-					false);
-
 	public StepHack() {
 		super("Step", "Makes you go up blocks fast.");
 		setCategory(Category.MOVEMENT);
-		addSetting(Height);
-		addSetting(packet);
 	}
 
 	@Override
@@ -36,17 +28,20 @@ public final class StepHack extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
-		mc.player.stepHeight = 0.75f;
 	}
 
 	@SubscribeEvent
-    public void WUpdateEvent (WUpdateEvent event) {
-
-	    mc.player.stepHeight = Height.getValueF();
-
-		if (packet.isChecked()) {
-			mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.75, mc.player.posZ, mc.player.onGround));
+	public void WUpdateEvent(WUpdateEvent event) {
+		try {
+			if (mc.player.collidedHorizontally) {
+				mc.player.setPosition(mc.player.posX, mc.player.posY + 1, mc.player.posZ);
+				mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1, mc.player.posZ, mc.player.onGround));
+			} else if (mc.player.onGround && !mc.player.isAirBorne) {
+				mc.player.motionY -= 5;
+				mc.player.connection.sendPacket(new CPacketPlayer(true));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 	}
 }

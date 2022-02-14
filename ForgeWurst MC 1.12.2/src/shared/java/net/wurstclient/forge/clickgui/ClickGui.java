@@ -7,23 +7,8 @@
  */
 package net.wurstclient.forge.clickgui;
 
-import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import net.wurstclient.forge.utils.TimerUtils;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -34,7 +19,17 @@ import net.wurstclient.forge.HackList;
 import net.wurstclient.forge.compatibility.WMinecraft;
 import net.wurstclient.forge.settings.Setting;
 import net.wurstclient.forge.utils.JsonUtils;
-import scala.swing.event.MouseMotionEvent;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public final class ClickGui {
 	private final ArrayList<Window> windows = new ArrayList<>();
@@ -333,7 +328,9 @@ public final class ClickGui {
 
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glLineWidth(3);
+		GL11.glEnable(GL11.GL_COLOR);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glLineWidth(3.5f);
 
 		// scrolling
 		int dWheel = Mouse.getDWheel();
@@ -436,7 +433,7 @@ public final class ClickGui {
 			// text
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			for (int i = 0; i < lines.length; i++)
-				fr.drawString(lines[i], xt1 + 2, yt1 + 2 + i * fr.FONT_HEIGHT,
+				fr.drawStringWithShadow(lines[i], xt1 + 2, yt1 + 2 + i * fr.FONT_HEIGHT,
 						0xffffff);
 		}
 

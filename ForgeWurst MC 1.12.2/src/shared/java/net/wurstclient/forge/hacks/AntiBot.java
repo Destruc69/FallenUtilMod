@@ -53,7 +53,7 @@ public final class AntiBot extends Hack {
 						mc.world.removeEntity(e);
 					}
 
-					if (level < 0) {
+					if (level == 0) {
 						mc.world.removeEntity(e);
 					}
 
