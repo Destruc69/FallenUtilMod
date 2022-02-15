@@ -127,7 +127,7 @@ public final class HackButton extends Component
 		if(settings)
 		{
 			// separator
-			GL11.glColor4f(100, 0, 0, opacity);
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glVertex2i(x3, y1);
 			GL11.glVertex2i(x3, y2);
@@ -145,7 +145,7 @@ public final class HackButton extends Component
 			double yb1 = y2 - 3.5;
 			double yb2 = y1 + 3;
 
-			GL11.glColor4f(100, 0, 0, opacity);
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2d(xb1, yb1);
 			GL11.glVertex2d(xb2, yb1);
@@ -158,16 +158,16 @@ public final class HackButton extends Component
 			{
 				ya1 = y2 - 3.5;
 				ya2 = y1 + 3;
-				GL11.glColor4f(100, 0, 0, opacity);
+				GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
 			}else
 			{
 				ya1 = y1 + 3.5;
 				ya2 = y2 - 3;
-				GL11.glColor4f(100, 0, 0, opacity);
+				GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
 			}
 			
 			// arrow
-			GL11.glColor4f(100, 0, 0, opacity);
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2d(xa1, ya1);
 			GL11.glVertex2d(xa3, ya1);

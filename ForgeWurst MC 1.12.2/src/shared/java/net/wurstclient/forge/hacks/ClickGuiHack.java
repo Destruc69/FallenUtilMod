@@ -40,7 +40,12 @@ public final class ClickGuiHack extends Hack
 		"Accent green", 16, 0, 255, 0.01, ValueDisplay.INTEGER);
 	private final SliderSetting acBlue = new SliderSetting("AC blue",
 		"Accent blue", 16, 0, 255, 0.01, ValueDisplay.INTEGER);
-	
+
+	private final CheckboxSetting nogui =
+			new CheckboxSetting("NoGUI",
+					"Hide the UI",
+					false);
+
 	private final CheckboxSetting inventoryButton =
 		new CheckboxSetting("Inventory Button",
 			"A button that lets you open the\n"
@@ -58,7 +63,9 @@ public final class ClickGuiHack extends Hack
 		addSetting(acRed);
 		addSetting(acGreen);
 		addSetting(acBlue);
+		addSetting(nogui);
 		addSetting(inventoryButton);
+
 		
 		MinecraftForge.EVENT_BUS.register(new InventoryButtonAdder());
 	}
@@ -73,6 +80,10 @@ public final class ClickGuiHack extends Hack
 	public float getOpacity()
 	{
 		return opacity;
+	}
+
+	public CheckboxSetting nogui() {
+		return nogui;
 	}
 	
 	public int getMaxHeight()

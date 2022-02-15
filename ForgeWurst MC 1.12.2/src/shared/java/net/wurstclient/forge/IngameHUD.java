@@ -20,8 +20,7 @@ import net.wurstclient.forge.clickgui.ClickGui;
 import net.wurstclient.forge.clickgui.ClickGuiScreen;
 import net.wurstclient.forge.compatibility.WMinecraft;
 
-public final class IngameHUD
-{
+public final class IngameHUD {
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private final HackList hackList;
 	private final ClickGui clickGui;
@@ -31,8 +30,7 @@ public final class IngameHUD
 	boolean a;
 	boolean b;
 
-	public IngameHUD(HackList hackList, ClickGui clickGui)
-	{
+	public IngameHUD(HackList hackList, ClickGui clickGui) {
 		this.hackList = hackList;
 		this.clickGui = clickGui;
 	}
@@ -64,36 +62,36 @@ public final class IngameHUD
 		}
 
 
-		
-		// title
-		GL11.glPushMatrix();
-		GL11.glScaled(1.55555555, 1.55555555, 1);
-		WMinecraft.getFontRenderer().drawStringWithShadow("Fallen", 3, 3, (int) textColor);
-		GL11.glPopMatrix();
-		
-		// hack list
-		int y = 19;
-		ArrayList<Hack> hacks = new ArrayList<>();
-		hacks.addAll(hackList.getValues());
-		hacks.sort(Comparator.comparing(Hack::getName));
-		
-		for(Hack hack : hacks)
-		{
-			if(!hack.isEnabled())
-				continue;
-			
-			WMinecraft.getFontRenderer()
-					.drawString(hack.getRenderName(), 2, y, (int) textColor);
-			y += 9;
+		if (!ForgeWurst.getForgeWurst().getHax().clickGuiHack.nogui().isChecked()) {
+			// title
+			GL11.glPushMatrix();
+			GL11.glScaled(1.55555555, 1.55555555, 1);
+			WMinecraft.getFontRenderer().drawStringWithShadow("Fallen", 3, 3, (int) textColor);
+			GL11.glPopMatrix();
+
+			// hack list
+			int y = 19;
+			ArrayList<Hack> hacks = new ArrayList<>();
+			hacks.addAll(hackList.getValues());
+			hacks.sort(Comparator.comparing(Hack::getName));
+
+			for (Hack hack : hacks) {
+				if (!hack.isEnabled())
+					continue;
+
+				WMinecraft.getFontRenderer()
+						.drawString(hack.getRenderName(), 2, y, (int) textColor);
+				y += 9;
+			}
+
+			// pinned windows
+			if (!(mc.currentScreen instanceof ClickGuiScreen))
+				clickGui.renderPinnedWindows(event.getPartialTicks());
+
+			if (blend)
+				GL11.glEnable(GL11.GL_BLEND);
+			else
+				GL11.glDisable(GL11.GL_BLEND);
 		}
-		
-		// pinned windows
-		if(!(mc.currentScreen instanceof ClickGuiScreen))
-			clickGui.renderPinnedWindows(event.getPartialTicks());
-		
-		if(blend)
-			GL11.glEnable(GL11.GL_BLEND);
-		else
-			GL11.glDisable(GL11.GL_BLEND);
 	}
 }
