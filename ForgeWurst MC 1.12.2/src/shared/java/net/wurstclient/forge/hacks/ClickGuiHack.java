@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WGuiInventoryButtonEvent;
-import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.clickgui.ClickGuiScreen;
 import net.wurstclient.forge.settings.CheckboxSetting;
@@ -22,8 +21,8 @@ import net.wurstclient.forge.settings.SliderSetting.ValueDisplay;
 public final class ClickGuiHack extends Hack
 {
 
-	private final SliderSetting opacity = new SliderSetting("Opacity", 0.5,
-		0.15, 0.85, 0.01, ValueDisplay.PERCENTAGE);
+	float opacity = 100;
+
 	private final SliderSetting maxHeight = new SliderSetting("Max height",
 		"Maximum window height\n" + "0 = no limit", 200, 0, 1000, 25,
 		ValueDisplay.INTEGER);
@@ -52,7 +51,6 @@ public final class ClickGuiHack extends Hack
 	public ClickGuiHack()
 	{
 		super("ClickGUI", "");
-		addSetting(opacity);
 		addSetting(maxHeight);
 		addSetting(bgRed);
 		addSetting(bgGreen);
@@ -74,7 +72,7 @@ public final class ClickGuiHack extends Hack
 	
 	public float getOpacity()
 	{
-		return opacity.getValueF();
+		return opacity;
 	}
 	
 	public int getMaxHeight()

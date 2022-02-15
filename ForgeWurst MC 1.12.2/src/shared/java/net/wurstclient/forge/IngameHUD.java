@@ -26,6 +26,8 @@ public final class IngameHUD
 	private final HackList hackList;
 	private final ClickGui clickGui;
 
+	float textColor;
+
 	boolean a;
 	boolean b;
 
@@ -42,17 +44,31 @@ public final class IngameHUD
 
 		boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
 
+
 		// color
 		clickGui.updateColors();
 
-		float textColor = 0x00ffef;
+		ClickGui gui = ForgeWurst.getForgeWurst().getGui();
+		if (gui.getAcColor()[2] > gui.getAcColor()[1]) {
+			textColor = 0x000AFF;
+
+			clickGui.updateColors();
+		} else if (gui.getAcColor()[1] > gui.getAcColor()[2]) {
+			textColor = 0x11FF00;
+
+			clickGui.updateColors();
+		} else if (gui.getAcColor()[0] > gui.getAcColor()[1] && gui.getAcColor()[0] > gui.getAcColor()[2]) {
+			textColor = 0xFF0000;
+
+			clickGui.updateColors();
+		}
+
 
 		
 		// title
 		GL11.glPushMatrix();
 		GL11.glScaled(1.55555555, 1.55555555, 1);
-		WMinecraft.getFontRenderer().drawString(
-			"Fallen", 3, 3, (int) textColor);
+		WMinecraft.getFontRenderer().drawStringWithShadow("Fallen", 3, 3, (int) textColor);
 		GL11.glPopMatrix();
 		
 		// hack list

@@ -328,9 +328,7 @@ public final class ClickGui {
 
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_COLOR);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glLineWidth(3.5f);
+		GL11.glLineWidth(4);
 
 		// scrolling
 		int dWheel = Mouse.getDWheel();
@@ -430,6 +428,15 @@ public final class ClickGui {
 			GL11.glVertex2i(xt2, yt1);
 			GL11.glEnd();
 
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+			GL11.glVertex2i(xt1, yt1);
+			GL11.glVertex2i(xt1, yt2);
+			GL11.glVertex2i(xt2, yt2);
+			GL11.glVertex2i(xt2, yt1);
+			GL11.glEnd();
+
 			// text
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			for (int i = 0; i < lines.length; i++)
@@ -444,20 +451,7 @@ public final class ClickGui {
 
 	public void renderPinnedWindows(float partialTicks)
 	{
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glLineWidth(3);
 
-		for(Window window : windows)
-			if(window.isPinned() && !window.isInvisible())
-				renderWindow(window, Integer.MIN_VALUE, Integer.MIN_VALUE,
-						partialTicks);
-
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	public void updateColors()
@@ -479,9 +473,6 @@ public final class ClickGui {
 		int x2 = x1 + window.getWidth();
 		int y2 = y1 + window.getHeight();
 		int y3 = y1 + 13;
-
-		if(window.isMinimized())
-			y2 = y3;
 
 		if(mouseX >= x1 && mouseY >= y1 && mouseX < x2 && mouseY < y2)
 			tooltip = null;
@@ -530,6 +521,22 @@ public final class ClickGui {
 				GL11.glVertex2i(xs2, ys4);
 				GL11.glEnd();
 
+				GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+				GL11.glBegin(GL11.GL_LINE_LOOP);
+				GL11.glVertex2i(xs2, ys1);
+				GL11.glVertex2i(xs2, ys2);
+				GL11.glVertex2i(xs3, ys2);
+				GL11.glVertex2i(xs3, ys1);
+				GL11.glVertex2i(xs1, ys1);
+				GL11.glVertex2i(xs1, ys3);
+				GL11.glVertex2i(xs2, ys3);
+				GL11.glVertex2i(xs2, ys1);
+				GL11.glVertex2i(xs1, ys4);
+				GL11.glVertex2i(xs1, ys2);
+				GL11.glVertex2i(xs2, ys2);
+				GL11.glVertex2i(xs2, ys4);
+				GL11.glEnd();
+
 				boolean hovering = mouseX >= xs1 && mouseY >= ys3
 						&& mouseX < xs2 && mouseY < ys4;
 
@@ -553,6 +560,18 @@ public final class ClickGui {
 			// left & right
 			GL11.glColor4f(bgColor[0], bgColor[1], bgColor[2], opacity);
 			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex2i(x1, y3);
+			GL11.glVertex2i(x1, y2);
+			GL11.glVertex2i(x3, y2);
+			GL11.glVertex2i(x3, y3);
+			GL11.glVertex2i(x5, y3);
+			GL11.glVertex2i(x5, y2);
+			GL11.glVertex2i(x4, y2);
+			GL11.glVertex2i(x4, y3);
+			GL11.glEnd();
+
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
 			GL11.glVertex2i(x1, y3);
 			GL11.glVertex2i(x1, y2);
 			GL11.glVertex2i(x3, y2);
@@ -605,11 +624,20 @@ public final class ClickGui {
 				yc1 = lastChild.getY() + lastChild.getHeight();
 			}
 			int yc2 = yc1 + 2;
+			GL11.glColor4f(bgColor[0], bgColor[1], bgColor[2], opacity);
+			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2i(xc1, yc2);
 			GL11.glVertex2i(xc1, yc1);
 			GL11.glVertex2i(xc2, yc1);
 			GL11.glVertex2i(xc2, yc2);
+			GL11.glEnd();
 
+			GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
+			GL11.glVertex2i(xc1, yc2);
+			GL11.glVertex2i(xc1, yc1);
+			GL11.glVertex2i(xc2, yc1);
+			GL11.glVertex2i(xc2, yc2);
 			GL11.glEnd();
 
 			// render children
@@ -623,14 +651,6 @@ public final class ClickGui {
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
 
-		if(!window.isMinimized())
-		{
-			// title bar outline
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2i(x1, y3);
-			GL11.glVertex2i(x2, y3);
-			GL11.glEnd();
-		}
 
 		// title bar buttons
 		int x3 = x2;
@@ -648,25 +668,22 @@ public final class ClickGui {
 
 		if(window.isPinnable())
 		{
-			x3 -= 11;
-			int x4 = x3 + 9;
-			boolean hovering = hoveringY && mouseX >= x3 && mouseX < x4;
-			renderPinButton(x3, y4, x4, y5, hovering, window.isPinned());
-		}
 
-		if(window.isMinimizable())
-		{
-			x3 -= 11;
-			int x4 = x3 + 9;
-			boolean hovering = hoveringY && mouseX >= x3 && mouseX < x4;
-			renderMinimizeButton(x3, y4, x4, y5, hovering,
-					window.isMinimized());
 		}
 
 
 		// title bar background
 		// behind title
+		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
 		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glVertex2i(x1, y1);
+		GL11.glVertex2i(x1, y3);
+		GL11.glVertex2i(x3, y3);
+		GL11.glVertex2i(x3, y1);
+		GL11.glEnd();
+
+		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex2i(x1, y1);
 		GL11.glVertex2i(x1, y3);
 		GL11.glVertex2i(x3, y3);
@@ -679,7 +696,7 @@ public final class ClickGui {
 		FontRenderer fontRenderer = WMinecraft.getFontRenderer();
 		String title =
 				fontRenderer.trimStringToWidth(window.getTitle(), x3 - x1);
-		fontRenderer.drawString(title, x1 + 2, y1 + 3, 0x00d6d6);
+		fontRenderer.drawString(title, x1 + 2, y1 + 3, 0xffffff);
 	}
 
 	private void renderTitleBarButton(int x1, int y1, int x2, int y2,
@@ -688,9 +705,16 @@ public final class ClickGui {
 		int x3 = x2 + 2;
 
 		// button background
-		GL11.glColor4f(bgColor[0], bgColor[1], bgColor[2],
-				hovering ? opacity * 1.5F : opacity);
+		GL11.glColor4f(1000, 0, 0, opacity);
 		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glVertex2i(x1, y1);
+		GL11.glVertex2i(x1, y2);
+		GL11.glVertex2i(x2, y2);
+		GL11.glVertex2i(x2, y1);
+		GL11.glEnd();
+
+		GL11.glColor4f(1000, 0, 0, opacity);
+		GL11.glBegin(GL11.GL_LINE_LOOP);
 		GL11.glVertex2i(x1, y1);
 		GL11.glVertex2i(x1, y2);
 		GL11.glVertex2i(x2, y2);
@@ -701,124 +725,12 @@ public final class ClickGui {
 	private void renderMinimizeButton(int x1, int y1, int x2, int y2,
 									  boolean hovering, boolean minimized)
 	{
-		renderTitleBarButton(x1, y1, x2, y2, hovering);
-
-		double xa1 = x1 + 1;
-		double xa2 = (x1 + x2) / 2.0;
-		double xa3 = x2 - 1;
-		double ya1;
-		double ya2;
-
-		if(minimized)
-		{
-			ya1 = y1 + 3;
-			ya2 = y2 - 2.5;
-			GL11.glColor4f(0, hovering ? 1 : 0.85F, 0, 1);
-
-		}else
-		{
-			ya1 = y2 - 3;
-			ya2 = y1 + 2.5;
-			GL11.glColor4f(hovering ? 1 : 0.85F, 0, 0, 1);
-		}
-
-		// arrow
-		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glVertex2d(xa1, ya1);
-		GL11.glVertex2d(xa3, ya1);
-		GL11.glVertex2d(xa2, ya2);
-		GL11.glEnd();
 
 	}
 
 	private void renderPinButton(int x1, int y1, int x2, int y2,
-								 boolean hovering, boolean pinned)
-	{
-		renderTitleBarButton(x1, y1, x2, y2, hovering);
-		float h = hovering ? 1 : 0.85F;
+								 boolean hovering, boolean pinned) {
 
-		if(pinned)
-		{
-			double xk1 = x1 + 2;
-			double xk2 = x2 - 2;
-			double xk3 = x1 + 1;
-			double xk4 = x2 - 1;
-			double yk1 = y1 + 2;
-			double yk2 = y2 - 2;
-			double yk3 = y2 - 0.5;
-
-			// knob
-			GL11.glColor4f(h, 0, 0, 0.5F);
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2d(xk1, yk1);
-			GL11.glVertex2d(xk2, yk1);
-			GL11.glVertex2d(xk2, yk2);
-			GL11.glVertex2d(xk1, yk2);
-			GL11.glVertex2d(xk3, yk2);
-			GL11.glVertex2d(xk4, yk2);
-			GL11.glVertex2d(xk4, yk3);
-			GL11.glVertex2d(xk3, yk3);
-			GL11.glEnd();
-
-			double xn1 = x1 + 3.5;
-			double xn2 = x2 - 3.5;
-			double yn1 = y2 - 0.5;
-			double yn2 = y2;
-
-			// needle
-			GL11.glColor4f(h, h, h, 1);
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2d(xn1, yn1);
-			GL11.glVertex2d(xn2, yn1);
-			GL11.glVertex2d(xn2, yn2);
-			GL11.glVertex2d(xn1, yn2);
-			GL11.glEnd();
-
-		}else
-		{
-			double xk1 = x2 - 3.5;
-			double xk2 = x2 - 0.5;
-			double xk3 = x2 - 3;
-			double xk4 = x1 + 3;
-			double xk5 = x1 + 2;
-			double xk6 = x2 - 2;
-			double xk7 = x1 + 1;
-			double yk1 = y1 + 0.5;
-			double yk2 = y1 + 3.5;
-			double yk3 = y2 - 3;
-			double yk4 = y1 + 3;
-			double yk5 = y1 + 2;
-			double yk6 = y2 - 2;
-			double yk7 = y2 - 1;
-
-			// knob
-			GL11.glColor4f(0, h, 0, 1);
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2d(xk1, yk1);
-			GL11.glVertex2d(xk2, yk2);
-			GL11.glVertex2d(xk3, yk3);
-			GL11.glVertex2d(xk4, yk4);
-			GL11.glVertex2d(xk5, yk5);
-			GL11.glVertex2d(xk6, yk6);
-			GL11.glVertex2d(xk3, yk7);
-			GL11.glVertex2d(xk7, yk4);
-			GL11.glEnd();
-
-			double xn1 = x1 + 3;
-			double xn2 = x1 + 4;
-			double xn3 = x1 + 1;
-			double yn1 = y2 - 4;
-			double yn2 = y2 - 3;
-			double yn3 = y2 - 1;
-
-			// needle
-			GL11.glColor4f(h, h, h, 1);
-			GL11.glBegin(GL11.GL_TRIANGLES);
-			GL11.glVertex2d(xn1, yn1);
-			GL11.glVertex2d(xn2, yn2);
-			GL11.glVertex2d(xn3, yn3);
-			GL11.glEnd();
-		}
 	}
 
 	private void renderCloseButton(int x1, int y1, int x2, int y2,
@@ -828,34 +740,14 @@ public final class ClickGui {
 
 		double xc1 = x1 + 2;
 		double xc2 = x1 + 3;
-		double xc3 = x2 - 2;
-		double xc4 = x2 - 3;
-		double xc5 = x1 + 3.5;
-		double xc6 = (x1 + x2) / 2.0;
-		double xc7 = x2 - 3.5;
 		double yc1 = y1 + 3;
 		double yc2 = y1 + 2;
-		double yc3 = y2 - 3;
-		double yc4 = y2 - 2;
-		double yc5 = y1 + 3.5;
-		double yc6 = (y1 + y2) / 2.0;
-		double yc7 = y2 - 3.5;
 
-		// cross
-		GL11.glColor4f(hovering ? 1 : 0.85F, 0, 0, 1);
+		// outline
+		GL11.glColor4f(1000F, 0F, 0F, opacity);
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2d(xc1, yc1);
 		GL11.glVertex2d(xc2, yc2);
-		GL11.glVertex2d(xc3, yc3);
-		GL11.glVertex2d(xc4, yc4);
-		GL11.glVertex2d(xc3, yc1);
-		GL11.glVertex2d(xc4, yc2);
-		GL11.glVertex2d(xc6, yc5);
-		GL11.glVertex2d(xc7, yc6);
-		GL11.glVertex2d(xc6, yc7);
-		GL11.glVertex2d(xc5, yc6);
-		GL11.glVertex2d(xc1, yc3);
-		GL11.glVertex2d(xc2, yc4);
 		GL11.glEnd();
 	}
 

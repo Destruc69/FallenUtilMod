@@ -20,16 +20,17 @@ import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public final class ElytraBoostHack extends Hack {
 	private final SliderSetting speed =
-			new SliderSetting("BaseSpeed", "Base Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("BaseSpeed", "Base Speed for Elytra", 0.05, 0.05, 1, 0.0025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting down =
-			new SliderSetting("DownSpeed", "Down Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("DownSpeed", "Down Speed for Elytra", 0.05, 0.05, 1, 0.0025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting up =
-			new SliderSetting("UpSpeed", "Up Speed for Elytra", 0.05, 0.05, 1, 0.025, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("UpSpeed", "Up Speed for Elytra", 0.05, 0.05, 1, 0.0025, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final CheckboxSetting time =
 			new CheckboxSetting("TimerTakeOff", "Makes getting off the ground easier",
