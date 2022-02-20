@@ -39,14 +39,9 @@ import java.lang.reflect.Field;
 
 public final class Scaffold extends Hack {
 
-	private final CheckboxSetting bot =
-			new CheckboxSetting("Auto-Bot",
-					false);
-
 	public Scaffold() {
 		super("Scaffold", "Scaffold for you with blocks.");
 		setCategory(Category.MOVEMENT);
-		addSetting(bot);
 	}
 
 	@Override
@@ -57,7 +52,6 @@ public final class Scaffold extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
-		setTickLength(50);
 	}
 
 	@SubscribeEvent
@@ -116,7 +110,8 @@ public final class Scaffold extends Hack {
 		int newSlot = -1;
 		for (int i = 0; i < 9; ++i) {
 			ItemStack stack = Scaffold.mc.player.inventory.getStackInSlot(i);
-			if (InventoryUtil.isItemStackNull(stack) || !(stack.getItem() instanceof ItemBlock) || !Block.getBlockFromItem((Item)stack.getItem()).getDefaultState().isFullBlock()) continue;
+			if (InventoryUtil.isItemStackNull(stack) || !(stack.getItem() instanceof ItemBlock) || !Block.getBlockFromItem((Item) stack.getItem()).getDefaultState().isFullBlock())
+				continue;
 			newSlot = i;
 			break;
 		}
@@ -124,69 +119,45 @@ public final class Scaffold extends Hack {
 			return;
 		}
 
-		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			mc.player.motionY += 0.20f;
-			setTickLength(50 / 0.7f);
-		} else {
-			setTickLength(50 / 0.9f);
-		}
-
 		BlockPos blockPos = Minecraft.getMinecraft().player.getPosition().down();
 		Block blocks = Minecraft.getMinecraft().world.getBlockState(blockPos).getBlock();
 
 		boolean crouched = false;
 		if (!Scaffold.mc.player.isSneaking() && !(blocks.getBlockState().getBlock() instanceof BlockAir)) {
-			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Scaffold.mc.player, CPacketEntityAction.Action.START_SNEAKING));
+			Scaffold.mc.player.connection.sendPacket((Packet) new CPacketEntityAction((Entity) Scaffold.mc.player, CPacketEntityAction.Action.START_SNEAKING));
 			crouched = true;
 		}
 		if (!(Scaffold.mc.player.getHeldItemMainhand().getItem() instanceof ItemBlock)) {
-			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketHeldItemChange(newSlot));
+			Scaffold.mc.player.connection.sendPacket((Packet) new CPacketHeldItemChange(newSlot));
 			Scaffold.mc.player.inventory.currentItem = newSlot;
 			Scaffold.mc.playerController.updateController();
 		}
-		float[] angle = MathUtils.calcAngle(Scaffold.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double) ((float) pos.getX() + 0.5f), (double) ((float) pos.getY() - 0.5f), (double) ((float) pos.getZ() + 0.5f)));
-		Scaffold.mc.player.connection.sendPacket((Packet)new CPacketPlayer.Rotation(angle[0], (float)MathHelper.normalizeAngle((int)((int)angle[1]), (int)360), Scaffold.mc.player.onGround));
+
 		Scaffold.mc.playerController.processRightClickBlock(Scaffold.mc.player, Scaffold.mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
+
+		if (!mc.gameSettings.keyBindJump.isKeyDown()) {
+			float[] angle = MathUtils.calcAngle(Scaffold.mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d((double) ((float) pos.getX() + 0.5f), (double) ((float) pos.getY() - 0.5f), (double) ((float) pos.getZ() + 0.5f)));
+			Scaffold.mc.player.connection.sendPacket((Packet) new CPacketPlayer.Rotation(angle[0], (float) MathHelper.normalizeAngle((int) ((int) angle[1]), (int) 360), Scaffold.mc.player.onGround));
+		}
+
+		if (mc.gameSettings.keyBindJump.isKeyDown()) {
+			Scaffold.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, mc.player.rotationPitch + 999, mc.player.onGround));
+		}
+
+		if (mc.gameSettings.keyBindJump.isKeyDown()) {
+			mc.player.motionY += 0.405;
+		}
+
 
 		mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face.rotateAround(face.getAxis()), EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
 		mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
 
 		Scaffold.mc.player.swingArm(EnumHand.MAIN_HAND);
-		Scaffold.mc.player.connection.sendPacket((Packet)new CPacketHeldItemChange(oldSlot));
+		Scaffold.mc.player.connection.sendPacket((Packet) new CPacketHeldItemChange(oldSlot));
 		Scaffold.mc.player.inventory.currentItem = oldSlot;
 		Scaffold.mc.playerController.updateController();
 		if (crouched) {
-			Scaffold.mc.player.connection.sendPacket((Packet)new CPacketEntityAction((Entity)Scaffold.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
-		}
-	}
-	private void setTickLength(float tickLength)
-	{
-		try
-		{
-			Field fTimer = mc.getClass().getDeclaredField(
-					wurst.isObfuscated() ? "field_71428_T" : "timer");
-			fTimer.setAccessible(true);
-
-			if(WMinecraft.VERSION.equals("1.10.2"))
-			{
-				Field fTimerSpeed = Timer.class.getDeclaredField(
-						wurst.isObfuscated() ? "field_74278_d" : "timerSpeed");
-				fTimerSpeed.setAccessible(true);
-				fTimerSpeed.setFloat(fTimer.get(mc), 50 / tickLength);
-
-			}else
-			{
-				Field fTickLength = Timer.class.getDeclaredField(
-						wurst.isObfuscated() ? "field_194149_e" : "tickLength");
-				fTickLength.setAccessible(true);
-				fTickLength.setFloat(fTimer.get(mc), tickLength);
-			}
-
-		}catch(ReflectiveOperationException e)
-		{
-			throw new RuntimeException(e);
+			Scaffold.mc.player.connection.sendPacket((Packet) new CPacketEntityAction((Entity) Scaffold.mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
 		}
 	}
 }
-
-

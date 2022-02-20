@@ -46,6 +46,8 @@ public final class HackList extends WHackList
 	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
+	public final CrystalPVPViewer crystalPVPViewer = register(new CrystalPVPViewer());
+	public final AntiWeather antiWeather = register(new AntiWeather());
 	public final Speed speed = register(new Speed());
 	public final AntiBot antiBot = register(new AntiBot());
 	public final InvMove invMove = register(new InvMove());

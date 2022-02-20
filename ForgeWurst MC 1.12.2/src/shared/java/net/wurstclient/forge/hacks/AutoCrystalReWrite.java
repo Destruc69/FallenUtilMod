@@ -12,18 +12,22 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemEndCrystal;
-import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.client.CPacketAnimation;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.SliderSetting;
-import net.wurstclient.forge.utils.ChatUtils;
 import net.wurstclient.forge.utils.CrystalUtil;
 import net.wurstclient.forge.utils.RotationUtils;
 import net.wurstclient.forge.utils.TimerUtils;
@@ -39,38 +43,11 @@ public final class AutoCrystalReWrite extends Hack {
 	private final SliderSetting range =
 			new SliderSetting("Range", "Range for witch we will break or place the crystals", 4, 1.0, 6, 0.5, SliderSetting.ValueDisplay.DECIMAL);
 
-	private final SliderSetting breakk =
-			new SliderSetting("BreakDelay", "Higher the value, faster the BreakDelay", 1500, 100, 5000, 100, SliderSetting.ValueDisplay.DECIMAL);
-
-	private final SliderSetting placee =
-			new SliderSetting("PlaceDelay", "Higher the value, faster the PlaceDelay", 2000, 100, 5000, 100, SliderSetting.ValueDisplay.DECIMAL);
-
-	//SafePlacements
-	private final CheckboxSetting safe =
-			new CheckboxSetting("SafePlacement [ENABLE]", "Enable Safe Placements, [Prevent placing crystals that could kill you]",
-					false);
-
-	private final SliderSetting safe1 =
-			new SliderSetting("SafePlacement [VALUE]", "Max damage a crystal can hurt you", 4, 1.0, 8, 0.5, SliderSetting.ValueDisplay.DECIMAL);
-
-	//HealthCap
-	private final CheckboxSetting health =
-			new CheckboxSetting("HealthCap [ENABLE]", "Enable HealthCap, [If your health is lower than the value we will return]",
-					false);
-
-	private final SliderSetting health1 =
-			new SliderSetting("HealthCap [VALUE]", "If your health is lower than the value we will return", 4, 1.0, 8, 0.5, SliderSetting.ValueDisplay.DECIMAL);
 
 	public AutoCrystalReWrite() {
 		super("AutoCrystal", "Killaura but for Crystals.");
 		setCategory(Category.COMBAT);
 		addSetting(range);
-		addSetting(breakk);
-		addSetting(placee);
-		addSetting(safe);
-		addSetting(safe1);
-		addSetting(health);
-		addSetting(health1);
 	}
 
 	@Override
@@ -84,159 +61,43 @@ public final class AutoCrystalReWrite extends Hack {
 	}
 
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event) {
-		if (placee.getValueF() > breakk.getValueF()) {
-			placee.setValue(breakk.getValue() - 500);
-		}
+	public void placeLogic(WUpdateEvent event) {
+		for (Entity player : mc.world.loadedEntityList) {
+			if (player instanceof EntityPlayer) {
+				if (player != mc.player) {
+					if (mc.world.getClosestPlayer(mc.player.posX, mc.player.posY, mc.player.posZ, range.getValue(), false).getDistance(player) < range.getValueF()) {
+						for (int i = -1; i <= 1; i++) {
+							for (int j = -1; j <= 1; j++) {
+								if (mc.world.getBlockState(player.getPosition().add(i, 0, j)).getBlock()
+										.equals(Blocks.AIR)
+										&& (mc.world.getBlockState(player.getPosition().add(i, -1, j)).getBlock()
+										.equals(Blocks.OBSIDIAN)
+										|| mc.world.getBlockState(player.getPosition().add(i, -1, j)).getBlock()
+										.equals(Blocks.BEDROCK))) {
 
+									mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+									mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+									mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(player.getPosition().add(i, -1, j), EnumFacing.UP, EnumHand.MAIN_HAND, player.getPosition().add(i, -1, j).getX(), player.getPosition().add(i, -1, j).getY(), player.getPosition().add(i, -1, j).getZ()));
 
-		//EntityPlayer
-		for (Entity e : mc.world.loadedEntityList) {
-			if (e instanceof EntityPlayer) {
-				if (mc.player.getHeldItemMainhand().getItem() instanceof ItemEndCrystal) {
-					//We dont want to kill ourselves
-					if (e != mc.player) {
-
-						try {
-
-							ArrayList<Entity> attackEntityList = new ArrayList<Entity>();
-
-							for (Entity s : mc.world.loadedEntityList) {
-								if (s instanceof EntityPlayer && s != mc.player) {
-									attackEntityList.add(s);
+									RotationUtils.faceVectorPacket(new Vec3d(player.getPosition().add(i, -1, j).getX(), player.getPosition().add(i, -1, j).getY(), player.getPosition().add(i, -1, j).getZ()));
 								}
 							}
-
-							Entity minEntity = null;
-
-							for (Entity f : attackEntityList) {
-								assert mc.player != null;
-								if (mc.world.getClosestPlayer(mc.player.posX, mc.player.posY, mc.player.posZ, range.getValue(), false).getDistance(e) < range.getValueF()) {
-									minEntity = f;
-								}
-							}
-
-
-							//Getting closest player, we can assume there the biggest threat
-							if (mc.world.getClosestPlayer(mc.player.posX, mc.player.posY, mc.player.posZ, range.getValue(), false).getDistance(e) < range.getValueF()) {
-								for (int i = -1; i <= 1; i++) {
-									for (int j = -1; j <= 1; j++) {
-										//Placing Logic
-										if (TimerUtils.hasPassed(breakk.getValueI())) {
-											if (mc.world.getBlockState(e.getPosition().add(i, 0, j)).getBlock()
-													.equals(Blocks.AIR)
-													&& (mc.world.getBlockState(e.getPosition().add(i, -1, j)).getBlock()
-													.equals(Blocks.OBSIDIAN)
-													|| mc.world.getBlockState(e.getPosition().add(i, -1, j)).getBlock()
-													.equals(Blocks.BEDROCK))) {
-
-												double damage = CrystalUtil.calculateDamage(e.getPosition().add(i, -1, j), mc.player);
-
-												//If crystal damage is going to be greater than this value we stop
-												if (safe.isChecked() && damage > safe1.getValueF())
-													return;
-
-												//If health is below this value we will stop
-												if (health.isChecked() && mc.player.getHealth() < health1.getValueF())
-													return;
-
-												//Place the Crystal
-												assert minEntity != null;
-												mc.playerController.processRightClickBlock(mc.player, mc.world,
-														minEntity.getPosition().add(i, -1, j), EnumFacing.UP, mc.objectMouseOver.hitVec,
-														EnumHand.MAIN_HAND);
-
-												//Packets, We triple for ensuring stability
-												RotationUtils.faceVectorPacket(new Vec3d(i, -1, j));
-												RotationUtils.faceVectorPacket(new Vec3d(i, -1, j));
-												RotationUtils.faceVectorPacket(new Vec3d(i, -1, j));
-
-												RotationUtils.faceVectorPacket(new Vec3d(e.getPosition().add(i, -1, j)));
-												RotationUtils.faceVectorPacket(new Vec3d(e.getPosition().add(i, -1, j)));
-												RotationUtils.faceVectorPacket(new Vec3d(e.getPosition().add(i, -1, j)));
-
-												mc.player.connection.sendPacket(new CPacketPlayer.Rotation(i, -1, mc.player.onGround));
-												mc.player.connection.sendPacket(new CPacketPlayer.Rotation(i, -1, mc.player.onGround));
-												mc.player.connection.sendPacket(new CPacketPlayer.Rotation(i, -1, mc.player.onGround));
-
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-
-												mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-												mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-												mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(e.getPosition().add(i, -1, j), EnumFacing.UP, EnumHand.MAIN_HAND, i, -1, j));
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(e.getPosition().add(i, -1, j), EnumFacing.UP, EnumHand.MAIN_HAND, i, -1, j));
-												mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(e.getPosition().add(i, -1, j), EnumFacing.UP, EnumHand.MAIN_HAND, i, -1, j));
-											}
-										}
-									}
-								}
-							}
-						} catch (Exception exception) {
-							exception.printStackTrace();
 						}
 					}
 				}
 			}
 		}
+	}
 
+	@SubscribeEvent
+	public void breakLogin(WUpdateEvent event) {
+		for (Entity crystal : mc.world.loadedEntityList) {
+			if (crystal instanceof EntityEnderCrystal) {
+				if (mc.player.getDistance(crystal) < range.getValueF()) {
+					mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+					mc.player.connection.sendPacket(new CPacketUseEntity(crystal));
 
-		//EntityEndCrystal
-		for (Entity a : mc.world.loadedEntityList) {
-			if (a instanceof EntityEnderCrystal) {
-				if (mc.player.getDistance(a) < range.getValueF()) {
-
-					try {
-
-						ArrayList<Entity> crystal = new ArrayList<Entity>();
-
-						Entity crys = null;
-
-						for (Entity j : mc.world.loadedEntityList) {
-							if (j instanceof EntityEnderCrystal) {
-								crystal.add(j);
-							}
-						}
-
-						for (Entity m : crystal) {
-							assert mc.player != null;
-							if (mc.world.getClosestPlayer(mc.player.posX, mc.player.posY, mc.player.posZ, range.getValue(), false).getDistance(m) < range.getValueF()) {
-								crys = m;
-							}
-						}
-
-
-						if (TimerUtils.hasPassed(placee.getValueI())) {
-							mc.playerController.attackEntity(mc.player, a);
-
-							//Packets, We triple for ensuring stability
-							mc.player.connection.sendPacket(new CPacketUseEntity());
-							mc.player.connection.sendPacket(new CPacketUseEntity());
-							mc.player.connection.sendPacket(new CPacketUseEntity());
-
-							mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-							mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-							mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-
-							double x = a.getEntityBoundingBox().calculateXOffset(a.getEntityBoundingBox(), mc.player.posX);
-							double y = a.getEntityBoundingBox().calculateYOffset(a.getEntityBoundingBox(), mc.player.posY);
-							double z = a.getEntityBoundingBox().calculateZOffset(a.getEntityBoundingBox(), mc.player.posZ);
-
-							RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
-							RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
-							RotationUtils.faceVectorPacket(new Vec3d(x, y, z));
-
-							mc.player.connection.sendPacket(new CPacketPlayer.Rotation((float) x, (float) y, mc.player.onGround));
-							mc.player.connection.sendPacket(new CPacketPlayer.Rotation((float) x, (float) y, mc.player.onGround));
-							mc.player.connection.sendPacket(new CPacketPlayer.Rotation((float) x, (float) y, mc.player.onGround));
-
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					RotationUtils.faceVectorPacket(new Vec3d(crystal.getPositionVector().x, crystal.getPositionVector().y, crystal.getPositionVector().z));
 				}
 			}
 		}

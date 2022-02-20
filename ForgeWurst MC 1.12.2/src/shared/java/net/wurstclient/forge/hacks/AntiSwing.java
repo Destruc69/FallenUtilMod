@@ -7,16 +7,14 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketConfirmTeleport;
+import net.minecraft.network.play.client.CPacketAnimation;
+import net.minecraft.network.play.server.SPacketAnimation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.minecraft.network.play.client.CPacketAnimation;
-import net.minecraft.network.play.server.SPacketAnimation;
-import net.wurstclient.forge.utils.ChatUtils;
 
 public final class AntiSwing extends Hack {
 	public AntiSwing() {

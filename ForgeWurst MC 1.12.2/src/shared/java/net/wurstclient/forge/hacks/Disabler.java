@@ -9,16 +9,14 @@ package net.wurstclient.forge.hacks;
 
 import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketKeepAlive;
-import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.server.SPacketConfirmTransaction;
+import net.minecraft.network.play.server.SPacketKeepAlive;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.settings.CheckboxSetting;
-import net.wurstclient.forge.utils.EntityFakePlayer;
-import net.wurstclient.forge.utils.TimerUtils;
 
 public final class Disabler extends Hack {
 
@@ -39,14 +37,14 @@ public final class Disabler extends Hack {
 
 	@SubscribeEvent
 	public void onIn(WPacketInputEvent event) {
-		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction) {
+		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction || event.getPacket() instanceof SPacketKeepAlive || event.getPacket() instanceof SPacketConfirmTransaction) {
 			event.setCanceled(true);
 		}
 	}
 
 	@SubscribeEvent
 	public void onOut(WPacketOutputEvent event) {
-		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction) {
+		if (event.getPacket() instanceof CPacketKeepAlive || event.getPacket() instanceof CPacketConfirmTransaction || event.getPacket() instanceof SPacketKeepAlive || event.getPacket() instanceof SPacketConfirmTransaction) {
 			event.setCanceled(true);
 		}
 	}
