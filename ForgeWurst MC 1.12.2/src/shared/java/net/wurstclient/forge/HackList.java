@@ -43,7 +43,6 @@ public final class HackList extends WHackList
 	public final AntiVoid antiVoid = register(new AntiVoid());
 	public final Teleport teleport = register(new Teleport());
 	public final Scaffold scaffold = register(new Scaffold());
-	public final MusicBox musicBox = register(new MusicBox());
 	public final Discord discord = register(new Discord());
 	public final Stash stash = register(new Stash());
 	public final CrystalPVPViewer crystalPVPViewer = register(new CrystalPVPViewer());

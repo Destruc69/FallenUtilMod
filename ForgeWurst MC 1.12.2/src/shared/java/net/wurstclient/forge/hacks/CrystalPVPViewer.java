@@ -10,19 +10,27 @@ package net.wurstclient.forge.hacks;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.ChatUtils;
 import net.wurstclient.forge.utils.TimerUtils;
 
 public final class CrystalPVPViewer extends Hack {
+
+	private final CheckboxSetting info =
+			new CheckboxSetting("FighterInfo",
+					false);
+
 	public CrystalPVPViewer() {
 		super("CPVPShow", "Grab some popcorn, and watch people fight with Crytstals in the server!.");
 		setCategory(Category.MISC);
+		addSetting(info);
 	}
 
 	@Override
@@ -40,6 +48,8 @@ public final class CrystalPVPViewer extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		mc.setRenderViewEntity(mc.player);
 	}
 
 	@SubscribeEvent
@@ -47,9 +57,24 @@ public final class CrystalPVPViewer extends Hack {
 		for (Entity e : mc.world.loadedEntityList) {
 			if (e instanceof EntityPlayer) {
 				if (e != mc.player) {
-					if (e.lastTickPosY < mc.player.posY && e.lastTickPosY != mc.player.posY) {
-						if (TimerUtils.hasPassed(5000)) {
+					if (mc.player.posY > e.lastTickPosY) {
+
+						if (info.isChecked()) {
+							ChatUtils.message("--------------------------");
+							ChatUtils.message("Name:" + " " + e.getName());
+							ChatUtils.message("Health:" + " " + ((EntityPlayer) e).getHealth());
+							ChatUtils.message("Possible Attacking Entity:" + " " + e.getEntityWorld().getClosestPlayer(e.lastTickPosX, e.lastTickPosY, e.lastTickPosZ, 999, false).getName());
+							ChatUtils.message("--------------------------");
+							info.setChecked(false);
+						}
+
+						if (TimerUtils.hasPassed(1500)) {
 							mc.setRenderViewEntity(e);
+							if (event.getPlayer() == mc.player) {
+								event.getPlayer().inventory.copyInventory(((EntityPlayer) e).inventory);
+								event.getPlayer().getHeldItemMainhand().getItem().setContainerItem(((EntityPlayer) e).getHeldItem(EnumHand.MAIN_HAND).getItem());
+								event.getPlayer().getHeldItemOffhand().getItem().setContainerItem(((EntityPlayer) e).getHeldItem(EnumHand.OFF_HAND).getItem());
+							}
 						}
 					}
 				}
