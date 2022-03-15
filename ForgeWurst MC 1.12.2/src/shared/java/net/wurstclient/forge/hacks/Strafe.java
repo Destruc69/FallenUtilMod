@@ -21,6 +21,10 @@ import java.lang.reflect.Field;
 
 public final class Strafe extends Hack {
 
+	private final CheckboxSetting ncp =
+			new CheckboxSetting("BypassSafe", "Slower version for AC's",
+					false);
+
 	private final CheckboxSetting stable =
 			new CheckboxSetting("Stability",
 					true);
@@ -29,6 +33,7 @@ public final class Strafe extends Hack {
 		super("Strafe", "Move in the air freely.");
 		setCategory(Category.MOVEMENT);
 		addSetting(stable);
+		addSetting(ncp);
 	}
 
 	@Override
@@ -46,52 +51,83 @@ public final class Strafe extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f) {
+		if (!ncp.isChecked()) {
+			if (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f) {
 
-			mc.player.setSprinting(true);
+				mc.player.setSprinting(true);
 
-			if (mc.player.onGround) {
+				if (mc.player.onGround) {
 
-				mc.player.motionY = 0.405f;
+					setTickLength((float) (50 / 1.7));
 
-				final float yaw = GetRotationYawForCalc();
-				mc.player.motionX -= MathHelper.sin(yaw) * 0.2f;
-				mc.player.motionZ += MathHelper.cos(yaw) * 0.2f;
+					mc.player.motionY = 0.405f;
+
+					final float yaw = GetRotationYawForCalc();
+					mc.player.motionX -= MathHelper.sin(yaw) * 0.3f;
+					mc.player.motionZ += MathHelper.cos(yaw) * 0.3f;
+				} else {
+					setTickLength((float) (50 / 1.05));
+
+					if (mc.player.fallDistance == 1) {
+						mc.player.motionY = -0.4;
+					}
+				}
 			}
-		}
 
-		if (mc.player.onGround) {
-			setTickLength(50 / 1.1f);
+			if (stable.isChecked()) {
+				if (mc.player.onGround && mc.player.moveForward == 0f && mc.player.moveStrafing == 0) {
+					mc.player.setVelocity(0, 0, 0);
+				}
+			}
 		} else {
-			setTickLength(50);
-		}
+			if (mc.player.moveForward != 0.0f || mc.player.moveStrafing != 0.0f) {
 
-		if (stable.isChecked()) {
-			if (mc.player.onGround && mc.player.moveForward == 0f && mc.player.moveStrafing == 0) {
-				mc.player.setVelocity(0, 0, 0);
+				mc.player.setSprinting(true);
+
+				if (mc.player.onGround) {
+
+					setTickLength((float) (50 / 1.6));
+
+					mc.player.motionY = 0.405f;
+
+					final float yaw = GetRotationYawForCalc();
+					mc.player.motionX -= MathHelper.sin(yaw) * 0.2f;
+					mc.player.motionZ += MathHelper.cos(yaw) * 0.2f;
+				} else {
+					setTickLength((float) (50 / 1.1));
+
+					if (mc.player.fallDistance == 1) {
+						mc.player.motionY = -0.4;
+					}
+				}
+			}
+
+			if (stable.isChecked()) {
+				if (mc.player.onGround && mc.player.moveForward == 0f && mc.player.moveStrafing == 0) {
+					mc.player.setVelocity(0, 0, 0);
+				}
 			}
 		}
 	}
-
-	private float GetRotationYawForCalc() {
-		float rotationYaw = mc.player.rotationYaw;
-		if (mc.player.moveForward < 0.0f) {
-			rotationYaw += 180.0f;
+		private float GetRotationYawForCalc () {
+			float rotationYaw = mc.player.rotationYaw;
+			if (mc.player.moveForward < 0.0f) {
+				rotationYaw += 180.0f;
+			}
+			float n = 1.0f;
+			if (mc.player.moveForward < 0.0f) {
+				n = -0.5f;
+			} else if (mc.player.moveForward > 0.0f) {
+				n = 0.5f;
+			}
+			if (mc.player.moveStrafing > 0.0f) {
+				rotationYaw -= 90.0f * n;
+			}
+			if (mc.player.moveStrafing < 0.0f) {
+				rotationYaw += 90.0f * n;
+			}
+			return rotationYaw * 0.017453292f;
 		}
-		float n = 1.0f;
-		if (mc.player.moveForward < 0.0f) {
-			n = -0.5f;
-		} else if (mc.player.moveForward > 0.0f) {
-			n = 0.5f;
-		}
-		if (mc.player.moveStrafing > 0.0f) {
-			rotationYaw -= 90.0f * n;
-		}
-		if (mc.player.moveStrafing < 0.0f) {
-			rotationYaw += 90.0f * n;
-		}
-		return rotationYaw * 0.017453292f;
-	}
 
 	private void setTickLength(float tickLength)
 	{

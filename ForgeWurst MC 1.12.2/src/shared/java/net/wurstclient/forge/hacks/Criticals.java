@@ -9,6 +9,7 @@ package net.wurstclient.forge.hacks;
 
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WPacketInputEvent;
@@ -50,8 +51,8 @@ public final class Criticals extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mc.player.getAttackingEntity() != null) {
-			mc.player.connection.sendPacket(new CPacketPlayer(false));
+		if (mc.player.swingProgress == 80) {
+			mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.3, mc.player.posZ, false));
 		}
 	}
 }

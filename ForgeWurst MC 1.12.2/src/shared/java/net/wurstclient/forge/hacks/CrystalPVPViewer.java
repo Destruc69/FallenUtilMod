@@ -63,12 +63,12 @@ public final class CrystalPVPViewer extends Hack {
 							ChatUtils.message("--------------------------");
 							ChatUtils.message("Name:" + " " + e.getName());
 							ChatUtils.message("Health:" + " " + ((EntityPlayer) e).getHealth());
-							ChatUtils.message("Possible Attacking Entity:" + " " + e.getEntityWorld().getClosestPlayer(e.lastTickPosX, e.lastTickPosY, e.lastTickPosZ, 999, false).getName());
+							ChatUtils.message("Possible Attacking Entity:" + " " + mc.getRenderViewEntity().getEntityWorld().getClosestPlayer(mc.getRenderViewEntity().lastTickPosX, mc.getRenderViewEntity().lastTickPosY, mc.getRenderViewEntity().lastTickPosZ, 999, false).getName());
 							ChatUtils.message("--------------------------");
 							info.setChecked(false);
 						}
 
-						if (TimerUtils.hasPassed(1500)) {
+						if (TimerUtils.hasReached(2000)) {
 							mc.setRenderViewEntity(e);
 							if (event.getPlayer() == mc.player) {
 								event.getPlayer().inventory.copyInventory(((EntityPlayer) e).inventory);

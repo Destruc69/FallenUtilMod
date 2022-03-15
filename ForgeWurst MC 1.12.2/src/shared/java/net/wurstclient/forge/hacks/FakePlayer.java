@@ -8,6 +8,8 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.ForgeWurst;
 import net.wurstclient.forge.Hack;
@@ -34,5 +36,10 @@ public final class FakePlayer extends Hack {
 		MinecraftForge.EVENT_BUS.unregister(this);
 
 		fakePlayer.despawn();
+	}
+
+	@SubscribeEvent
+	public void no(WUpdateEvent event) {
+		fakePlayer.setCustomNameTag(mc.player.getName());
 	}
 }

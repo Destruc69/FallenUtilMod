@@ -13,7 +13,7 @@ public final class Anchor extends Hack {
 			new SliderSetting("Speed", 2, 1.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
 
 	private final SliderSetting fall =
-			new SliderSetting("Fall Distance", 2, 3.0, 8, 1.0, SliderSetting.ValueDisplay.DECIMAL);
+			new SliderSetting("Fall Distance", 1, 1, 4, 1, SliderSetting.ValueDisplay.DECIMAL);
 
 	public Anchor() {
 		super("Anchor", "Fast fall when your value blocks over a hole.");

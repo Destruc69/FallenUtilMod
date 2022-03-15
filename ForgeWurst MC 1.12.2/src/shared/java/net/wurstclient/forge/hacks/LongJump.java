@@ -31,7 +31,7 @@ public final class LongJump extends Hack
 {
 	public LongJump()
 	{
-		super("LongJump", "Made to bypass NCP.");
+		super("LongJump", "long Jumps.");
 		setCategory(Category.MOVEMENT);
 	}
 	

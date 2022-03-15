@@ -41,11 +41,16 @@ public final class FreecamHack extends Hack {
 	@Override
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
+
+		if (mc.player == null || mc.world == null) {
+			return;
+		}
+
 		mc.renderChunksMany = false;
 
+		camera = new EntityOtherPlayerMP(mc.world, mc.getSession().getProfile());
 		player = new EntityFakePlayer();
 
-		camera = new EntityOtherPlayerMP(mc.world, mc.getSession().getProfile());
 		camera.copyLocationAndAnglesFrom(mc.player);
 		camera.prevRotationYaw = mc.player.rotationYaw;
 		camera.rotationYawHead = mc.player.rotationYawHead;
@@ -58,16 +63,18 @@ public final class FreecamHack extends Hack {
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+
+		MinecraftForge.EVENT_BUS.unregister(this);
 		mc.renderChunksMany = true;
+
+		player.despawn();
+		mc.world.removeEntity(player);
 
 		if (mc.player != null && mc.world != null && mc.getRenderViewEntity() != null) {
 			mc.player.moveStrafing = 0;
 			mc.player.moveForward = 0;
 			mc.world.removeEntity(camera);
 			mc.setRenderViewEntity(mc.player);
-
-			player.despawn();
-			mc.world.removeEntity(player);
 		}
 	}
 
@@ -78,7 +85,6 @@ public final class FreecamHack extends Hack {
 		}
 
 		if (camera == null) {
-			setEnabled(false);
 			return;
 		}
 
@@ -126,22 +132,11 @@ public final class FreecamHack extends Hack {
 		}
 
 		player.setPosition(mc.player.posX, mc.player.posY, mc.player.posZ);
-		player.rotationYaw = mc.player.rotationYaw;
-		player.rotationPitch = mc.player.rotationPitch;
-
-		if (mc.player.isHandActive()) {
-			player.swingArm(EnumHand.MAIN_HAND);
-		}
-
-		if (mc.player.isSneaking()) {
-			player.setSneaking(true);
-		} else {
-			player.setSneaking(false);
-		}
 
 		camera.inventory.copyInventory(mc.player.inventory);
 		camera.noClip = true;
 		camera.rotationYawHead = camera.rotationYaw;
+
 		camera.rotationYaw = mc.player.rotationYaw;
 		camera.rotationPitch = mc.player.rotationPitch;
 

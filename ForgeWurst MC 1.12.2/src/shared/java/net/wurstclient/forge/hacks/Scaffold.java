@@ -42,6 +42,11 @@ public final class Scaffold extends Hack {
 	public Scaffold() {
 		super("Scaffold", "Scaffold for you with blocks.");
 		setCategory(Category.MOVEMENT);
+
+		//PHOBOS
+		//PHOBOS
+		//PHOBOS
+		//PHOBOS
 	}
 
 	@Override
@@ -56,6 +61,9 @@ public final class Scaffold extends Hack {
 
 	@SubscribeEvent
 	public void onUpdateWalkingPlayerPost(WUpdateEvent event) {
+		//PHOBOS
+		//PHOBOS
+		//PHOBOS
 		BlockPos playerBlock;
 		if (BlockUtils.isScaffoldPos((playerBlock = BlockUtils.getPlayerPosWithEntity()).add(0, -1, 0))) {
 			if (BlockUtils.isValidBlock(playerBlock.add(0, -2, 0))) {
@@ -100,12 +108,16 @@ public final class Scaffold extends Hack {
 		} else if (face == EnumFacing.NORTH) {
 			pos = pos.add(0, 0, 1);
 		} else if (face == EnumFacing.SOUTH) {
+			//PHOBOS
+			//PHOBOS
 			pos = pos.add(0, 0, -1);
 		} else if (face == EnumFacing.EAST) {
 			pos = pos.add(-1, 0, 0);
 		} else if (face == EnumFacing.WEST) {
 			pos = pos.add(1, 0, 0);
 		}
+
+		//PHOBOS
 		int oldSlot = Scaffold.mc.player.inventory.currentItem;
 		int newSlot = -1;
 		for (int i = 0; i < 9; ++i) {
@@ -133,6 +145,8 @@ public final class Scaffold extends Hack {
 			Scaffold.mc.playerController.updateController();
 		}
 
+
+		//PHOBOS		//PHOBOS		//PHOBOS
 		Scaffold.mc.playerController.processRightClickBlock(Scaffold.mc.player, Scaffold.mc.world, pos, face, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
 
 		if (!mc.gameSettings.keyBindJump.isKeyDown()) {
@@ -141,17 +155,9 @@ public final class Scaffold extends Hack {
 		}
 
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			Scaffold.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, mc.player.rotationPitch + 999, mc.player.onGround));
+			Scaffold.mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, 90, mc.player.onGround));
 		}
-
-		if (mc.gameSettings.keyBindJump.isKeyDown()) {
-			mc.player.motionY += 0.405;
-		}
-
-
-		mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, face.rotateAround(face.getAxis()), EnumHand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-		mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
-
+		//PHOBOS		//PHOBOS		//PHOBOS		//PHOBOS		//PHOBOS
 		Scaffold.mc.player.swingArm(EnumHand.MAIN_HAND);
 		Scaffold.mc.player.connection.sendPacket((Packet) new CPacketHeldItemChange(oldSlot));
 		Scaffold.mc.player.inventory.currentItem = oldSlot;

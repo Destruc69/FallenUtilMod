@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
+import net.wurstclient.forge.utils.TimerUtils;
 
 public final class TPAura extends Hack {
 	public TPAura() {
@@ -36,17 +37,19 @@ public final class TPAura extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		for (Entity e : mc.world.loadedEntityList) {
-			if (e instanceof EntityPlayer) {
+		if (TimerUtils.hasReached(1000, true)) {
+			for (Entity e : mc.world.loadedEntityList) {
+				if (e instanceof EntityPlayer) {
 
-				Double ex = e.lastTickPosX;
-				Double ey = e.lastTickPosY;
-				Double ez = e.lastTickPosZ;
+					Double ex = e.lastTickPosX;
+					Double ey = e.lastTickPosY;
+					Double ez = e.lastTickPosZ;
 
-				mc.player.setPosition(ex, ey, ez);
+					mc.player.setPosition(ex, ey, ez);
 
-				mc.playerController.attackEntity(mc.player, e);
-				mc.player.swingArm(EnumHand.MAIN_HAND);
+					mc.playerController.attackEntity(mc.player, e);
+					mc.player.swingArm(EnumHand.MAIN_HAND);
+				}
 			}
 		}
 	}

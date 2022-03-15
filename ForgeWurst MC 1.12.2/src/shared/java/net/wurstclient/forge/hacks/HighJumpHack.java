@@ -18,35 +18,30 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import net.wurstclient.forge.utils.ChatUtils;
 
-public final class HighJumpHack extends Hack
-{
-	public HighJumpHack()
-	{
+public final class HighJumpHack extends Hack {
+	public HighJumpHack() {
 		super("HighJump", "Makes you jump really high.");
 		setCategory(Category.MOVEMENT);
 	}
-	
+
 	@Override
-	protected void onEnable()
-	{
+	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
 
 	}
-	
+
 	@Override
-	protected void onDisable()
-	{
+	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 
 	}
-	
+
 	@SubscribeEvent
-	public void onUpdate(WUpdateEvent event)
-	{
+	public void onUpdate(WUpdateEvent event) {
 		if (mc.gameSettings.keyBindJump.isKeyDown()) {
 			if (mc.player.onGround) {
 				mc.player.motionY = 3.0;
-		}
+			}
 		}
 	}
 }

@@ -7,49 +7,44 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockSoulSand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketPlayerDigging.Action;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.wurstclient.fmlevents.WPacketInputEvent;
+import net.wurstclient.fmlevents.WPlayerMoveEvent;
+import net.wurstclient.fmlevents.WPostMotionEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.compatibility.WEntity;
+import net.wurstclient.forge.compatibility.WPlayer;
 import net.wurstclient.forge.settings.CheckboxSetting;
-import net.wurstclient.forge.utils.PlayerUtils;
+import net.wurstclient.forge.utils.*;
+import org.lwjgl.input.Keyboard;
 
 
 public final class NoSlowdown extends Hack {
 
-	private final CheckboxSetting NCP =
-			new CheckboxSetting("NCP Strict",
-					true);
-
-	private final CheckboxSetting item =
-			new CheckboxSetting("Items",
-					true);
-
-	private final CheckboxSetting block =
-			new CheckboxSetting("Blocks",
-					true);
-
 	public NoSlowdown() {
 		super("NoSlowDown", "Don't slow down with items / blocks.");
 		setCategory(Category.MOVEMENT);
-		addSetting(NCP);
-		addSetting(item);
-		addSetting(block);
 	}
 
 	@Override
@@ -65,62 +60,26 @@ public final class NoSlowdown extends Hack {
 	}
 
 	@SubscribeEvent
-	public void WUpdateEvent(WUpdateEvent event) {
-		if (NCP.isChecked() && item.isChecked()) {
+	public void onUpdate(WUpdateEvent event) {
+		if (mc.player.isHandActive() && mc.player.getHeldItemMainhand().getItem() instanceof Item) {
+			double[] der = MathUtils.directionSpeed(0.2);
+
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
-			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
-		}
+			mc.player.connection.sendPacket(new CPacketPlayerDigging(Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
 
-		if (item.isChecked()) {
-			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemFood && mc.player.isHandActive()) {
-
-				float yaw = Minecraft.getMinecraft().player.rotationYaw;
-				float pitch = Minecraft.getMinecraft().player.rotationPitch;
-
-				if (!mc.player.isSprinting() && mc.player.onGround) {
-					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
-					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
-				} else if (mc.player.isSprinting() && mc.player.onGround) {
-					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.010;
-					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.010;
+			if (mc.player.onGround) {
+				if (TimerUtils.hasReached(100, true)) {
+					mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+				} else {
+					mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
 				}
+			} else {
+				mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SPRINTING));
+			}
 
-				if (mc.player.isAirBorne) {
-					Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.01;
-					Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.01;
-				}
-
-				if (mc.player.getHeldItemMainhand().getItem() instanceof Item && mc.player.isHandActive()) {
-					if (!mc.player.isSprinting()) {
-						Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
-						Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.04;
-					} else if (mc.player.isSprinting()) {
-						Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.016;
-						Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.016;
-					}
-				}
-
-				if (block.isChecked()) {
-					if (mc.player.onGround && mc.player.moveForward == 0f && mc.player.moveStrafing == 0) {
-						mc.player.setVelocity(0, 0, 0);
-					}
-
-					BlockPos blockpos = mc.player.getPosition();
-
-					if (mc.world.getBlockState(blockpos.down()).getBlock() instanceof BlockSoulSand) {
-						if (!mc.player.isSprinting()) {
-							if (mc.gameSettings.keyBindForward.isKeyDown()) {
-								Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.08;
-								Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.08;
-							} else if (mc.player.isSprinting()) {
-								if (mc.gameSettings.keyBindForward.isKeyDown()) {
-									Minecraft.getMinecraft().player.motionX -= Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.16;
-									Minecraft.getMinecraft().player.motionZ += Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch)) * 0.16;
-								}
-							}
-						}
-					}
-				}
+			if (mc.player.moveForward != 0 || mc.player.moveStrafing != 0) {
+				mc.player.motionX = der[0];
+				mc.player.motionZ = der[1];
 			}
 		}
 	}

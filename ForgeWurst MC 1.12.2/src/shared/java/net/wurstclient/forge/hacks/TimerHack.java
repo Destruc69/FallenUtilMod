@@ -23,7 +23,7 @@ import net.wurstclient.forge.utils.ChatUtils;
 public final class TimerHack extends Hack
 {
 	private final SliderSetting speed =
-		new SliderSetting("Speed", 2, 0.1, 20, 0.1, ValueDisplay.DECIMAL);
+		new SliderSetting("Speed", 2, 0.1, 20, 0.05, ValueDisplay.DECIMAL);
 	
 	public TimerHack()
 	{

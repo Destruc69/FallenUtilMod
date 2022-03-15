@@ -56,7 +56,8 @@ public final class AutoTotem extends Hack {
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
 		if (totem.isChecked()) {
-			if (passedMs(500)) {
+			if (TimerUtils.hasReached(500, true)) {
+
 				Item oldItem = mc.player.getHeldItemOffhand().getItem();
 				int slot = InventoryUtil.getSlot(Items.TOTEM_OF_UNDYING);
 				InventoryUtil.clickSlot(slot);
@@ -71,7 +72,8 @@ public final class AutoTotem extends Hack {
 		ItemStack engolden = new ItemStack(Items.GOLDEN_APPLE, 1, (short) 1);
 
 		if (gap.isChecked()) {
-			if (passedMs(500)) {
+			if (TimerUtils.hasReached(500, true)) {
+
 				Item oldItem = mc.player.getHeldItemOffhand().getItem();
 				int slot = mc.player.inventory.getSlotFor(engolden);
 				InventoryUtil.clickSlot(slot);
@@ -82,7 +84,8 @@ public final class AutoTotem extends Hack {
 			}
 
 			if (end.isChecked()) {
-				if (passedMs(500)) {
+				if (TimerUtils.hasReached(500, true)) {
+
 					Item oldItem = mc.player.getHeldItemOffhand().getItem();
 					int slot = InventoryUtil.getSlot(Items.END_CRYSTAL);
 					InventoryUtil.clickSlot(slot);
@@ -94,47 +97,4 @@ public final class AutoTotem extends Hack {
 			}
 		}
 	}
-
-	public boolean passedS(double s) {
-		return this.passedMs((long)s * 1000L);
-	}
-
-	public boolean passedDms(double dms) {
-		return this.passedMs((long)dms * 10L);
-	}
-
-	public boolean passedDs(double ds) {
-		return this.passedMs((long)ds * 100L);
-	}
-
-	public boolean passedMs(long ms) {
-		return this.passedNS(this.convertToNS(ms));
-	}
-
-	public void setMs(long ms) {
-		this.time = System.nanoTime() - this.convertToNS(ms);
-	}
-
-	public boolean passedNS(long ns) {
-		return System.nanoTime() - this.time >= ns;
-	}
-
-	public long getPassedTimeMs() {
-		return this.getMs(System.nanoTime() - this.time);
-	}
-
-	public TimerUtils reset() {
-		this.time = System.nanoTime();
-		return this.reset();
-	}
-
-	public long getMs(long time) {
-		return this.time / 1000000L;
-	}
-
-	public long convertToNS(long time) {
-		return this.time * 1000000L;
-	}
 }
-
-

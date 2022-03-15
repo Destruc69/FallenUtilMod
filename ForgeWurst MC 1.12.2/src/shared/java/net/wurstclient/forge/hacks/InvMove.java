@@ -47,7 +47,7 @@ public final class InvMove extends Hack {
 	}
 
 	@SubscribeEvent
-	public void onUpdate(WPlayerMoveEvent event) {
+	public void onUpdate(WUpdateEvent event) {
 		if (mc.currentScreen == null || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiEditSign || mc.currentScreen instanceof GuiScreenBook) {
 			return;
 		}

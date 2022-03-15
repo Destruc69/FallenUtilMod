@@ -7,7 +7,7 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketAnimation;
+import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketAnimation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,7 +15,6 @@ import net.wurstclient.fmlevents.WPacketInputEvent;
 import net.wurstclient.fmlevents.WPacketOutputEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.minecraft.network.play.client.CPacketUpdateSign;
 import net.minecraft.network.play.server.SPacketSignEditorOpen;
 import net.minecraft.network.play.server.SPacketParticles;
 import net.minecraft.network.play.server.SPacketChangeGameState;
@@ -29,15 +28,11 @@ import net.minecraft.network.play.server.SPacketSpawnPainting;
 import net.minecraft.network.play.server.SPacketCustomSound;
 import net.minecraft.network.play.server.SPacketUpdateScore;
 import net.minecraft.network.play.server.SPacketTabComplete;
-import net.minecraft.network.play.client.CPacketResourcePackStatus;
 import net.minecraft.client.Minecraft;
 import net.wurstclient.forge.utils.ChatUtils;
 import net.wurstclient.forge.utils.KeyBindingUtils;
 import net.minecraft.client.settings.KeyBinding;
 import net.wurstclient.fmlevents.WUpdateEvent;
-import net.minecraft.network.play.client.CPacketEnchantItem;
-import net.minecraft.network.play.client.CPacketCreativeInventoryAction;
-import net.minecraft.network.play.client.CPacketSpectate;
 import net.minecraft.network.play.server.SPacketDisplayObjective;
 
 
@@ -63,8 +58,6 @@ public final class AntiKick extends Hack {
 	public void onPacketOutput(WPacketOutputEvent event) {
 		if (event.getPacket() instanceof SPacketSignEditorOpen)
 			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketUpdateSign)
-			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketParticles)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketChangeGameState)
@@ -73,29 +66,15 @@ public final class AntiKick extends Hack {
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketResourcePackSend)
 			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketPlayerListItem)
-			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketCustomSound)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketUpdateBossInfo)
 			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketServerInfo)
-			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketSpawnPainting)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketCustomSound)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketUpdateScore)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketTabComplete)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketResourcePackStatus)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketEnchantItem)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketCreativeInventoryAction)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketSpectate)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof SPacketDisplayObjective)
 			event.setCanceled(true);
@@ -104,43 +83,11 @@ public final class AntiKick extends Hack {
 
 	@SubscribeEvent
 	public void onPacketInput(WPacketInputEvent event) {
-		if (event.getPacket() instanceof SPacketSignEditorOpen)
+		if (event.getPacket() instanceof CPacketResourcePackStatus)
 			event.setCanceled(true);
 		if (event.getPacket() instanceof CPacketUpdateSign)
 			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketParticles)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketChangeGameState)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketMaps)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketResourcePackSend)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketPlayerListItem)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketCustomSound)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketUpdateBossInfo)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketServerInfo)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketSpawnPainting)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketCustomSound)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketUpdateScore)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketTabComplete)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketResourcePackStatus)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketEnchantItem)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketCreativeInventoryAction)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof CPacketSpectate)
-			event.setCanceled(true);
-		if (event.getPacket() instanceof SPacketDisplayObjective)
+		if (event.getPacket() instanceof CPacketSeenAdvancements)
 			event.setCanceled(true);
 	}
 }

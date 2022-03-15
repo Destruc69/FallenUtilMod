@@ -28,7 +28,7 @@ import java.util.Map.Entry;
 public final class HackList extends WHackList
 {
 	public final AntiSpamHack antiSpamHack = register(new AntiSpamHack());
-	public final BoatFly boatFly = register(new BoatFly());
+	public final EntityFly boatFly = register(new EntityFly());
 	public final EntitySpeed entitySpeed = register(new EntitySpeed());
 	public final StatSpoof statSpoof = register(new StatSpoof());
 	public final PortalGod portalGod = register(new PortalGod());
@@ -37,6 +37,9 @@ public final class HackList extends WHackList
 	public final NoCom noCom = register(new NoCom());
 	public final Welcomer welcomer = register(new Welcomer());
 	public final FPS fps = register(new FPS());
+	public final AimBot aimBot = register(new AimBot());
+	public final SnowFly snowFly = register(new SnowFly());
+	public final PacketSender packetSender = register(new PacketSender());
 	public final FakePlayer fakePlayer = register(new FakePlayer());
 	public final FakeHackers fakeHackers = register(new FakeHackers());
 	public final NameTags nameTags = register(new NameTags());
@@ -48,21 +51,12 @@ public final class HackList extends WHackList
 	public final CrystalPVPViewer crystalPVPViewer = register(new CrystalPVPViewer());
 	public final AntiWeather antiWeather = register(new AntiWeather());
 	public final Speed speed = register(new Speed());
+	public final Animations animations = register(new Animations());
 	public final AntiBot antiBot = register(new AntiBot());
 	public final InvMove invMove = register(new InvMove());
 	public final AntiFog antiFog = register(new AntiFog());
 	public final Anti4J anti4J = register(new Anti4J());
 	public final DebugForScaff debugForScaff = register(new DebugForScaff());
-	/**
-	 * ClickGUI Backround Effects
-	 * Fix AutoTotem
-	 * Improve Stash/StashFinder
-	 * Make Scaffold bypass NCP
-	 * More Render Modules for PvP/CPvP
-	 * Make ElytraFlight better than it is
-	 * FIX JLAYER/MUSICBOX
-	 * More General Modules
-	 */
 	public final AntiAFK antiAFK = register(new AntiAFK());
 	public final Anchor anchor = register(new Anchor());
 	public final PlayerCom playerCom = register(new PlayerCom());

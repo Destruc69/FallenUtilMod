@@ -15,6 +15,8 @@ import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 
+import java.util.Objects;
+
 public final class Discord extends Hack {
 
 	public static DiscordRichPresence presence = new DiscordRichPresence();
@@ -31,13 +33,18 @@ public final class Discord extends Hack {
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		DiscordEventHandlers handlers = new DiscordEventHandlers();
-		rpc.Discord_Initialize("891902442999017482", handlers, true, "");
-		presence.startTimestamp = System.currentTimeMillis() / 1000L;
-		presence.details = presence.state = "Idle";
-		presence.largeImageKey = "fallen";
-		rpc.Discord_UpdatePresence(presence);
+		try {
 
+			DiscordEventHandlers handlers = new DiscordEventHandlers();
+			rpc.Discord_Initialize("891902442999017482", handlers, true, "");
+			presence.startTimestamp = System.currentTimeMillis() / 1000L;
+			presence.details = presence.state = "Idle";
+			presence.largeImageKey = "fallen";
+			rpc.Discord_UpdatePresence(presence);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -47,38 +54,31 @@ public final class Discord extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
+		try {
+			presence.details = mc.player.getName() + " " + "|" + " " + getWorld();
+			presence.state = Objects.requireNonNull(mc.getCurrentServerData()).serverIP + " " + "|" + " " + mc.getCurrentServerData().gameVersion;
+			presence.largeImageText = "Fallen Utility Mod";
+			rpc.Discord_UpdatePresence(presence);
 
-		presence.details = getUsername() + " " + "|" + " " + getWorld();
-		presence.state = getBrand() + " " + "|" + " " + getVersion();
-		presence.largeImageText = "Fallen Utility Mod";
-		rpc.Discord_UpdatePresence(presence);
-
-	}
-
-	private static String getUsername() {
-		return mc.player.getName();
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static String getWorld() {
+		try {
 
-		if (mc.isSingleplayer()) {
-			return "Singleplayer";
+			if (mc.isSingleplayer()) {
+				return "Singleplayer";
+			}
+
+			if (!mc.isSingleplayer()) {
+			}
+			return "Multiplayer";
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		if (!mc.isSingleplayer()) {
-		}
-		return "Multiplayer";
-
-	}
-
-	private static String getVersion() {
-
-		return mc.getVersion();
-
-	}
-
-	private static String getBrand() {
-		return String.valueOf(mc.getConnection().getNetworkManager().getRemoteAddress());
+		return null;
 	}
 }

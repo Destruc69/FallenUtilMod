@@ -10,6 +10,7 @@ package net.wurstclient.forge.hacks;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,6 +44,7 @@ public final class SnowFly extends Hack
 		BlockPos blockPos = Minecraft.getMinecraft().player.getPosition();
 
 		if (mc.player.world.getBlockState(blockPos.down()).getBlock() instanceof BlockSnowBlock || mc.player.world.getBlockState(blockPos.down()).getBlock() instanceof BlockSnow) {
+			mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, true));
 			mc.player.jump();
 		}
 	}
