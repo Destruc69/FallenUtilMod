@@ -7,23 +7,25 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.login.server.SPacketDisconnect;
-import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
+import net.wurstclient.forge.utils.MathUtils;
+import net.wurstclient.forge.utils.PlayerUtils;
 
-public final class NoFallHack extends Hack {
-
+public final class NoSlowDown extends Hack {
 	private final CheckboxSetting ncp =
-			new CheckboxSetting("NCP New",
+			new CheckboxSetting("NCP-Strict",
 					false);
 
-	public NoFallHack() {
-		super("NoFall", "Protects you from fall damage.");
+	public NoSlowDown() {
+		super("NoSlowDown", "No time to slow down when eating");
 		setCategory(Category.MOVEMENT);
 		addSetting(ncp);
 	}
@@ -31,26 +33,24 @@ public final class NoFallHack extends Hack {
 	@Override
 	protected void onEnable() {
 		MinecraftForge.EVENT_BUS.register(this);
-
 	}
 
 	@Override
 	protected void onDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
-
 	}
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (event.getPlayer().fallDistance > 4) {
-			mc.getConnection().sendPacket(new CPacketPlayer(true));
-		}
+		if (mc.player.isHandActive() && mc.player.getHeldItemMainhand().getItem() instanceof Item) {
+			if (mc.player.moveForward != 0 || mc.player.moveStrafing != 0) {
+				double[] dir = MathUtils.directionSpeed(0.2);
+				mc.player.motionX = dir[0];
+				mc.player.motionZ = dir[1];
+			}
 
-		if (ncp.isChecked()) {
-			if (mc.player.fallDistance == 4) {
-				mc.world.sendQuittingDisconnectingPacket();
-				mc.player.connection.sendPacket(new SPacketDisconnect());
-				mc.player.connection.sendPacket(new net.minecraft.network.play.server.SPacketDisconnect());
+			if (ncp.isChecked()) {
+				mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
 			}
 		}
 	}
