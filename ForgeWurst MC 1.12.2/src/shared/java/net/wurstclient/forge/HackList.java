@@ -28,7 +28,6 @@ import java.util.Map.Entry;
 public final class HackList extends WHackList
 {
 
-	public final AutoSprintHack autoSprintHack = register(new AutoSprintHack());
 	public final RadarHack radarHack = register(new RadarHack());
 	public final NoFall noFall = register(new NoFall());
 	public final AutoWalk autoWalk = register(new AutoWalk());
