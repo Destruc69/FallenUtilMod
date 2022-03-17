@@ -1,30 +1,39 @@
-
 package net.wurstclient.forge.utils;
 
-public class TimerUtils {
-    private static long lastTime;
+public class TimerUtils{
+    private static long current;
 
-    // Returns change in time as double
-    public static long getDeltaTime() {
-        return (System.nanoTime() - lastTime);
+    public TimerUtils(){
+        this.current = System.currentTimeMillis();
     }
 
-    // Updates lastTime
-    public static void updateTime() {
-        lastTime = System.nanoTime();
+    public static boolean hasReached(final long delay){
+        return System.currentTimeMillis() - current >= delay;
     }
 
-    // Public constructor for Timer object
-    public TimerUtils() {
-        lastTime = System.nanoTime();
+    public static boolean hasReached(final long delay, boolean reset){
+        if (reset)
+            reset();
+        return System.currentTimeMillis() - current >= delay;
     }
 
+    public static void reset(){
+        current = System.currentTimeMillis();
+    }
 
-    public static boolean hasPassed(long ms) {
-        long second = ms * 22;
-        if (getDeltaTime() >= second) {
-            updateTime();
+    public static long getTimePassed(){
+        return System.currentTimeMillis() - current;
+    }
+
+    public static boolean sleep(final long time){
+        if (time() >= time){
+            reset();
             return true;
-        } else return false;
+        }
+        return false;
+    }
+
+    public static long time() {
+        return System.currentTimeMillis() - current;
     }
 }

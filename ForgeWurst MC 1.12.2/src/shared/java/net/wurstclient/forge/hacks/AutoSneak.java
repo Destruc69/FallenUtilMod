@@ -7,6 +7,7 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
@@ -14,15 +15,14 @@ import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.EnumSetting;
 import net.wurstclient.forge.utils.KeyBindingUtils;
-import net.wurstclient.forge.utils.MathUtils;
 
-public final class AutoSprintHack extends Hack {
+public final class AutoSneak extends Hack {
 
 	private final EnumSetting<Mode> mode =
-			new EnumSetting<>("Mode", Mode.values(), Mode.RAGE);
+			new EnumSetting<>("Mode", Mode.values(), Mode.NCP);
 
-	public AutoSprintHack() {
-		super("AutoSprint", "Makes you sprint automatically.");
+	public AutoSneak() {
+		super("AutoSneak", "Makes you sneak automatically.");
 		setCategory(Category.MOVEMENT);
 		addSetting(mode);
 	}
@@ -39,30 +39,26 @@ public final class AutoSprintHack extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mode.getSelected().rage) {
-			if (mc.player.onGround) {
-				double[] dir = MathUtils.directionSpeed(0.2);
-
-				mc.player.motionX = dir[0];
-				mc.player.motionZ = dir[1];
-			}
+		if (mode.getSelected().ncp) {
+			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+			mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
 		} else {
-			KeyBindingUtils.setPressed(mc.gameSettings.keyBindSprint, true);
+			KeyBindingUtils.setPressed(mc.gameSettings.keyBindSneak, true);
 		}
 	}
 
 	private enum Mode {
-		NORMAL("Normal", true, false),
-		RAGE("Rage", false, true);
+		NCP("NCP", false, true),
+		NORMAL("Normal", false, true);
 
 		private final String name;
 		private final boolean normal;
-		private final boolean rage;
+		private final boolean ncp;
 
-		private Mode(String name, boolean normal, boolean rage) {
+		private Mode(String name, boolean normal, boolean ncp) {
 			this.name = name;
 			this.normal = normal;
-			this.rage = rage;
+			this.ncp = ncp;
 		}
 
 		public String toString() {

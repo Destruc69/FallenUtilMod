@@ -27,110 +27,13 @@ import java.util.Map.Entry;
 
 public final class HackList extends WHackList
 {
-	public final AntiSpamHack antiSpamHack = register(new AntiSpamHack());
-	public final BoatFly boatFly = register(new BoatFly());
-	public final EntitySpeed entitySpeed = register(new EntitySpeed());
-	public final StatSpoof statSpoof = register(new StatSpoof());
-	public final PortalGod portalGod = register(new PortalGod());
-	public final MoreInv moreInv = register(new MoreInv());
-	public final SlowFly slowFly = register(new SlowFly());
-	public final NoCom noCom = register(new NoCom());
-	public final Welcomer welcomer = register(new Welcomer());
-	public final FPS fps = register(new FPS());
-	public final FakePlayer fakePlayer = register(new FakePlayer());
-	public final FakeHackers fakeHackers = register(new FakeHackers());
-	public final NameTags nameTags = register(new NameTags());
-	public final AntiVoid antiVoid = register(new AntiVoid());
-	public final Teleport teleport = register(new Teleport());
-	public final Scaffold scaffold = register(new Scaffold());
-	public final Discord discord = register(new Discord());
-	public final Stash stash = register(new Stash());
-	public final CrystalPVPViewer crystalPVPViewer = register(new CrystalPVPViewer());
-	public final AntiWeather antiWeather = register(new AntiWeather());
-	public final Speed speed = register(new Speed());
-	public final AntiBot antiBot = register(new AntiBot());
-	public final InvMove invMove = register(new InvMove());
-	public final AntiFog antiFog = register(new AntiFog());
-	public final Anti4J anti4J = register(new Anti4J());
-	public final DebugForScaff debugForScaff = register(new DebugForScaff());
-	/**
-	 * ClickGUI Backround Effects
-	 * Fix AutoTotem
-	 * Improve Stash/StashFinder
-	 * Make Scaffold bypass NCP
-	 * More Render Modules for PvP/CPvP
-	 * Make ElytraFlight better than it is
-	 * FIX JLAYER/MUSICBOX
-	 * More General Modules
-	 */
-	public final AntiAFK antiAFK = register(new AntiAFK());
-	public final Anchor anchor = register(new Anchor());
-	public final PlayerCom playerCom = register(new PlayerCom());
-	public final AutoTotem autoTotem = register(new AutoTotem());
-	public final YawLock yawLock = register(new YawLock());
-	public final PacketFly packetFly = register(new PacketFly());
-	public final AirJump airJump = register(new AirJump());
-	public final Online online = register(new Online());
-	public final AutoCrystalReWrite autoCrystalReWrite = register(new AutoCrystalReWrite());
-	public final Coords coords = register(new Coords());
-	public final AntiHunger antiHunger = register(new AntiHunger());
-	public final NoSlowdown noSlowdown = register(new NoSlowdown());
-	public final AntiKick antiKick = register(new AntiKick());
-	public final AntiSwing antiSwing = register(new AntiSwing());
-	public final NoSound noSound = register(new NoSound());
-	public final Criticals criticals = register(new Criticals());
-	public final PacketCanceler packetCanceler = register(new PacketCanceler());
-	public final NoKnockback noKnockback = register(new NoKnockback());
-	public final SpamDropHack spamDropHack = register(new SpamDropHack());
-	public final AutoBreakHack autoBreakHack = register(new AutoBreakHack());
-	public final AutoPlaceHack autoPlaceHack = register(new AutoPlaceHack());
-	public final VannilaCrashHack vannilaCrashHack = register(new VannilaCrashHack());
-	public final HighJumpHack highJumpHack = register(new HighJumpHack());
-	public final AutoJumpHack autojumpHack = register(new AutoJumpHack());
-	public final AutoSneakHack autosneakHack = register(new AutoSneakHack());
-	public final AutoArmorHack autoArmorHack = register(new AutoArmorHack());
-	public final AutoFarmHack autoFarmHack = register(new AutoFarmHack());
-	public final AutoFishHack autoFishHack = register(new AutoFishHack());
+
 	public final AutoSprintHack autoSprintHack = register(new AutoSprintHack());
-	public final AutoSwimHack autoSwimHack = register(new AutoSwimHack());
-	public final AutoToolHack autoToolHack = register(new AutoToolHack());
-	public final AutoWalkHack autoWalkHack = register(new AutoWalkHack());
-	public final BlinkHack blinkHack = register(new BlinkHack());
-	public final Strafe strafe = register(new Strafe());
-	public final Structure endPortal = register(new Structure());
-	public final Follow follow = register(new Follow());
-	public final Crasher crasher = register(new Crasher());
-	public final ChestEspHack chestEspHack = register(new ChestEspHack());
-	public final ClickGuiHack clickGuiHack = register(new ClickGuiHack());
-	public final FastBreakHack fastBreakHack = register(new FastBreakHack());
-	public final FastLadderHack fastLadderHack = register(new FastLadderHack());
-	public final FastPlaceHack fastPlaceHack = register(new FastPlaceHack());
-	public final StepHack stepHack = register(new StepHack());
-	public final ElytraBoostHack elytraboosthack = register(new ElytraBoostHack());
-	public final ParkourHack parkourhack = register(new ParkourHack());
-	public final FlightHack flightHack = register(new FlightHack());
-	public final FreecamHack freecamHack = register(new FreecamHack());
-	public final FullbrightHack fullbrightHack = register(new FullbrightHack());
-	public final GlideHack glideHack = register(new GlideHack());
-	public final ItemEspHack itemEspHack = register(new ItemEspHack());
-	public final JesusHack jesusHack = register(new JesusHack());
-	public final MoveBot moveBot = register(new MoveBot());
-	public final KillauraHack killauraHack = register(new KillauraHack());
-	public final MobEspHack mobEspHack = register(new MobEspHack());
-	public final MobSpawnEspHack mobSpawnEspHack =
-			register(new MobSpawnEspHack());
-	public final NoFallHack noFallHack = register(new NoFallHack());
-	public final Trail trail = register(new Trail());
-	public final TunnellerHack tunnellerHack = register(new TunnellerHack());
-	public final NoHurtcamHack noHurtcamHack = register(new NoHurtcamHack());
-	public final NoWebHack noWebHack = register(new NoWebHack());
-	public final NukerHack nukerHack = register(new NukerHack());
-	public final Disabler disabler = register(new Disabler());
-	public final PlayerEspHack playerEspHack = register(new PlayerEspHack());
 	public final RadarHack radarHack = register(new RadarHack());
-	public final SpiderHack spiderHack = register(new SpiderHack());
-	public final TimerHack timerHack = register(new TimerHack());
-	public final XRayHack xRayHack = register(new XRayHack());
+	public final NoFall noFall = register(new NoFall());
+	public final AutoWalk autoWalk = register(new AutoWalk());
+	public final NoSlowDown noSlowDown = register(new NoSlowDown());
+	public final ClickGuiHack clickGuiHack = register(new ClickGuiHack());
 	
 	private final Path enabledHacksFile;
 	private final Path settingsFile;

@@ -55,9 +55,10 @@ public class CrystalUtil extends Hack {
 
 	/**
 	 * Gets the end crystal in the given blockpos. If theres none then returns null
+	 * @param pos
 	 */
 	public static EntityEnderCrystal getCrystalInPos(BlockPos pos) {
-		for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(0, 1, 0)))) {
+		for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos))) {
 			if (entity instanceof EntityEnderCrystal && entity.isEntityAlive()) {
 				return (EntityEnderCrystal)entity;
 			}

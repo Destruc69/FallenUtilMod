@@ -7,24 +7,27 @@
  */
 package net.wurstclient.forge.hacks;
 
+import net.minecraft.item.Item;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
-import net.wurstclient.forge.settings.EnumSetting;
-import net.wurstclient.forge.utils.KeyBindingUtils;
+import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.utils.MathUtils;
+import net.wurstclient.forge.utils.PlayerUtils;
 
-public final class AutoSprintHack extends Hack {
+public final class NoSlowDown extends Hack {
+	private final CheckboxSetting ncp =
+			new CheckboxSetting("NCP-Strict",
+					false);
 
-	private final EnumSetting<Mode> mode =
-			new EnumSetting<>("Mode", Mode.values(), Mode.RAGE);
-
-	public AutoSprintHack() {
-		super("AutoSprint", "Makes you sprint automatically.");
+	public NoSlowDown() {
+		super("NoSlowDown", "No time to slow down when eating");
 		setCategory(Category.MOVEMENT);
-		addSetting(mode);
+		addSetting(ncp);
 	}
 
 	@Override
@@ -39,34 +42,16 @@ public final class AutoSprintHack extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-		if (mode.getSelected().rage) {
-			if (mc.player.onGround) {
+		if (mc.player.isHandActive() && mc.player.getHeldItemMainhand().getItem() instanceof Item) {
+			if (mc.player.moveForward != 0 || mc.player.moveStrafing != 0) {
 				double[] dir = MathUtils.directionSpeed(0.2);
-
 				mc.player.motionX = dir[0];
 				mc.player.motionZ = dir[1];
 			}
-		} else {
-			KeyBindingUtils.setPressed(mc.gameSettings.keyBindSprint, true);
-		}
-	}
 
-	private enum Mode {
-		NORMAL("Normal", true, false),
-		RAGE("Rage", false, true);
-
-		private final String name;
-		private final boolean normal;
-		private final boolean rage;
-
-		private Mode(String name, boolean normal, boolean rage) {
-			this.name = name;
-			this.normal = normal;
-			this.rage = rage;
-		}
-
-		public String toString() {
-			return name;
+			if (ncp.isChecked()) {
+				mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, PlayerUtils.GetLocalPlayerPosFloored(), EnumFacing.DOWN));
+			}
 		}
 	}
 }
