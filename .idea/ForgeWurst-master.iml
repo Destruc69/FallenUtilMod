@@ -19,6 +19,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="java-discord-rpc-2.0.1-all (2)" level="project" />
-    <orderEntry type="library" exported="" name="jl1.0.1" level="project" />
+    <orderEntry type="library" name="jl1.0.1" level="project" />
   </component>
 </module>
