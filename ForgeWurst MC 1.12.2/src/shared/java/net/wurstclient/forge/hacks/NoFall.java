@@ -7,7 +7,6 @@
  */
 package net.wurstclient.forge.hacks;
 
-import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,9 +15,6 @@ import net.wurstclient.forge.Category;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.settings.CheckboxSetting;
 import net.wurstclient.forge.settings.EnumSetting;
-import net.wurstclient.forge.utils.KeyBindingUtils;
-import net.wurstclient.forge.utils.MathUtils;
-import net.wurstclient.forge.utils.TimerUtils;
 
 public final class NoFall extends Hack {
 
@@ -30,7 +26,7 @@ public final class NoFall extends Hack {
 					false);
 
 	public NoFall() {
-		super("AutoSprint", "Makes you sprint automatically.");
+		super("NoFall", "Prevents falling damage/falling.");
 		setCategory(Category.PLAYER);
 		addSetting(mode);
 		addSetting(ncp);
@@ -48,22 +44,15 @@ public final class NoFall extends Hack {
 
 	@SubscribeEvent
 	public void onUpdate(WUpdateEvent event) {
-
-		if (ncp.isChecked()) {
-			if (mc.player.isAirBorne) {
-				mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
+		if (mode.getSelected().packet) {
+			if (mc.player.fallDistance > 4) {
+				mc.player.connection.sendPacket(new CPacketPlayer(true));
 			}
 		}
 
-		if (mode.getSelected().packet) {
-			if (mc.player.fallDistance < 4 && !mc.player.onGround) {
-				mc.player.connection.sendPacket(new CPacketPlayer(true));
-			}
-		} else {
+		if (mode.getSelected().anti) {
 			if (mc.player.fallDistance > 4 && !mc.player.onGround) {
-				if (TimerUtils.hasReached(100, true)) {
-					mc.player.jump();
-				}
+				mc.player.motionY -= 10;
 			}
 		}
 	}

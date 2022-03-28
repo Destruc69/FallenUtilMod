@@ -128,7 +128,7 @@ public final class HackButton extends Component
 		{
 			// separator
 			GL11.glColor4f(acColor[0], acColor[1], acColor[2], opacity);
-			GL11.glBegin(GL11.GL_LINES);
+			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2i(x3, y1);
 			GL11.glVertex2i(x3, y2);
 			GL11.glEnd();
@@ -176,7 +176,7 @@ public final class HackButton extends Component
 			
 			// outline
 			GL11.glColor4f(0.0625F, 0.0625F, 0.0625F, 0.5F);
-			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glBegin(GL11.GL_LINE_LOOP);
 			GL11.glVertex2d(xa1, ya1);
 			GL11.glVertex2d(xa3, ya1);
 			GL11.glVertex2d(xa2, ya2);

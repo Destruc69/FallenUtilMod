@@ -10,6 +10,7 @@ package net.wurstclient.forge;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import net.wurstclient.forge.hacks.ClickGuiHack;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -80,7 +81,7 @@ public final class IngameHUD {
 					continue;
 
 				WMinecraft.getFontRenderer()
-						.drawString(hack.getRenderName(), 2, y, (int) textColor);
+						.drawString(hack.getRenderName(), 3, y, (int) textColor);
 				y += 9;
 			}
 

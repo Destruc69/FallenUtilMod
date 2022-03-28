@@ -41,7 +41,7 @@ public final class RadarHack extends Hack
     private final ArrayList<Entity> entities = new ArrayList<>();
 
     private final SliderSetting radius = new SliderSetting("Radius",
-            "Radius in blocks.", 100, 1, 100, 1, ValueDisplay.INTEGER);
+            "Radius in blocks.", 100, 26, 500, 1, ValueDisplay.INTEGER);
     private final CheckboxSetting rotate =
             new CheckboxSetting("Rotate with player", true);
 

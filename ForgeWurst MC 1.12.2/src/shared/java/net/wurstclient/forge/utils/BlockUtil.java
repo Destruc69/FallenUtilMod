@@ -14,6 +14,8 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -149,7 +151,12 @@ public final class BlockUtil extends Hack {
 		return Math.abs(first.getX() - second.getX()) + Math.abs(first.getY() - second.getY()) + Math.abs(first.getZ() - second.getZ());
 	}
 
-	/**
+    public static boolean isValidBlock(BlockPos pos) {
+		Block block = BlockUtil.mc.world.getBlockState(pos).getBlock();
+		return !(block instanceof BlockLiquid) && block.getMaterial(null) != Material.AIR;
+    }
+
+    /**
 	 * Checks if the block is in render distance or known by the client.
 	 */
 

@@ -103,7 +103,7 @@ public final class Radar extends Component
 				- (player.prevPosZ
 					+ (player.posZ - player.prevPosZ) * partialTicks);
 			double distance = Math.sqrt(diffX * diffX + diffZ * diffZ)
-				* (getWidth() * 0.5 / hack.getRadius());
+				* (getWidth() * 3 / hack.getRadius());
 			double neededRotation = Math.toDegrees(Math.atan2(diffZ, diffX));
 			double angle;
 			if(hack.isRotateEnabled())

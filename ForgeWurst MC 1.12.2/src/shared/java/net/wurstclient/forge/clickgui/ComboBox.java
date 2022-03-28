@@ -85,7 +85,7 @@ public final class ComboBox extends Component
 			gui.setTooltip(setting.getDescription());
 		
 		// background
-		GL11.glColor4f(100, 0, 0, opacity);
+		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x1, y1);
 		GL11.glVertex2i(x1, y2);
@@ -93,8 +93,8 @@ public final class ComboBox extends Component
 		GL11.glVertex2i(x4, y1);
 		GL11.glEnd();
 
-		GL11.glColor4f(100, 0, 0, opacity);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x1, y1);
 		GL11.glVertex2i(x1, y2);
 		GL11.glVertex2i(x4, y2);
@@ -111,7 +111,7 @@ public final class ComboBox extends Component
 		GL11.glVertex2i(x2, y1);
 		GL11.glEnd();
 		GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.5F);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x4, y1);
 		GL11.glVertex2i(x4, y2);
 		GL11.glVertex2i(x2, y2);
@@ -119,7 +119,7 @@ public final class ComboBox extends Component
 		GL11.glEnd();
 		
 		// separator
-		GL11.glBegin(GL11.GL_LINES);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2i(x3, y1);
 		GL11.glVertex2i(x3, y2);
 		GL11.glEnd();
@@ -141,8 +141,8 @@ public final class ComboBox extends Component
 		GL11.glEnd();
 		
 		// outline
-		GL11.glColor4f(0.0625F, 0.0625F, 0.0625F, 0.5F);
-		GL11.glBegin(GL11.GL_LINE_LOOP);
+		GL11.glColor4f(bgColor[0], bgColor[1], bgColor[2], 0.75f);
+		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glLineWidth(1000);
 		GL11.glVertex2d(xa1, ya1);
 		GL11.glVertex2d(xa3, ya1);
@@ -237,7 +237,7 @@ public final class ComboBox extends Component
 				boolean hValue = hovering && mouseY >= yi1 && mouseY < yi2;
 				
 				// background
-				GL11.glColor4f(100, 0, 0, opacity);
+				GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
 				GL11.glBegin(GL11.GL_QUADS);
 				GL11.glVertex2i(x1, yi1);
 				GL11.glVertex2i(x1, yi2);
@@ -245,8 +245,8 @@ public final class ComboBox extends Component
 				GL11.glVertex2i(x2, yi1);
 				GL11.glEnd();
 
-				GL11.glColor4f(100, 0, 0, opacity);
-				GL11.glBegin(GL11.GL_LINE_LOOP);
+				GL11.glColor4f(acColor[0], acColor[1], acColor[2], 0.75f);
+				GL11.glBegin(GL11.GL_QUADS);
 				GL11.glVertex2i(x1, yi1);
 				GL11.glVertex2i(x1, yi2);
 				GL11.glVertex2i(x2, yi2);

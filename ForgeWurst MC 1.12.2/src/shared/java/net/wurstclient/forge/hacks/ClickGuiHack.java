@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.wurstclient.fmlevents.WGuiInventoryButtonEvent;
+import net.wurstclient.fmlevents.WUpdateEvent;
 import net.wurstclient.forge.Hack;
 import net.wurstclient.forge.clickgui.ClickGuiScreen;
 import net.wurstclient.forge.settings.CheckboxSetting;

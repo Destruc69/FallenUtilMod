@@ -8,6 +8,7 @@
 package net.wurstclient.forge.hacks;
 
 import net.minecraft.item.Item;
+import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,13 +22,21 @@ import net.wurstclient.forge.utils.PlayerUtils;
 
 public final class NoSlowDown extends Hack {
 	private final CheckboxSetting ncp =
-			new CheckboxSetting("NCP-Strict",
+			new CheckboxSetting("OldNCP", "Tells the server you stopped using the item \n" +
+					"when in reality you are still using it, Bypasses old versions of NCP ",
+					false);
+
+	private final CheckboxSetting bt =
+			new CheckboxSetting("SneakingPacket", "Sends start sneaking packet \n" +
+					"This might bypass some NCP configs because i tested on 2b2t \n" +
+					"and when you are sneaking it goes slightly slower but bypasses",
 					false);
 
 	public NoSlowDown() {
 		super("NoSlowDown", "No time to slow down when eating");
 		setCategory(Category.MOVEMENT);
 		addSetting(ncp);
+		addSetting(bt);
 	}
 
 	@Override
@@ -47,6 +56,10 @@ public final class NoSlowDown extends Hack {
 				double[] dir = MathUtils.directionSpeed(0.2);
 				mc.player.motionX = dir[0];
 				mc.player.motionZ = dir[1];
+			}
+
+			if (bt.isChecked()) {
+				mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
 			}
 
 			if (ncp.isChecked()) {
